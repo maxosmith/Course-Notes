@@ -2,7 +2,7 @@
 %Packages
 %----------------------------
 %Use majority of page
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=0.5in]{geometry}
 %Advanced list functionality
 \usepackage{enumerate}
 %Include math symbols
@@ -49,6 +49,10 @@
 
 %Section in header
 \renewcommand{\sectionmark}[1]{\markright{#1}}
+
+%Fix margins
+\geometry{letterpaper}
+\geometry{tmargin=1in, bmargin=1in}
 
 %----------------------------
 %Formatting Definitions
