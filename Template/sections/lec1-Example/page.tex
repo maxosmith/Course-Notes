@@ -1,12 +1,3 @@
-testing $\vec{a}$ 1, 2
-
-\begin{defn}[Relative Path]
-	A relative path is a path that is referring to your current directory.
-\end{defn}
-
-\begin{rem}
-	Recall that double quotes do not protect back quotes.
-\end{rem}
 
 \begin{lstlisting}[style=Sublime-C++, caption=C++ Example]
 #include <stdio.h>
@@ -30,6 +21,8 @@ int main()
 }
 \end{lstlisting}
 
-\begin{exmp}
-	$$2+2=3$$
-\end{exmp}
+You can also include code from a file:
+\lstinputlisting[style=Sublime-C++, caption=C++ From File]{./sections/lec1-Example/ex.cpp}
+
+Not only that, but you make it so only subsections of line numbers show up:
+\lstinputlisting[style=Sublime-C++, caption=Lines 6-11, firstline=6, lastline=12]{./sections/lec1-Example/ex.cpp}

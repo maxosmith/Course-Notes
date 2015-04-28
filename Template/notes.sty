@@ -2,7 +2,7 @@
 %Packages
 %----------------------------
 %Use majority of page
-\usepackage[margin=1in]{geometry}
+\usepackage[margin=0.5in]{geometry}
 %Advanced list functionality
 \usepackage{enumerate}
 %Include math symbols
@@ -18,7 +18,7 @@
 %More detailed titling, used in subtitle
 \usepackage{titling}
 %Used in pseudocode
-\usepackage{algpseudocode}
+\usepackage{algorithm, algorithmic}
 %Remarks & theorems
 \usepackage{notes}
 %Use of graphics
@@ -28,7 +28,9 @@
 %Table of contents linking
 \usepackage{hyperref}
 %Customize theorems
-\usepackage{thmtools}
+\usepackage{thmtools, nameref, cleveref}
+%To stop reordering figures
+\usepackage{float}
 
 
 %----------------------------
@@ -49,6 +51,26 @@
 
 %Section in header
 \renewcommand{\sectionmark}[1]{\markright{#1}}
+
+%Fix margins
+\geometry{letterpaper}
+\geometry{tmargin=1in, bmargin=1in}
+
+%Fixes line numbering
+\makeatletter
+\lst@Key{matchrangestart}{f}{\lstKV@SetIf{#1}\lst@ifmatchrangestart}
+\def\lst@SkipToFirst{%
+    \lst@ifmatchrangestart\c@lstnumber=\numexpr-1+\lst@firstline\fi
+    \ifnum \lst@lineno<\lst@firstline
+        \def\lst@next{\lst@BeginDropInput\lst@Pmode
+        \lst@Let{13}\lst@MSkipToFirst
+        \lst@Let{10}\lst@MSkipToFirst}%
+        \expandafter\lst@next
+    \else
+        \expandafter\lst@BOLGobble
+    \fi}
+\makeatother
+\lstset{matchrangestart=t}
 
 %----------------------------
 %Formatting Definitions
