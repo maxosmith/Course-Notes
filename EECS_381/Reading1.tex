@@ -1,0 +1,74 @@
+\documentclass[11pt,letterpaper]{article}
+\usepackage{notes}
+
+%Global Course Variables
+\newcommand{\myCourseCode}{EECS 381}
+\newcommand{\myCourseName}{Objecty-Oriented and Advanced Programming}
+\newcommand{\myProf}{David Kieras (Maybe)}
+\newcommand{\myTerm}{Fall 2015 (Maybe)}
+
+%Headers
+\lhead{\myCourseName}
+\rhead{\fancyplain{}{\rightmark}} 
+
+%Footers
+\cfoot{\thepage}
+
+\begin{document}
+\titleHeader{\myCourseCode}{\myCourseName}{\myProf}{\myTerm}
+
+%Document information
+\rule[0.5ex]{1\columnwidth}{.5pt}
+Contributors: Max Smith
+\begin{center}
+	Latest revision: \today
+\end{center}
+\toc
+\abstr{Check}
+
+%----------------------------
+%Document Begins
+%----------------------------
+
+\section{Reading 1}
+\input{sections/lec1-Example/page}
+
+\subsection{Chapter 1}
+Symbolic Constants
+
+\subsection{Chapter 2}
+Internal variables:\newline
+Internal variables are local to the function it is declared in. They can have a can have a length of 31 characters and can only be comprised of integers and letters and numbers (The underscore counts as a letter). 
+External variables:\newline
+External variables (globals) are variables taht exist for all functions. External names can only have a length of 6 characters and one case because they may be used by assemblers and loaders.
+Good Practice:\newline
+You shouldn't start off variables with an underscore because library routines often use those names. It is traditional practice to use lower case for variable names, all uppercase for symbolic constants and a capitalized name for object types. 
+Data type lengths:\newline
+char - a single byte, 8 bits
+int - an integer, size depends on system
+short - an integer that is no larger than an integer (typically 16 bits)
+long - an integer, size is no smaller tahn an int (typically graeter than or equal to 32 bits)
+float - single-precision floating point
+double - double precision floating point
+unsigned (data type) - respective data type that can only be greater than or equal to 0. Because there are no negative numbers, one can have much more positive numbers (max signed number * 2 + 1) 
+Constants:\newline
+An integer constant can be represented like as just an int, hexadecimal, decimal or octal: 1234
+A long constant is represented as a short constant with a terminal L or l, or it is a number too big to fit in an int: 123456789l or 123456789L
+An unsigned integer constant is represented with a u or U at the end of an integer: 1234u or 1234U
+An unsigned long constant is represented as a long but with a ul or UL at the end of the constant: 1234ul or 1234UL
+A double constant is represented as a number with a decimal point or as an exponent: 43.1
+A float constant is the same representation as a double constant but with a f or F suffix: 43.1F or 43.1f
+
+
+
+\newpage
+
+\section{qwertqw}
+
+\section{AGAIN?!?!!}
+
+%----------------------------
+%Quick Reference Examples
+%----------------------------
+
+\end{document}
