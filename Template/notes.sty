@@ -105,9 +105,28 @@
 	frame=leftline
 }
 
-%Default C++
-\lstdefinestyle{Sublime-C++}{
+%Sublime Dark C++
+\lstdefinestyle{s-C++}{
 	language=C++,	
+	aboveskip=3mm,
+	belowskip=3mm,
+	numbers=left,
+	numbersep=5pt,
+	backgroundcolor=\color{sublime_black},
+	numberstyle=\small\ttfamily\color{gray},
+	stringstyle=\color{sublime_yellow},
+	keywordstyle=\small\ttfamily\color{sublime_red},
+	basicstyle=\small\ttfamily\color{sublime_white},
+	identifierstyle=\small\ttfamily\color{sublime_blue},
+	commentstyle=\color{sublime_gray},
+	showstringspaces=false,
+	tabsize=4,
+	frame=leftline
+}
+
+%Sublime Dark LaTeX
+\lstdefinestyle{s-tex}{
+	language=[LaTeX]{TeX},	
 	aboveskip=3mm,
 	belowskip=3mm,
 	numbers=left,

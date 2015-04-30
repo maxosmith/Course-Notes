@@ -1,5 +1,5 @@
 
-\begin{lstlisting}[style=Sublime-C++, caption=C++ Example]
+\begin{lstlisting}[style=s-C++, caption=C++ Example]
 #include <stdio.h>
 #define N 10
 /* Block
@@ -22,7 +22,13 @@ int main()
 \end{lstlisting}
 
 You can also include code from a file:
-\lstinputlisting[style=Sublime-C++, caption=C++ From File]{./sections/lec1-Example/ex.cpp}
+\lstinputlisting[style=s-C++, caption=C++ From File]{./sections/lec1-Example/ex.cpp}
 
 Not only that, but you make it so only subsections of line numbers show up:
-\lstinputlisting[style=Sublime-C++, caption=Lines 6-11, firstline=6, lastline=12]{./sections/lec1-Example/ex.cpp}
+\lstinputlisting[style=s-C++, caption=Lines 6-11, firstline=6, lastline=12]{./sections/lec1-Example/ex.cpp}
+
+\begin{lstlisting}[style=s-tex, caption=Source: Lines 6-11]
+\lstinputlisting[style=s-C++, caption=Lines 6-11, firstline=6, lastline=12]{
+	./sections/lec1-Example/ex.cpp
+}
+\end{lstlisting}
