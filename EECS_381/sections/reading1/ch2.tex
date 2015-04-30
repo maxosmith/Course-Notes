@@ -1,21 +1,43 @@
-Internal variables:\newline
-Internal variables are local to the function it is declared in. They can have a can have a length of 31 characters and can only be comprised of integers and letters and numbers (The underscore counts as a letter). 
-External variables:\newline
-External variables (globals) are variables taht exist for all functions. External names can only have a length of 6 characters and one case because they may be used by assemblers and loaders.
-Good Practice:\newline
-You shouldn't start off variables with an underscore because library routines often use those names. It is traditional practice to use lower case for variable names, all uppercase for symbolic constants and a capitalized name for object types. 
-Data type lengths:\newline
-char - a single byte, 8 bits
-int - an integer, size depends on system
-short - an integer that is no larger than an integer (typically 16 bits)
-long - an integer, size is no smaller tahn an int (typically graeter than or equal to 32 bits)
-float - single-precision floating point
-double - double precision floating point
-unsigned (data type) - respective data type that can only be greater than or equal to 0. Because there are no negative numbers, one can have much more positive numbers (max signed number * 2 + 1) 
-Constants:\newline
-An integer constant can be represented like as just an int, hexadecimal, decimal or octal: 1234
-A long constant is represented as a short constant with a terminal L or l, or it is a number too big to fit in an int: 123456789l or 123456789L
-An unsigned integer constant is represented with a u or U at the end of an integer: 1234u or 1234U
-An unsigned long constant is represented as a long but with a ul or UL at the end of the constant: 1234ul or 1234UL
-A double constant is represented as a number with a decimal point or as an exponent: 43.1
-A float constant is the same representation as a double constant but with a f or F suffix: 43.1F or 43.1f
+\subsubsection{Variable Names}
+\begin{itemize}[--] %http://en.wikibooks.org/wiki/LaTeX/List_Structures
+	\item Internal variables
+		\begin{itemize}
+			\item Internal variables are local to the function it is declared in. 
+			\item They can have a can have a length of 31 characters and can only be comprised of integers and letters and numbers (The underscore counts as a letter). 
+		\end{itemize}
+
+	\item External variables
+		\begin{itemize}
+			\item External variables (globals) are variables that exist for all functions. 
+			\item External names can only have a length of 6 characters and one case because they may be used by assemblers and loaders.
+		\end{itemize}
+
+	\item Variable naming good practice
+		\begin{itemize}
+			\item You shouldn't start off variables with an underscore because library routines often use those names. 
+			\item It is traditional practice to use lower case for variable names, all uppercase for symbolic constants and a capitalized name for object types. 
+		\end{itemize}
+\end{itemize}
+
+
+\subsubsection{Data Types and Sizes}
+\begin{description} 
+	\item[char] a single byte, 8 bits
+	\item[int] an integer, size depends on system
+	\item[short] an integer that is no larger than an integer (typically 16 bits)
+	\item[long] an integer, size is no smaller tahn an int (typically graeter than or equal to 32 bits)
+	\item[float] single-precision floating point
+	\item[double] double precision floating point
+	\item[unsigned (data type)] respective data type that can only be greater than or equal to 0. Because there are no negative numbers, one can have much more positive numbers ($maxSignedNumber * 2 + 1$) 
+\end{description}
+
+
+\subsubsection{Constants}
+\begin{itemize}[--]
+	\item An integer constant can be represented like as just an int, hexadecimal, decimal or octal: 1234
+	\item A long constant is represented as a short constant with a terminal L or l, or it is a number too big to fit in an int: 123456789l or 123456789L
+	\item An unsigned integer constant is represented with a u or U at the end of an integer: 1234u or 1234U
+	\item An unsigned long constant is represented as a long but with a ul or UL at the end of the constant: 1234ul or 1234UL
+	\item A double constant is represented as a number with a decimal point or as an exponent: 43.1
+	\item A float constant is the same representation as a double constant but with a f or F suffix: 43.1F or 43.1f
+\end{itemize}

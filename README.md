@@ -68,3 +68,17 @@ git clone https://github.com/MaxOSmith/Course-Notes
 ```
 \input{sections/<file-name>/page}
 ```
+6. Update the term information variables at the beginning of the 'Index.tex' file
+```
+%Global Course Variables
+\newcommand{\myCourseCode}{EECS 381}
+\newcommand{\myCourseName}{Objecty-Oriented and Advanced Programming}
+\newcommand{\myProf}{David Kieras (Maybe)}
+\newcommand{\myTerm}{Fall 2015 (Maybe)}
+```
+7. Add your name to the contributor's list
+8. Update the abstract, a good option is the class description from the course guide.
+
+## Compiling
+
+If you have done everything above this, all you should need to do is hit 'CTRL+B' when you have 'Index.tex' open to build the file. You'll get a file called 'Index.pdf,' which can be opened from the side-bar by clicking on it.
