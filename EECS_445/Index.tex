@@ -1,0 +1,48 @@
+\documentclass[english, 11pt]{article}
+\usepackage{notes}
+\usepackage{lipsum}
+
+%Global Course Variables
+\newcommand{\myCourseCode}{EECS 445}
+\newcommand{\myCourseName}{Introduction to Machine Learning}
+\newcommand{\myProf}{Honglak Lee}
+\newcommand{\myTerm}{Fall 2015}
+
+%Headers
+\lhead{\myCourseName}
+\rhead{\fancyplain{}{\rightmark}} 
+
+%Footers
+\cfoot{\thepage}
+
+\begin{document}
+\titleHeader{\myCourseCode}{\myCourseName}{\myProf}{\myTerm}
+
+%Document information
+\rule[0.5ex]{1\columnwidth}{.5pt}
+Contributors: Max Smith
+\begin{center}
+	Latest revision: \today
+\end{center}
+\toc
+\abstr{Theory and implementation of state-of-the-art machine learning algorithms for large-scale real-world applications. Topics include supervised learning (regression, classification, kernel methods, neural networks, and regularization) and unsupervised learning (clustering, density estimation, and dimensionality reduction).}
+
+%----------------------------
+%Document Begins
+%----------------------------
+% \input{sections/lec1-Example/page}
+
+\section{Introduction and Overview}
+\section{Supervised Learning: Regression}
+\section{Supervised Learning: Classification}
+\section{Kernel Methods}
+\section{Regularization and Model Selection}
+\section{Advice on using ML Algorithms}
+\section{Neural Networks}
+\section{Unsupervised Learning}
+\section{Gaussian Process}
+\section{Ensemble Methods}
+\section{Sequence Modeling}
+\section{Learning Theory}
+
+\end{document}
