@@ -40,4 +40,35 @@
 	\item An unsigned long constant is represented as a long but with a ul or UL at the end of the constant: 1234ul or 1234UL
 	\item A double constant is represented as a number with a decimal point or as an exponent: 43.1
 	\item A float constant is the same representation as a double constant but with a f or F suffix: 43.1F or 43.1f
+	\item A character constant is an integer written as one character within single quotes such as `f'. Certain characters can be represented by escape
+		  sequences. Below is the complete set of escape sequences:
+	\begin{tabular}{c | c || c | c}
+		\hline 
+		a & alert(bell) character & \ & backslash
+		b & backspace &? & question mark
+		f & formfeed & ' & single quotes
+		n & newline & " & double quotes
+		r & carriage return & ooo & octal number
+		t & horizontal tab & xhh & hexadecimal number
+		v & vertical tab  & 0 & null character
+	\end{tabular}
+	
+	\item A constant expression is an expression that involves only constants. Such expressions are usually evaluated during compilation rather than at run time
+	\item A string constant or string literal is a sequence of zero or more characters surrounded by double quotes: "Something like this"	
+	\item An enumeration is a list of constant integer values that can be specified, really similar to #define. two examples of this is: 
+		enum boolean {NO, YES}; /*NO = 0, YES = 1*/. similarly enum months{JAN = 1, FEB, MAR, APR, MAY} /*JAN = 1, FEB = 2, MAR = 3*/
+\end{itemize}
+
+
+\subsubsection{Declarations}
+\begin{itemize}{--}
+	\item All variables must be declared before use. Declarations specify a type and contains a list of one or more variables of that type
+	\item Automatic (or internal) cariables are initialized to garbage variables if not explicitely initialized and are initialized every time that block of code is run
+	\item External and static variables are initialized to zero by default and are initialized once throughout the life of a program
+	\item The qualifier const can be applied to a declared variable and it specifies that the variable will not be changed 
+\end{itemize}
+
+\subsubsection{Arithmetic Operators}
+\begin{itemize}{--}
+
 \end{itemize}
