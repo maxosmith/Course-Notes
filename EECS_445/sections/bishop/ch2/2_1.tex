@@ -1,10 +1,8 @@
 \begin{defn}[Binary Variable]
-	Single variable that can take on either 1, or 0. $x\in \{0, 1\}$
-\end{defn}
-
-We denote $\mu$ ($0\leq\mu\leq 1$) to be the probability that the random binary variable $x=1$
+	Single variable that can take on either 1, or 0; $x\in \{0, 1\}$. We denote $\mu$ ($0\leq\mu\leq 1$) to be the probability that the random binary variable $x=1$
 	$$p(x=1|\mu)=\mu$$
 	$$p(x=0|\mu)=1-\mu$$
+\end{defn}
 
 \begin{defn}[Bernoulli Distribution]
 	Probability distribution of the binary variable x, where $\mu$ is the probability $x=1$.
@@ -30,7 +28,9 @@ We denote $\mu$ ($0\leq\mu\leq 1$) to be the probability that the random binary 
 \subsubsection{The Beta Distribution}
 In order to develop a Bayesian treatment for fitting data sets, we will introduce a prior distribution $p(\mu)$.
 
-\begin{defn}[Conjugacy] when the prior and posterior distributions belong to the same family. \end{defn}
+\begin{itemize}[--]
+	\item \textbf{Conjugacy:} when the prior and posterior distributions belong to the same family.
+\end{itemize}
 
 \begin{defn}[Beta Distribution]
 	$$\text{Beta}(\mu |a,b)=\frac{\Gamma (a+b)}{\Gamma (a)\Gamma (b)}\mu^{a-1} (1-\mu )^{b-1}$$
@@ -49,12 +49,10 @@ In order to develop a Bayesian treatment for fitting data sets, we will introduc
 	$$p(\mu |m,l,a,b)= \frac{\Gamma (m+a+l+b)}{\Gamma (m+a)\Gamma (l+b)} \mu^{m+a-1} (1-\mu )^{l+b-1}$$
 \end{defn}
 
-\begin{defn}[Hyperparameters] parameters that control the distribution of the regular parameters. \end{defn}
-
-\begin{defn}[Sequential Approach] method of learning where you make use of an observation one at a time, or in small batches, and then discard them before the next observatiosn are used. (Can be shown with a Beta, where observing $x=1\to a++, x=0\to b++$, then normalizing) \end{defn}
-
-\begin{rem} For a finite data set, the posterior mean for $\mu$ always lies between the prior mean and the maximum likelihood estimate.\end{rem}
-
-\begin{rem} A general property of Bayesian learning is when we observe more and more data the uncertainty of the posterior distribution will steadily decrease. \end{rem}
-
-More information and examples of probability distributions can be found in Appendix B of Bishop's `Pattern Recognition and Machine Learning.'
+\begin{itemize}[--]
+	\item \textbf{Hyperparameters:} parameters that control the distribution of the regular parameters.
+	\item \textbf{Sequential Approach:} method of learning where you make use of an observation one at a time, or in small batches, and then discard them before the next observatiosn are used. (Can be shown with a Beta, where observing $x=1\to a++, x=0\to b++$, then normalizing)
+	\item For a finite data set, the posterior mean for $\mu$ always lies between the prior mean and the maximum likelihood estimate.
+	\item A general property of Bayesian learning is when we observe more and more data the uncertainty of the posterior distribution will steadily decrease.
+	\item More information and examples of probability distributions can be found in Appendix B of Bishop's `Pattern Recognition and Machine Learning.'
+\end{itemize}

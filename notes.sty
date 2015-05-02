@@ -6,7 +6,7 @@
 %Advanced list functionality
 \usepackage{enumerate}
 %Include math symbols
-\usepackage{amsmath, amsthm, amssymb, amsfonts}
+\usepackage{amsmath, amsthm, amssymb}
 %List labels, enumitem to keep use of basic options like [(a)]
 \usepackage[shortlabels]{enumitem}
 %Drawing Graphs
@@ -194,6 +194,11 @@
 
 %Style of following declarations
 \theoremstyle{definition}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
 
 \declaretheorem[name=Example,
 refname={example,examples},
