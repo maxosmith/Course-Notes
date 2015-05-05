@@ -11,6 +11,7 @@
 \usepackage[shortlabels]{enumitem}
 %Drawing Graphs
 \usepackage{tikz, tkz-graph}
+\usetikzlibrary{shapes, arrows}
 %Allows use of lstlisting
 \usepackage{listings}
 %Ability to define colors
@@ -226,3 +227,11 @@ numberwithin=section]{defn}
 \renewcommand{\O}[1]{
 	\mathcal{O}(#1)
 }
+
+%Tikz style definitions
+\tikzstyle{decision} = [diamond, draw,
+    text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+\tikzstyle{block} = [rectangle, draw, 
+    text width=5em, text centered, rounded corners, minimum height=4em]
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{cloud} = [draw, ellipse, node distance=3cm, minimum height=2em]
