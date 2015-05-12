@@ -64,3 +64,35 @@ Similarly when you have an additional variable, you want to reach the bottom of 
 	\item Another common way to represent multidimensional cost functions is through contour plots
 	\item 
 \end{itemize}
+
+\subsubsection{Gradient Descent}
+\begin{itemize}[--]
+	\item Given some function $J(\theta_0, \theta_1,\ldots ,\theta_n)$ we want to minimize $J$ with respect to $\theta_0, \theta-1,\ldots ,\theta_n$. 
+	\item Choose initialize values for the parameters (eg. $\theta_0=\ldots=\theta_n =0$)
+	\item Iteratively change $\theta_0, \ldots, \theta_n$ to reduce $J(\theta_0, \ldots, \theta_n )$, until hopefully a minimum is achieved.
+	$$\theta_j := \theta_j - \alpha \frac{\partial}{\partial \theta_j}J(\theta_0,\ldots, \theta_n)$$
+	\item $\alpha$ is the learning rate, which determines how much change happens in each update
+ 	\item Ensure simultaneous update, store in temps and then assign.
+	\item An issue with gradient descent is finding local minimums, because you won't be able to find the optimal solution. 
+	\item 
+\end{itemize}
+
+\subsubsection{Gradient Descent Intuition}
+\begin{itemize}[--]
+	\item To simplify, we will consider the cost funciton with 1 variable ($J(\theta_0)$).
+	\item The negative gradient means that you negative slope, which results in increases with negative slope and dcreases with positive slopes
+	\item If $\alpha$ is too small, gradient descent can be very slow.
+	\begin{center}
+		\includegraphics[scale=0.75]{sections/cs229/w1/alpha_small.png}
+	\end{center}
+
+	\item If $\alpha$ is too large, it may fail to converge (not reach minimum).
+	\begin{center}
+		\includegraphics[scale=0.75]{sections/cs229/w1/alpha_large.png}
+	\end{center}
+
+	\item If you're already at the local minimum, you will not change your parameters because the gradient is zero.
+	\item You can still converge to a local minimum with a fixed $\alpha$ (learning rate) because as we approach the minimun the gradient descent will automatically take smaller steps.
+	\item 
+
+\end{itemize}
