@@ -1,0 +1,17 @@
+\subsubsection{Multiple Features}
+\begin{itemize}[--]
+	\item Instead of just one feature ($x$), we known multiple features ($x_1,\ldots, x_n$). eg. size, number of bedrooms, number of floors, age of home.
+	\item $x^{(i)}_j:$ value of feature $j$ in $i^{th}$ training example
+	\item Now our hypothesis must account for multiple features: 
+		$$h_\theta (x)=\theta_0 + \theta_1 x_1 + \ldots \theta_n x_n$$
+	\item Again we define $x_0 = 1$ to simplify future math ($x^{(i)}_0=1$).
+	$$x=\begin{bmatrix} x_1\\ \vdots\\ x_n\end{bmatrix}\in \mathbb{R}^{n+1}
+		\theta = \begin{bmatrix}\theta_0 \\ \vdots\\ \theta_n\end{bmatrix}\in\mathbb{R}^{n+1}$$
+	\item Transposing the $\theta$ vector given our assumption for $x_0^{(i)}$ allows us to simplify our hypothesis into:
+		$$h_\theta (x) = \theta^{T}x$$
+\end{itemize}
+
+\subsubsection{Gradient Descent for Multiple Variables}
+\begin{itemize}[--]
+	\item Test
+\end{itemize}

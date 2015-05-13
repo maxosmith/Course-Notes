@@ -93,6 +93,21 @@ Similarly when you have an additional variable, you want to reach the bottom of 
 
 	\item If you're already at the local minimum, you will not change your parameters because the gradient is zero.
 	\item You can still converge to a local minimum with a fixed $\alpha$ (learning rate) because as we approach the minimun the gradient descent will automatically take smaller steps.
-	\item 
+\end{itemize}
 
+\subsubsection{Gradient Descent for Linear Regression}
+\begin{itemize}[--]
+	\item Before we continue, we must calculate what the derivative term is:
+	\begin{equation*}
+	\begin{split}
+		\frac{\partial}{\partial\theta_j}J(\theta_0, \theta_1) &= \frac{\partial}{\partial\theta_j}\frac{1}{2m}\sum_{i=1}^{m}(h(x^{(i)}-y^{(i)}))^2\\ 
+		&= \frac{\partial}{\partial\theta_j}\frac{1}{2m}\sum_{i=1}^{m}(\theta_0+\theta_1 x^{(i)} - y^{(i)})^2
+	\end{split}
+	\end{equation*}
+	\item In our linear model we have $j=0,1$; therefore, we can simplify our equation further for each case of $j$:
+	$$j=0:\frac{\partial}{\partial\theta_0}J(\theta_0, \theta_1)=\frac{1}{m}\sum_{i=1}^{m}(h(x^{(i)} - y^{(i}))$$
+	$$j=1:\frac{\partial}{\partial\theta_1}J(\theta_0, \theta_1)=\frac{1}{m}\sum_{i=1}^{m}(h(x^{(i)} - y^{(i}))x^{(i)}$$
+	\item Linear regression will always have a convex function for it's cost; namely, it is bowl shaped and doesn't have any local min besides the global - always finds best solution.
+	\item \textbf{Batch:} each step of gradient descent uses all the training examples
+	\item Gradient descent scales better than normal equations, which is an advanced linear algebra technique that finds the parameters in closed forms - no iterations.
 \end{itemize}
