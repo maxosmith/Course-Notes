@@ -43,4 +43,13 @@
 			\item Rotation invariance
 		\end{itemize}
 	\end{itemize}
+
+	\item \textbf{Shift invariance}: if any input into a system $x(t)$ produces the output $y(t)$ then upon introduction of a shift to the input, let the shift be $\delta$, $x(t+\delta)$ results in a shifted output $y(t+\delta)$. 
+	\item If $f(n,m)\xrightarrow{\mathcal{S}} g(n,m)$ then $f(n-n_0, m-m_0)\xrightarrow{\mathcal{S}} g(n-n_0, m-m_0)$ for every input image $f(n,m)$ and shifts $n_0, m_0$.
+	\item \textbf{Linear filtering}: A system $\mathcal{S}$ is a linear system iff it satisfies the superposition property (additivity and homogeneity):
+		$$\mathcal{S}(\alpha f_1 + \beta f_2) = \alpha\mathcal{S}(f_1) + \beta\mathcal{S} (f_2)$$
+	\item Moving average isn't a linear system (TODO: need justification)
+	\item Thresholding isn't a linear system, fails additivity. $f_1 < T, f_2 < T$ while $f_1+f2 > T$
+	\item TODO: Impulse Resposne
+	\item 
 \end{itemize}
