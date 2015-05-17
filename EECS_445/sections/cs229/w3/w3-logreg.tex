@@ -58,5 +58,67 @@
 
 \subsubsection{Simplified Cost Function and Gradient Descent}
 \begin{itemize}[--]
-	\item j
+	\item We can simplify the cost function to a single formula:
+	$$\text{cost}(h(x),y)=-y\log (h(x)) - (1-y) \log (1-h(x)$$
+	\item This formula works because when $y=1$ the portion of the equation that is relevant for $0$ becomes $0$ via $(1-y)$
+	\item Similarly for $y=0$.
+	\item Note: $y\in {0, 1}$ always.
+	\begin{align}
+		J(\theta) &= \frac{1}{m}\sum_{i=1}^{m}\text{cost}(h(x^{(i)}), y^{(i)})
+		&= -\frac{1}{m}\sum_{i=1}^{m}y^{(i)}\log h(x^{i}) + (1-y{(i)})\log (1-h(x({i})))
+	\end{align}
+
+	\item Note the negative sign was pulled out of the summation and brought in front of the summation
+	\item To implement gradient descent we must first fit the parameters $\theta$ to the model by minimizing $J(\theta)$
+	\item Then we can make a predition given the new $x$ using: $h(x)=\frac{1}{1+e^{-\theta^{T}x}}$
+	\item We again minimize our cost function using gradient descent, where:
+	$$\frac{\partial}{\partial\theta_j}J(\theta) = \frac{1}{m}\sum_{i=1}^{m} (h(x^{(i)}-y{(i)})x_j^{(i)}$$
+
+	\item To ensure that the learning rate $\alpha$ is set properly, remember to plot the cost function ($J(\theta)$) as a function of number of iterations and make sure $J(\theta)$ is decreasing on every iteration
+\end{itemize}
+
+\subsubsection{Advanced Optimization}
+\begin{itemize}[--]
+	\item Optimization algorithm: has the goal of minimizing a cost function $J(\theta)$. 
+	\item Given $\theta$ we have code that can compute:
+	\begin{itemize}[--]
+		\item $J(\theta)$ (to monitor convergence)
+		\item $\frac{\partial}{\partial\theta_j}J(\theta)$ for ($j=0,1,\ldots, n$)
+	\end{itemize}
+
+	\item Gradient descent repeats the following until convergence:
+	$$\theta_j := \theta_j - \alpha\frac{\partial}{\partial\theta_j}J(\theta)$$
+
+	\item Gradient descent isn't the only optimization algorithm:
+	\begin{itemize}[--]
+		\item Conjugate gradient
+		\item BFGS
+		\item L-BFGS
+	\end{itemize}
+
+	\item They have the advantages:
+	\begin{itemize}[--]
+		\item No need to manually pick $\alpha$
+		\item Often faster than gradient descent
+	\end{itemize}
+
+	\item And the disadvantages:
+	\begin{itemize}[--]
+		\item More complex
+	\end{itemize}
+
+	\item Don't implement these yourself, use package implementation
+\end{itemize}
+
+\subsubsection{Multiclass Classification: One-vs-All}
+\begin{itemize}[--]
+	\item Example of \textbf{multiclass classification}: email foldering/tagging: work, friends, family, hobby, etc.
+	\item In \textbf{one-vs-all} we compare each classification against all other possibilities. 
+	\begin{center}
+		\includegraphics[scale=0.5]{sections/cs229/w3/multiclass.png}
+	\end{center}
+
+	\item This gives us a classifier for each class
+	\item Each classifier estimates the probability that the value is that particular class
+	\item This allows us to guess the particular class by taking the representative class of the maximum probability classifier across all classifiers
 \end{itemize}
