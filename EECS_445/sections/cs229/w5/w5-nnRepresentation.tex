@@ -1,0 +1,67 @@
+\subsubsection{Non-linear Hypothesis}
+\begin{itemize}[--]
+	\item Suppose you have a housing classification problem with different features $x_1, \ldots ,x_100$ and if we were to include all quadratic terms for linear classification there would be an enourmous number of terms (~5000 features).
+	\item Using linear classifiers has an extremely bad asymptotic complexity (n is typically large)
+	\item For example computer vision problems are $\O{n^2}$
+	\item Neural networks turn out to be a much better way to solve these style problems
+\end{itemize}
+
+\subsubsection{Neurons and the Brain}
+\begin{itemize}[--]
+	\item Neural networks origins are in algorithms that try to mimic the brain
+	\item \textbf{``One learning algorithm hypothesis''}: $x$ cortex can learn whatever is hooked up to it
+	\begin{itemize}[--]
+		\item Auditory cortex can learn to see
+		\item Somatosensory cortex (touch) can learn to see
+		\item There is one algorithm that can teach anything to do any function
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{Model Representation I}
+\begin{itemize}[--]
+	\item Neural networks work by simulating the neurons in the brain
+	\item Has ``input wires'' dendrite
+	\item Has ``output wires'' axon
+	\item Neuron is a computational unit that takes in inputs and produces an output
+	\item Neurons communicate with little spikes of electricity through their axons, which another neuron can receiv with its dendrite
+	\item In an artificial neural network we model a neuron as a logistic unit:
+	\begin{center}\begin{tikzpicture}[node distance=1cm, auto]
+		%Place nodes
+		\node (x1) {$x_1$};
+		\node [below of=x1] (dots) {$x_2$};
+		\node [below of=dots] (xn) {$x_3$};
+
+		\node [cloud, right of=dots] (neuron) {  };
+
+		\node [right of=neuron] (h) {$h_\theta (x)$};
+
+		%Draw edges
+		\path [line] (x1) -- (neuron);
+		\path [line] (dots) -- (neuron);
+		\path [line] (xn) -- (neuron);
+		\path [line] (neuron) -- (h);
+	\end{tikzpicture}\end{center}
+
+		$$x=\begin{bmatrix} x_0\\ x_1\\ x_2\\ x_3 \end{bmatrix}, \theta=\begin{bmatrix}\theta_0 \\ \theta_1 \\ \theta_2 \\ \theta_3 \end{bmatrix}, h(x)=\frac{1}{1+e^{-\theta^{T}x}}$$
+
+	\begin{itemize}[--]
+		\item Here the arrows coming from the $x$ are the input wires
+		\item The neuron does the computation
+		\item Finally the output comes out
+	\end{itemize}
+
+	\item The $x_0$ is called the \textbf{bias unit} and is sometimes omitted because it's constant.
+	\item \textbf{Activation function}: defines the output of that node given an input or set of inputs
+	\item ``weights'' are synonomous with parameters of the model
+	\item Neural networks are groups of neurons strung together
+
+	TODO: Neural Network
+
+	\item \textbf{Input layer}: first layer of inputted values
+	\item \textbf{Output layer}: the final layer that calculates the output value
+	\item \textbf{Hidden layer}: the center layers that don't have known outputs (not input or output layer)
+	\item $a_i^{(j)}=$ ``activation'' of unit $i$ in layer $j$
+	\item $\theta^{(j)}=$ matrix of weights controlling function mapping from layer $j$ to layer $j+1$
+	\item If a network has $s_j$ units in layer $j$, $s_{j+1}$ units in layer $j+1$, then $\theta^{(j)}$ will be of dimension $s_{j+1}\times (s_j + 1)$
+
+\end{itemize}
