@@ -1,0 +1,61 @@
+\subsubsection{Prioritizing What to Work On}
+\begin{itemize}[--]
+	\item Building a spam Classifier:
+	\begin{itemize}[--]
+		\item Supervised learning problem.
+		\item $x=$features of email
+		\item $y=$ spam (1) or not spam (0)
+		\item Featurs $x$: choose 100 words indicative of spam/not spam
+		\item $\vec{x}=$ 1 when the corresponding word appears, and 0 otherwise (eg. andrew is the first word, and it's in the email $x\left[ 0\right]=1$)
+		\item Note: in practice, take most frequently occuring $n$ words (10000 to 50000) in training set, rather than manually pick 100 words
+	\end{itemize}
+
+	\item How to spend our time to make it have low error?
+	\begin{itemize}[--]
+		\item Collect lots of data
+		\begin{itemize}[--]
+			\item eg. ``honeypot'' project
+		\end{itemize}
+
+		\item Develop sophisticated features, for example based on email routing information (from email header)
+		\item Develop sophisticated features for message body, eg. should ``discount'' and ``discounts'' be treated as the same word? How about ``deal'' and ``Dealer''? Features about punctuation?
+		\item Develop sophisticated algorithm to detect misspellings (eg. m0rtgages, med1cine, w4tches)
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{Error Analysis}
+\begin{itemize}[--]
+	\item Recommended approach:
+	\begin{itemize}
+		\item Start with a simple algorithm that you can implement quickly. Implement it and test it on our cross-validation data
+		\item Plot learning curves to decide if more data, more features, etc. are likely to help.
+		\item Error analysis: Manually examine the examples (in cross validation set) that your algorithm made errors on. See if you spot any systematic trend in what type of examples it is making errors on
+	\end{itemize}
+
+	\item This allows evidence to decide our decisions, and not gut feelings
+	\item Manually categorize errors when doing analysis:
+	\begin{itemize}[--]
+		\item What type of error is it
+		\item What cues (features) you think would have helped the algorithm classify them correctly
+	\end{itemize}
+
+	\item The importance of numerical evaluation:
+	\item Should discount/discounts/discounted/discounting be treated as the same word?
+	\item Can use ``stemming'' software (eg. Porter stemmer)
+	\item 
+\end{itemize}
+
+\subsubsection{Error Metrics for Skewed Classes}
+\begin{itemize}[--]
+	\item j
+\end{itemize}
+
+\subsubsection{Trading Off Precision and Recall}
+\begin{itemize}[--]
+	\item j
+\end{itemize}
+
+\subsubsection{Data For Machine Learning}
+\begin{itemize}[--]
+	\item j
+\end{itemize}
