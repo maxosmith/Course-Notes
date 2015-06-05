@@ -42,6 +42,9 @@
 \setlength{\headheight}{15pt}
 \pagestyle{fancy}
 \fancyhf{}
+\makeatletter
+\newcommand{\resetHeadWidth}{\fancy@setoffs}
+\makeatother
 
 %Set-up links, enabling table of contents
 \hypersetup{
@@ -56,6 +59,7 @@
 %Fix margins
 \geometry{letterpaper}
 \geometry{tmargin=1in, bmargin=1in}
+\resetHeadWidth
 
 %Fixes line numbering
 \makeatletter
@@ -72,6 +76,9 @@
     \fi}
 \makeatother
 \lstset{matchrangestart=t}
+
+%Additional Tikz libraries
+\usetikzlibrary{calc, matrix}
 
 %----------------------------
 %Formatting Definitions
@@ -235,3 +242,5 @@ numberwithin=section]{defn}
     text width=5em, text centered, rounded corners, minimum height=4em]
 \tikzstyle{line} = [draw, -latex']
 \tikzstyle{cloud} = [draw, ellipse, node distance=3cm, minimum height=2em]
+
+\resetHeadWidth
