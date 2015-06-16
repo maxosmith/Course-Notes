@@ -68,15 +68,52 @@
 	\end{tikzpicture}
 
 	\item \textbf{Precision}: $\frac{\text{True Positives}}{\# Predicted Positives}$ (first row)
-	\item \textbf{Recall}: $\frac{\text{}}{\text{}}$
+	\item \textbf{Recall}: $\frac{\text{True positive}}{\text{\# Actual Positives}}$ (first col)
+	\item $y=1$ in presence of rare class that we want to detect
 \end{itemize}
 
 \subsubsection{Trading Off Precision and Recall}
 \begin{itemize}[--]
-	\item j
+	\item Continueing the cancer classification problem, with a logistic regression ($y=1$ has cancer).
+	\item Suppose we want to predict $y=1$ (cancer) only if very confident
+	\item One way to do this is to set the threshold for predicted $y=1$ when $h(x)$ is very high ($h(x)\geq 0.7$)
+	\begin{itemize}[--]
+		\item Higher precision
+		\item Lower recall 
+	\end{itemize}
+
+	\item Suppose we want to avoid missing too many cases of cancer (avoid false negatives)
+	\begin{itemize}[--]
+		\item We may now instead set the threshold very low ($h(x)<0.3$)
+		\item High recall, lower precision
+		\item Catching more cancer individuals, but more incorrect 
+	\end{itemize}	
+
+	\item How to compare precision/recall numbers?
+	\item Suppose we have 3 different algorithms:
+
+	\begin{tabular}{c| c c}
+		& Precision (P) & Recall (R)\\
+		\hline
+		Algorithm 1 & 0.5 & 0.4 \\
+		Algorithm 2 & 07 & 0.1 \\
+		Algorithm 3 & 0.02 & 1.0
+	\end{tabular}
+
+	\item Averaging lends itself to Alg 3, which is clearly a bad choice (always predicts $y=1$), so this is a bad choice
+	\item \textbf{F score}: $F_1 = 2\frac{PR}{P+R}$
+	\item There are many different scores to compare precision/recall, but this numeric is the typical beginner level
 \end{itemize}
 
 \subsubsection{Data For Machine Learning}
 \begin{itemize}[--]
-	\item j
+	\item ``It's not who has the best algorithm that wins. It's who has the most data''
+	\item Assume feature $x\in\mathbb{R}^{n+1}$ has sufficient information to predict $y$ accurately.
+	\item Example: For breakfast I ate \_ eggs. (predict correct form of: to, too, two)
+	\item Counterexample: predict housing price from only size (feet$^2$) and no othe features (don't have enough information to accurately predict the price)
+	\item Useful test: Given the input $x$, can a human expert confidently predict $y$? (given the features for the model)
+	\item Supose we use a learning algorithm with many parameters (eg. logistic regression/linear regression with many features; neural network with many hidden units)
+	\item $J_{train}$ should be small due to the low bias of these algorithms
+	\item And using our very large training set (unlikely to overfit, low variance) $\to J_{train}=J_{test}$
+	\item These result in $J_{test}$ being very small
 \end{itemize}
