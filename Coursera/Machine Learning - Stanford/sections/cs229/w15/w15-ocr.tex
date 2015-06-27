@@ -1,0 +1,59 @@
+\subsubsection{Problem Descritpion and Pipeline}
+\begin{itemize}[--]
+	\item \textbf{Photo OCR}: photo optical character recognition
+	\item How do we get computers to understand the text that appears in images
+	\item Photo OCR pipeline
+	\begin{itemize}[--]
+		\item Text detection (bounding box)
+		\item Character segmentation (segment each character within box)
+		\item Character classification (on each segment)
+	\end{itemize}
+	\item These `pipelines' are common, where each component may be its own machine learning component (not necessary)
+	\item This pipeline can be one of the most important design decision
+\end{itemize}
+
+\subsubsection{Sliding Windows}
+\begin{itemize}[--]
+	\item Supervised leanring for pedestrain detection:
+	\begin{itemize}[--]
+		\item $x=$ pixels in 82x36 image patches
+		\item Positive examples ($y=1$), negative ($y=0$)
+		\item Where positive examples are images containing a pedestrian
+		\item Train a classifier to recognize pedestrians
+	\end{itemize}
+	\item To check if if a pedestrian in our image, we will take the same bounding box and slide it across the first row of this size on our image
+	\item The amount of pixels you shift the image over in this slide is called the \textbf{step-size/stride}
+	\item Now we scale this sliding box for different sized objects of interest
+	\item We can apply this concept to detect boxes that contain some sort of character
+	\item We can expand our guessed areas, and then draw bounding rectangles over areas that have reasonable resolutions for words
+	\item We may also need to train a classifier to classify between letters that are split/partial, to find the individual characters in the words
+\end{itemize}
+
+\subsubsection{Getting Lots of Data and Artificial Data}
+\begin{itemize}[--]
+	\item For character recognition, we can make fake data by taking font from the internet and overlaying it on a random background iamge
+	\item You can apply different distortions to get even more sophisticated examples
+	\item Another way is by taking already obtained data, and introducing distortions
+	\item For another example you can alter audio for speech recognition by overlaying backgrounds
+	\item Distortion introduced should be representation of the type of noise/distortions in test set
+	\item Usually does not help to add purely random/meaningless noise to your data
+	\item Discussion on getting more data:
+	\begin{itemize}[--]
+		\item Make sure you have a low bias classifier before expending the effort (Plot learning curves). eg. keep increasing the number of features/number of hidden units in neural network until you have a low bias classifier
+		\item  ``How much work would it be to get 10x as much data as we currently have?''
+		\begin{itemize}[--]
+			\item Artificial data synthesis
+			\item Collect/label it yourself (no. of hours?)
+			\item ``Crowd source'' (eg. amazon mechanical turk)
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{Ceiling Analysis - What Part of the Pipeline to Work on Next}
+\begin{itemize}[--]
+	\item  What part of the pipeline should you spend the most time trying to improve?
+	\item In order to make decisions on developing the system, it will be helpful to have a single real-number evaluation of the system
+	\item Feed perfect inputs into each pipeline stage and see the total improvement via this metric
+	\item The larger the jump, the more you should focuso on that segment of the pipeline
+\end{itemize}
+

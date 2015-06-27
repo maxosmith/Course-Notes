@@ -1,0 +1,80 @@
+\documentclass[english, 11pt]{article}
+\usepackage{../../notes}
+\usepackage{lipsum}
+
+%Global Course Variables
+\newcommand{\myCourseCode}{Stanford}
+\newcommand{\myCourseName}{Machine Learning}
+\newcommand{\myProf}{Andrew Ng}
+\newcommand{\myTerm}{Summer 2015}
+\newcommand{\myLogo}{stanford.png}
+
+%Headers
+\lhead{\myCourseName}
+\rhead{\fancyplain{}{\rightmark}} 
+
+%Footers
+\cfoot{\thepage}
+
+\begin{document}
+\titleHeader{\myCourseCode}{\myCourseName}{\myProf}{\myTerm}{\myLogo}
+
+%Document information
+\rule{1\columnwidth}{.5pt}
+Contributors: Max Smith
+\begin{center}
+	Latest revision: \today
+\end{center}
+\toc
+\abstr{This course provides a broad introduction to machine learning, datamining, and statistical pattern recognition. Topics include: (i) Supervised learning (parametric/non-parametric algorithms, support vector machines, kernels, neural networks). (ii) Unsupervised learning (clustering, dimensionality reduction, recommender systems, deep learning). (iii) Best practices in machine learning (bias/variance theory; innovation process in machine learning and AI). The course will also draw from numerous case studies and applications, so that you'll also learn how to apply learning algorithms to building smart robots (perception, control), text understanding (web search, anti-spam), computer vision, medical informatics, audio, database mining, and other areas.}
+
+%----------------------------
+%Document Begins
+%----------------------------
+
+\section{Linear Regression with One Variable}
+\input{sections/cs229/w1/w1-1varlinreg}
+
+\section{Linear Regression with Multiple Variables}
+\input{sections/cs229/w2/w2-multivarlinreg}
+
+\section{Logistic Regression}
+\input{sections/cs229/w3/w3-logreg}
+
+\section{Regularization}
+\input{sections/cs229/w4/w4-regularization}
+
+\section{Neural Networks: Representation}
+\input{sections/cs229/w5/w5-nnRepresentation}
+
+\section{Neural Networks: Learning}
+\input{sections/cs229/w6/w6-nnLearning}
+
+\section{Advice for Applying Machine Learning}
+\input{sections/cs229/w7/w7-applying}
+
+\section{Machine Learning System Design}
+\input{sections/cs229/w8/w8-design}
+
+\section{Support Vector Machines}
+\input{sections/cs229/w9/w9-vectorMachines}
+
+\section{Clustering}
+\input{sections/cs229/w10/w10-unsupervised}
+
+\section{Dimensionality Reduction}
+\input{sections/cs229/w11/w11-reduction}
+
+\section{Anomaly Detection}
+\input{sections/cs229/w12/w12-anomaly}
+
+\section{Recommender Systems}
+\input{sections/cs229/w13/w13-recommender}
+
+\section{Large Scale Machine Learning}
+\input{sections/cs229/w14/w14-largeScale}
+
+\section{Application Example: Photo OCR}
+\input{sections/cs229/w15/w15-ocr}
+
+\end{document}

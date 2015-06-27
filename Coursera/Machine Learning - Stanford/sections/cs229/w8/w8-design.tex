@@ -1,0 +1,119 @@
+\subsubsection{Prioritizing What to Work On}
+\begin{itemize}[--]
+	\item Building a spam Classifier:
+	\begin{itemize}[--]
+		\item Supervised learning problem.
+		\item $x=$features of email
+		\item $y=$ spam (1) or not spam (0)
+		\item Featurs $x$: choose 100 words indicative of spam/not spam
+		\item $\vec{x}=$ 1 when the corresponding word appears, and 0 otherwise (eg. andrew is the first word, and it's in the email $x\left[ 0\right]=1$)
+		\item Note: in practice, take most frequently occuring $n$ words (10000 to 50000) in training set, rather than manually pick 100 words
+	\end{itemize}
+
+	\item How to spend our time to make it have low error?
+	\begin{itemize}[--]
+		\item Collect lots of data
+		\begin{itemize}[--]
+			\item eg. ``honeypot'' project
+		\end{itemize}
+
+		\item Develop sophisticated features, for example based on email routing information (from email header)
+		\item Develop sophisticated features for message body, eg. should ``discount'' and ``discounts'' be treated as the same word? How about ``deal'' and ``Dealer''? Features about punctuation?
+		\item Develop sophisticated algorithm to detect misspellings (eg. m0rtgages, med1cine, w4tches)
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{Error Analysis}
+\begin{itemize}[--]
+	\item Recommended approach:
+	\begin{itemize}
+		\item Start with a simple algorithm that you can implement quickly. Implement it and test it on our cross-validation data
+		\item Plot learning curves to decide if more data, more features, etc. are likely to help.
+		\item Error analysis: Manually examine the examples (in cross validation set) that your algorithm made errors on. See if you spot any systematic trend in what type of examples it is making errors on
+	\end{itemize}
+
+	\item This allows evidence to decide our decisions, and not gut feelings
+	\item Manually categorize errors when doing analysis:
+	\begin{itemize}[--]
+		\item What type of error is it
+		\item What cues (features) you think would have helped the algorithm classify them correctly
+	\end{itemize}
+
+	\item The importance of numerical evaluation:
+	\item Should discount/discounts/discounted/discounting be treated as the same word?
+	\item Can use ``stemming'' software (eg. Porter stemmer)
+	\item Error analysis may not be helpful for deciding if this is likely to improve performance. Only solution is to try and see if it works (hopefully this can be done quickly)
+	\item Then we wil need numerical evaluation (eg. cross validation erro) of algorithm's performance with and without stemming
+	\item Comparing the error between these two, you can easily decide whether or not to use stemming
+\end{itemize}
+
+\subsubsection{Error Metrics for Skewed Classes}
+\begin{itemize}[--]
+	\item Consider training a logistic regression model $h(x)$ ($y=1$ if cancer, $y=0$ otherwise)
+	\item We discover that we got 1\% error on test set (99\% correct)
+	\item However, only 0.50\% of patients have cancer
+	\item If we always predicted $y=0$, we would have better error (0.5\%)
+	\item \textbf{Skewed classes}: where we have much greater number of examples of one class then the others
+	\item This makes classification accuracy unclear when quality changes in classifier
+	\item \textbf{Precision/Recall}:
+	\begin{tikzpicture}[element/.style={minimum width=1.75cm,minimum height=0.85cm}]
+		\matrix (m) [matrix of nodes,nodes={element},column sep=-\pgflinewidth, row sep=-\pgflinewidth,]{
+		         & 1  & 0 \\
+		1 & |[draw]|True Positive & |[draw]|False Positive \\
+		0 & |[draw]|False Negative & |[draw]|True Negative \\
+		};
+
+		\node[above=0.25cm] at ($(m-1-2)!0.5!(m-1-3)$){\textbf{Actual Class}};
+		\node[rotate=90] at ($(m-2-1)!0.5!(m-3-1)+(-1.25,0)$){\textbf{Predicted Class}};
+	\end{tikzpicture}
+
+	\item \textbf{Precision}: $\frac{\text{True Positives}}{\# Predicted Positives}$ (first row)
+	\item \textbf{Recall}: $\frac{\text{True positive}}{\text{\# Actual Positives}}$ (first col)
+	\item $y=1$ in presence of rare class that we want to detect
+\end{itemize}
+
+\subsubsection{Trading Off Precision and Recall}
+\begin{itemize}[--]
+	\item Continueing the cancer classification problem, with a logistic regression ($y=1$ has cancer).
+	\item Suppose we want to predict $y=1$ (cancer) only if very confident
+	\item One way to do this is to set the threshold for predicted $y=1$ when $h(x)$ is very high ($h(x)\geq 0.7$)
+	\begin{itemize}[--]
+		\item Higher precision
+		\item Lower recall 
+	\end{itemize}
+
+	\item Suppose we want to avoid missing too many cases of cancer (avoid false negatives)
+	\begin{itemize}[--]
+		\item We may now instead set the threshold very low ($h(x)<0.3$)
+		\item High recall, lower precision
+		\item Catching more cancer individuals, but more incorrect 
+	\end{itemize}	
+
+	\item How to compare precision/recall numbers?
+	\item Suppose we have 3 different algorithms:
+
+	\begin{tabular}{c| c c}
+		& Precision (P) & Recall (R)\\
+		\hline
+		Algorithm 1 & 0.5 & 0.4 \\
+		Algorithm 2 & 07 & 0.1 \\
+		Algorithm 3 & 0.02 & 1.0
+	\end{tabular}
+
+	\item Averaging lends itself to Alg 3, which is clearly a bad choice (always predicts $y=1$), so this is a bad choice
+	\item \textbf{F score}: $F_1 = 2\frac{PR}{P+R}$
+	\item There are many different scores to compare precision/recall, but this numeric is the typical beginner level
+\end{itemize}
+
+\subsubsection{Data For Machine Learning}
+\begin{itemize}[--]
+	\item ``It's not who has the best algorithm that wins. It's who has the most data''
+	\item Assume feature $x\in\mathbb{R}^{n+1}$ has sufficient information to predict $y$ accurately.
+	\item Example: For breakfast I ate \_ eggs. (predict correct form of: to, too, two)
+	\item Counterexample: predict housing price from only size (feet$^2$) and no othe features (don't have enough information to accurately predict the price)
+	\item Useful test: Given the input $x$, can a human expert confidently predict $y$? (given the features for the model)
+	\item Supose we use a learning algorithm with many parameters (eg. logistic regression/linear regression with many features; neural network with many hidden units)
+	\item $J_{train}$ should be small due to the low bias of these algorithms
+	\item And using our very large training set (unlikely to overfit, low variance) $\to J_{train}=J_{test}$
+	\item These result in $J_{test}$ being very small
+\end{itemize}

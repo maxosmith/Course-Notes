@@ -1,0 +1,57 @@
+\begin{itemize}[--]
+	\item \textbf{Linear Regression:} $y(\mathbf{x}, \mathbf{w})=w_0la+w_1 x_1+\ldots +w_D x_D$
+	\item Limited on linear function of input variables $x_i$
+	\item Extend the model with nonlinear functions, where $\phi_j (x)$ are known as basis functions:
+		$$y(\mathbf{x}, \mathbf{w})=w_0 +\sum_{j=1}^{M-1}w_j\phi_j (x)$$
+	\item $w_0$ allows for any fixed offset in data, and is known as the \textbf{bias parameter}.
+	\item Given a dummy variable $\phi_0 (x)=1$, our model becomes:
+		$$y(\mathbf{x}, \mathbf{w})=\sum_{j=0}^{M-1}w_j\phi_j (x)=\mathbf{w}^\mathbf{T} \mathbf{\phi} (x)$$
+	\item Functions of this form are called \textbf{linear models} because the function is linear in weight.
+\end{itemize}
+
+\subsubsection{Maximum likelihood and least squares}
+\begin{itemize}[--]
+	\item Via proof on p. 141-2, the maximum likelihood of the weight matrix is: $$\mathbf{w}_{\mathbf{ML}}=(\mathbf{\phi}^{\mathbf{T}}\mathbf{\phi})^{-1}\mathbf{\phi}^{\mathbf{T}}\mathbf{t}$$
+	where: $\mathbf{\phi}_{nj}=\phi_{j} (x_{n})$, called the \textbf{design matrix}
+	\item This is known as the \textbf{normal equations} for the least squares problem.
+\end{itemize}
+
+\begin{theorem}[Moore-Penrose Pseudo-Inverse]
+	of the matrix $\mathbf{\phi}$ is the quantity:
+	$$\mathbf{\phi}^{\dagger}=(\mathbf{\phi}^{\mathbf{T}}\mathbf{\phi})^{-1}\mathbf{\phi}^{\mathbf{T}}$$
+	It is regarded as the generalization of the matrix inverse of nonsquare matrix, because in the case that that the matrix is square we see: $\mathbf{\phi}^{\dagger}=\mathbf{phi}^{-1}$
+\end{theorem}
+
+\begin{itemize}[--]
+	\item The bias $w_0$ compensates for the difference between the averages of the target values and the weighted sum of the average of the basis function values.
+	\item The Geometric interpretation of the least squares solution is an $N$-dimensional projection onto an $M$-dimensional subspace.
+	\item Thus in practice direct solutions can lead to numerical issues when $\phi^{T}\phi$ is close to singular, because it results in large parameters. \textbf{Singular value decomposition} is a solution to this as it regularizes the terms.
+\end{itemize}
+
+\subsubsection{Sequential Learning}
+\begin{itemize}[--]
+	\item \textbf{Sequential Learning}: data points are considered one at a time, and the model parameters are updated after each such presentation.
+	\begin{itemize}[--]
+		\item This is useful for real-time applications, where data continues to arrive
+	\end{itemize}
+\end{itemize}
+
+\begin{defn}[Stochastic Gradient Descent]
+	Application of sequential learning where the model parameters are updated at each additional data point using:
+	$$\mathbf{w}^{(\tau +1)}=\mathbf{w}^{(\tau )}-\eta \nabla E_n$$
+	Here $\tau$ is the iteration number, $\eta$ is the learning rate, and $E_n$ represents an objective funciton we want to minimize (in this case the sum of errors).
+
+	TODO: Pseudocode
+\end{defn}
+
+\begin{defn}[Least-Means-Squares (LMS) Algorithm]
+	Stochastic gradient descent where the objective function is the sum-of-squares error function resulting:
+		$$\mathbf{w}^{(\tau +1)}=\mathbf{w}^{(\tau)} + \eta (t_n - \mathbf{w}^{(\tau)\mathbf{T}}\phi_n )\phi_n$$
+\end{defn}
+
+\begin{itemize}[--]
+	\item We introduce a regularization term to control over and under fitting. $$E=E_D (\mathbf{w}) + \lambda E_W \mathbf{w})$$
+	\item A simple example of regularization is given by the sum-of-squares of the weight vector elements: $$E_W (\mathbf{w}) = 1/2 \mathbf{w}^\mathbf{T}\mathbf{w}$$
+	\item This regularizer is known as \textbf{weight decay} because it encourages weight values to decay towards zero unless supported by the data (stats term: \textbf{parameter shrinkage})
+	\item 
+\end{itemize}
