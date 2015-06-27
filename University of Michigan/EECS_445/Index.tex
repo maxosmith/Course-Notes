@@ -1,5 +1,5 @@
 \documentclass[english, 11pt]{article}
-\usepackage{../notes}
+\usepackage{../../notes}
 \usepackage{lipsum}
 
 %Global Course Variables
@@ -7,6 +7,7 @@
 \newcommand{\myCourseName}{Introduction to Machine Learning}
 \newcommand{\myProf}{Honglak Lee}
 \newcommand{\myTerm}{Fall 2015}
+\newcommand{\myLogo}{../um_seal.png}
 
 %Headers
 \lhead{\myCourseName}
@@ -16,7 +17,7 @@
 \cfoot{\thepage}
 
 \begin{document}
-\titleHeader{\myCourseCode}{\myCourseName}{\myProf}{\myTerm}
+\titleHeader{\myCourseCode}{\myCourseName}{\myProf}{\myTerm}{\myLogo}
 
 %Document information
 \rule{1\columnwidth}{.5pt}
@@ -37,52 +38,6 @@ Contributors: Max Smith
 
 	\subsection{Linear Models for Regression}
 	\input{sections/bishop/ch3/3_1}
-
-\section{Stanford Notes - CS229}
-	\subsection{Linear Regression with One Variable}
-	\input{sections/cs229/w1/w1-1varlinreg}
-
-	\subsection{Linear Regression with Multiple Variables}
-	\input{sections/cs229/w2/w2-multivarlinreg}
-
-	\subsection{Logistic Regression}
-	\input{sections/cs229/w3/w3-logreg}
-  
-	\subsection{Regularization}
-	\input{sections/cs229/w4/w4-regularization}
-
-	\subsection{Neural Networks: Representation}
-	\input{sections/cs229/w5/w5-nnRepresentation}
-
-	\subsection{Neural Networks: Learning}
-	\input{sections/cs229/w6/w6-nnLearning}
-
-	\subsection{Advice for Applying Machine Learning}
-	\input{sections/cs229/w7/w7-applying}
-
-	\subsection{Machine Learning System Design}
-	\input{sections/cs229/w8/w8-design}
-
-	\subsection{Support Vector Machines}
-	\input{sections/cs229/w9/w9-vectorMachines}
-
-	\subsection{Clustering}
-	\input{sections/cs229/w10/w10-unsupervised}
-
-	\subsection{Dimensionality Reduction}
-	\input{sections/cs229/w11/w11-reduction}
-
-	\subsection{Anomaly Detection}
-	\input{sections/cs229/w12/w12-anomaly}
-
-	\subsection{Recommender Systems}
-	\input{sections/cs229/w13/w13-recommender}
-
-	\subsection{Large Scale Machine Learning}
-	\input{sections/cs229/w14/w14-largeScale}
-
-	\subsection{Application Example: Photo OCR}
-	\input{sections/cs229/w15/w15-ocr}
 
 % \section{Introduction and Overview}
 % \section{Supervised Learning: Regression}

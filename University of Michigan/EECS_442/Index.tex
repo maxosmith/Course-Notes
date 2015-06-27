@@ -1,5 +1,5 @@
 \documentclass[english, 11pt]{article}
-\usepackage{notes}
+\usepackage{../../notes}
 \usepackage{lipsum}
 
 %Global Course Variables
@@ -7,6 +7,7 @@
 \newcommand{\myCourseName}{Computer Vision}
 \newcommand{\myProf}{Matthew Johnson-Roberson}
 \newcommand{\myTerm}{Fall 2015}
+\newcommand{\myLogo}{../um_seal.png}
 
 %Headers
 \lhead{\myCourseName}
@@ -16,7 +17,7 @@
 \cfoot{\thepage}
 
 \begin{document}
-\titleHeader{\myCourseCode}{\myCourseName}{\myProf}{\myTerm}
+\titleHeader{\myCourseCode}{\myCourseName}{\myProf}{\myTerm}{\myLogo}
 
 %Document information
 \rule[0.5ex]{1\columnwidth}{.5pt}
@@ -31,10 +32,6 @@ Contributors: Max Smith
 %Document Begins
 %----------------------------
 % \input{sections/lec1-Example/page}
-
-\section{Stanford Notes - CS 131}
-\subsection{Pixels, Feature, and Cameras}
-\input{sections/cs131/1-cameras/pixelsandfilters}
 
 \subsection{Regions of Images, and Segmentation}
 
