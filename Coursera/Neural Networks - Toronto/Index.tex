@@ -1,0 +1,68 @@
+\documentclass[english, 11pt]{article}
+\usepackage{../../notes}
+\usepackage{lipsum}
+
+%Global Course Variables
+\newcommand{\myCourseCode}{University of Toronto}
+\newcommand{\myCourseName}{Neural Networks for Machine Learning}
+\newcommand{\myProf}{Geoffrey Hinton}
+\newcommand{\myTerm}{Summer 2015}
+\newcommand{\myLogo}{UofT-Crest-Wide.png}
+
+%Headers
+\lhead{\myCourseName}
+\rhead{\fancyplain{}{\rightmark}} 
+
+%Footers
+\cfoot{\thepage}
+
+\begin{document}
+\titleHeader{\myCourseCode}{\myCourseName}{\myProf}{\myTerm}{\myLogo}
+
+%Document information
+\rule{1\columnwidth}{.5pt}
+Contributors: Max Smith
+\begin{center}
+	Latest revision: \today
+\end{center}
+\toc
+\abstr{Todo}
+
+%----------------------------
+%Document Begins
+%----------------------------
+
+\section{Introduction}
+
+\section{The Perceptron learning procedure}
+
+\section{The backpropagation learning proccedure}
+
+\section{Learning feature vectors for words}
+
+\section{Object recognition with neural nets}
+	\input{sections/5/5}
+
+\section{Optimization: How to make the learning go faster}
+
+\section{Recurrent neural networks}
+
+\section{More recurrent neural networks}
+
+\section{Ways to make neural networks generalize better}
+
+\section{Combining multiple neural networks to improve generalization}
+
+\section{Hopfield nets and Boltzmann machines}
+
+\section{Restricted Boltzmann machines (RBMs)}
+
+\section{Stacking RBMs to make Deep Belief Nets}
+
+\section{Deep neural nets with generative pre-training}
+
+\section{Modeling hierarchical structure with neural nets}
+
+\section{Recent applications of deep neural nets}
+
+\end{document}
