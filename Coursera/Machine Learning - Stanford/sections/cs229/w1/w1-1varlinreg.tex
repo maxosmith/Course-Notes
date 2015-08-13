@@ -62,19 +62,17 @@ Similarly when you have an additional variable, you want to reach the bottom of 
 	\item The gradient gives the direction of maximumal increase on a surface.
 	\item We will use a negative gradient to find the `direction' to travel towards the bottom of the hill
 	\item Another common way to represent multidimensional cost functions is through contour plots
-	\item 
 \end{itemize}
 
 \subsubsection{Gradient Descent}
 \begin{itemize}[--]
-	\item Given some function $J(\theta_0, \theta_1,\ldots ,\theta_n)$ we want to minimize $J$ with respect to $\theta_0, \theta-1,\ldots ,\theta_n$. 
+	\item Given some function $J(\theta_0, \theta_1,\ldots ,\theta_n)$ we want to minimize $J$ with respect to $\theta_0, \theta_1,\ldots ,\theta_n$. 
 	\item Choose initialize values for the parameters (eg. $\theta_0=\ldots=\theta_n =0$)
 	\item Iteratively change $\theta_0, \ldots, \theta_n$ to reduce $J(\theta_0, \ldots, \theta_n )$, until hopefully a minimum is achieved.
 	$$\theta_j := \theta_j - \alpha \frac{\partial}{\partial \theta_j}J(\theta_0,\ldots, \theta_n)$$
 	\item $\alpha$ is the learning rate, which determines how much change happens in each update
  	\item Ensure simultaneous update, store in temps and then assign.
 	\item An issue with gradient descent is finding local minimums, because you won't be able to find the optimal solution. 
-	\item 
 \end{itemize}
 
 \subsubsection{Gradient Descent Intuition}

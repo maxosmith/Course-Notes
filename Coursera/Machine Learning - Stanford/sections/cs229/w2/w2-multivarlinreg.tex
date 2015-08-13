@@ -14,11 +14,11 @@
 \subsubsection{Gradient Descent for Multiple Variables}
 \begin{itemize}[--]
 	\item Repeat until convergence ($j=0,\ldots, n$): 
-		$$\theta_j := \theta_j \alpha\frac{1}{m}\sum_{i=1}^{m}(h(x^{(i)}-y^{(i)}))x^{(i)}_j$$
+		$$\theta_j := \theta_j -\alpha\frac{1}{m}\sum_{i=1}^{m}(h(x^{(i)}-y^{(i)}))x^{(i)}_j$$
 	\item This is a valid generalization of the previous formula because of our base case $x^{(i)}_0=1$
 \end{itemize}
 
-\subsubsection{Gradient Descent in Practice I - Featuer Scaling}
+\subsubsection{Gradient Descent in Practice I - Feature Scaling}
 \begin{itemize}[--]
 	\item \textbf{Feature scaling:} if features are on similar scales then we converge more quickly
 	\item Your parameters will oscillate along the larger ranged parameter making it's way much slower towards the center (in the case of two variables); whereas, if both axis were equal then you don't have a worst case to fret about
