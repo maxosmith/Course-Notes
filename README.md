@@ -1,6 +1,10 @@
 # Course-Notes
 
-## Getting Started:
+## Introduction
+
+Collection of lecture notes from institutions and sources. Feel free to contribute with a pull request.
+
+## Editing set-up:
 
 ### Installing Git
 
