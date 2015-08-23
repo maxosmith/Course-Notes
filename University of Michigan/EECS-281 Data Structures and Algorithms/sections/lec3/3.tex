@@ -1,0 +1,69 @@
+\subsection{Logarithmic Runtime}
+Logarithmic behavior is typically in a program that divides the input size every step. This could be something like binary search, or an update condition in a \lstinline[style=C++]{for} loop:
+\begin{lstlisting}[style=C++]
+for (int i = 100; i > 0; i /= 2){/* loop contents */}
+\end{lstlisting}
+
+\subsection{Complexity Analysis}
+\begin{itemize}
+	\item Each step takes $\O{1}$ time
+	\item \textbf{Goal}: Find time based on $n$
+	\item Tools:
+	\begin{itemize}
+		\item Find rate of growth of $f(n)$
+		\item Use Big-O notation to compare growth rates
+	\end{itemize}
+\end{itemize}
+
+\subsection{Complexity Cases}
+\begin{itemize}
+	\item \textbf{Best case}: The input case of size $n$ which will take the shortest amount of time. For example, in linear search, the element could be the first element in the array.
+	\item \textbf{Worst case}: The input case of size $n$ which would take the most amount of steps. In linear search, this would mean checking every element until the end.
+	\item \textbf{Average case}: The average input case. This would be $\frac{n}{2}$ in linear search.
+\end{itemize}
+
+\subsection{Amortized Complexity}
+A special kind of worst-case complexity that considers how an algorithm performs over a large series of inputs. It is just the total cost of the operations divided by $n$. ``If you use it a lot, it behaves as if it were ...''
+
+\subsection{Measuring Runtime}
+On Unix, use \lstinline[language=bash]{usr/bin/time}. call it like so:
+\begin{lstlisting}[language=bash]
+/usr/bin/time [command]
+\end{lstlisting}
+Or, if you want to measure the amount of time a block of code takes in C++, use \lstinline[style=C++]{<sys/time.h>}:
+\begin{lstlisting}[style=C++]
+#include <resource.h>
+#include <sys/resource.h>
+#include <sys/time.h>
+
+int main() {
+	struct rusage startu;
+	struct rusage endu;
+
+	getrusage(RUSAGE_SELF, &startu);
+	// Computation
+	getrusaage(RUSAGE_SELF, &endu);
+}
+\end{lstlisting}
+
+\subsection{Pseudocode}
+Pseudocode is a special way to describe algorithms. It is a mixture of English and programming to communicate whan an algorithm does in the simplest way.
+\begin{algorithmic}
+\Function{FizzBuzz}{}
+	\State $print_number \gets true$
+	\For{i := 1 to 100}
+		\If{i is divisable by 3}
+			\State print ``Fizz'';
+			\State $print_number \gets false$
+		\EndIf
+		\If{i is divisble by 5}
+			\State print ``Buzz'';
+			\State $print_number \gets false$
+		\EndIf
+		\If{$print_number$}
+			\State print i + newline;
+		\EndIf
+	\EndFor
+\EndFunction
+\end{algorithmic}
+It is meant to be readable, and there is no single standard.

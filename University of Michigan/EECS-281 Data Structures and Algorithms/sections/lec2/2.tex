@@ -1,0 +1,60 @@
+What affects runtime?
+\begin{itemize}
+	\item \textbf{The algorithm}: By relative measure, this is always on top. If there is an algorithm to do something in linear time when the competing implementation is in polynomial time, there's a clear winner.
+	\item \textbf{Implementation details}: Without knowledge of good programming style, there can be very subtle and tricky errors that can slow the algorithm down. For example, when iterating through a 2D array, you should always go row-major style to access sequential elements in memory.
+	\item \textbf{CPU speed and memory}: Usually, by investing a lot of money, you can only get a 2x-5x improvement in computing power. Not much.
+	\item \textbf{Compiler options}: The -g flag adds annotations to your files and should only be used for debugging. The -O3 flag turns on the highest level of optimization.
+	\item \textbf{Parallel programs}: What is running at the same time as your program in the processor. Virtually makes no difference.
+	\item \textbf{Input size}: This is the hardest thing to change, anyway.
+\end{itemize}
+The key question we seek to answer is: does a fast algorithm remain fast at large values of $n$?
+
+Notation:
+\begin{itemize}
+	\item $n$: input size
+	\item $f(n)$: max number of steps taken by an algorithm when input has length $n$
+	\item $\O{f(n)}$: upper bounds up to a constant
+\end{itemize}
+However it some cases defining $n$ remains ambigious: given a graph $V=5, E=6$ what would be $n$? It depends.
+
+\textbf{Steps} in a program are considered to be a single expression: 
+\begin{itemize}
+	\item Variable assignment
+	\item Arithmetic operations (not all)
+	\item Comparisons
+	\item Array indexing
+	\item Function calls
+	\item etc.
+\end{itemize}
+An example of counting follows:
+\begin{lstlisting}[style=C++]
+int sum = 0;					// init: 1
+for (int i = 0; i < n; ++i){	// init: 1, test: n, update: n, test fail: 1
+	sum += 1;					// 1*n
+}
+return sum;						// 1
+\end{lstlisting}
+In this example the sum of steps is $4+3n$. \textbf{Note}: loops generally take $2n+2$ steps.
+
+\begin{defn}[Big O]
+$f(n)=\O{g(n)}$ iff there exists $c>0, n_0 >0$ such that $f(n)\leq c\times g(n)$.
+\end{defn}
+
+\begin{defn}[Limit Definition of Big O]
+If $\lim_{n\to\infty}\frac{f(n)}{g(n)}=d<\infty$ then $f(n)$ is $\O{g(n)}$.
+\end{defn}
+Common Orders of Functions:\\
+\begin{center}
+\begin{tabular}{l | l}
+	Notation & Name \\
+	\hline
+	$\O{1}$ & Constant \\
+	$\O{\log{n}}$ & Logarithmic \\
+	$\O{N}$ & Linear \\
+	$\O{n \log{n}}$ & Loglinear \\
+	$\O{n^2}$ & Quadratic \\
+	$\O{c^n}$ & Exponential \\
+	$\O{n!}$ & Factorial \\
+	$\O{2^{2^{n}}}$ & Doubly Exponential	
+\end{tabular}
+\end{center}

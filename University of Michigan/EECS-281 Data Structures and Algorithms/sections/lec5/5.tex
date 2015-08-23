@@ -1,0 +1,25 @@
+Let's start with an interview question.
+
+A majority element is an element in array constitutes more than 50\% of elements. For example, consider the numbers:
+$$11,13,99,12,99,10,99,99,99$$
+Here, the majority element is 99. \textbf{Challenge}: Find the majority element in linear time using $\O{1}$ memory. 
+
+Use Moore's voting algorithm.
+
+\subsection{C Arrays and Strings}
+C arrays and strings are useful to know for legacy codebases, but you should always use \lstinline[style=C++]{array<T>} and \lstinline[style=C++]{vector<T>} instead for projects.
+
+\subsection{Range-based for loops}
+In C++11, there are for-in loops. They are used like so:
+\begin{lstlisting}[style=C++]
+for (auto x: array){/* use x */}
+\end{lstlisting}
+If you want to change values in \lstinline[style=C++]{array}, use:
+\begin{lstlisting}[style=C++]
+for (auto &x: array){/* change x values */}
+\end{lstlisting}
+
+\subsection{Container Classes}
+Objects that contain multiple data items, such as ints, doubles, or objects. They allow for control and protection over editing of objects, and can copy/edit/sort/order many objects at once.
+
+They're also very combinable - you can have a vector of stacks.

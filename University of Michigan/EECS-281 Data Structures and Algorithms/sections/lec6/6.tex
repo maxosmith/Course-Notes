@@ -1,0 +1,252 @@
+\subsection{Recap - Bounds Checking for Arrays Example}
+\subsubsection{Basic Layout}
+\begin{lstlisting}[style=C++]
+class Array {
+ public:
+    Array(unsigned len = 0) : length(len) {
+        data = (len ? new double[len] : nullptr);
+    }
+ private:
+    double *data;        // array data
+    unsigned int length; // array size
+}
+\end{lstlisting}
+You could use a struct, but users of your class would be able to access all member variables of your struct by default.
+
+\subsubsection{Copy Constructor}
+To copy the array, you need to perform a \textit{deep copy}:
+\begin{lstlisting}[style=C++]
+Array(const Array & a) {
+    length = a.getLength(); // getter for length // 1 step
+    data = new double[length];                   // 1 step
+    for (unsigned i = 0; i < length; i++) {      // n times
+        data[i] = a[i];                          // c steps
+    }
+}
+\end{lstlisting}
+The complexity of this is: $\O{! + 1 + (nc) + 1}=\O{n}$
+
+\subsubsection{Better Copying}
+\begin{lstlisting}[style=C++]
+void copyFrom(const Array & a) {
+    if (length != a.length) {
+        delete[] data;
+        length = a.length;
+        data = new double[length];
+    }
+
+    for (unsigned int i = 0; i < length; i++) {
+        data[i] = a.data[i];
+    }
+}
+
+Array(const Array & a) : length(0), data(nullptr) {
+    copyFrom(a);
+}
+
+Array & operator=(const Array & a) {
+    copyFrom(a);
+    return *this;
+}
+\end{lstlisting}
+
+\subsection{The Big 5}
+\begin{itemize}
+	\item Destructor
+	\item Copy constructor
+	\item Overloaded operator=
+	\item Copy constructor from \textit{r-value}
+	\item Overloaded operator= from \textit{r-value}
+\end{itemize}
+
+\subsubsection{Destructor}
+\begin{lstlisting}[style=C++]
+~Array() {
+    if (data != nullptr) {
+        for (int i = 0; i < length; i++) { // n times
+            delete data[i];                // 1 step
+        }
+        delete[] date;                     // 1 step
+        data = nullptr;                    // 1 step
+    }
+}
+\end{lstlisting}
+Complexity: $\O{n}$
+
+\subsubsection{Access Operator[]}
+\begin{lstlisting}[style=C++]
+const double & operator[](int idx) const {
+    if (idx < length && idx >= 0)
+        return data[idx];
+    throw runtime_error("bad idx");
+}
+\end{lstlisting}
+\begin{itemize}
+	\item Declares read-only access/
+	\item Automatically selected by the compiler when an array being access is marked \lstinline[style=C++]{const}
+	\item Helps compiler optimize code for speed
+	\item Some functions, like \lstinline[style=C++]{ostream &operator<<(ostream &os, const Array &a)} require \lstinline[style=C++]{const}.
+	\item Must also make a non-constr version
+\end{itemize}
+
+\subsubsection{Access with more than 2 dimensions}
+\begin{lstlisting}[style=C++]
+const double &operator()(int i, int j) const {
+    // return by const reference
+}
+\end{lstlisting}
+\begin{itemize}
+	\item Can't overload \lstinline[style=C++]{operator[][]}
+\end{itemize}
+
+\subsubsection{Inserting an Element}
+\begin{lstlisting}[style=C++]
+bool insert(int index, double val) {
+    if (index >= size || index < 0) {
+        return false;
+    } else {
+        for (int i = size - 1; i > index; --i) {
+            data[i] = data[i - 1];
+        }
+        data[index] = val;
+        return true;
+    }
+}
+\end{lstlisting}
+Complexity:
+\begin{itemize}
+	\item Best case: $\O{1}$
+	\begin{itemize}
+		\item The element is inserted at the end
+	\end{itemize}
+
+	\item Average case: $\O{n}$
+	\begin{itemize}
+		\item Go through half of elements (but that is a constant times $n$)
+	\end{itemize}
+
+	\item Worst case: $\O{n}$
+	\begin{itemize}
+		\item Go through all elements
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{Append}
+When array is full, resize:
+\begin{itemize}
+	\item Double array size from $n$ to $2n$
+	\item Copy $n$ items from the original array to the new array
+	\item Appending $n$ elements
+	\item Total: $1 + n + n = 2n + 1$ steps
+	\item Amortized: $(2n+1)/n=\O{1}$ steps
+\end{itemize}
+
+\subsection{Linked Lists and Iterators}
+\begin{itemize}
+	\item \textbf{Linked list}: Each person points to the next person
+	\item \textbf{Doubly linked list}: Each person points to each other
+	\item \textbf{Circularly linked list}: A list which has the first and last nodes pointing to each other
+\end{itemize}
+
+\subsubsection{Arrays vs Linked Lists}
+Arrays:
+\begin{itemize}
+	\item Access:
+	\begin{itemize}
+		\item Random: $\O{1}$ time
+		\item Sequential: $\O{1}$ time
+	\end{itemize}
+
+	\item Insert:
+	\begin{itemize}
+		\item Insert: $\O{n}$ time
+		\item Append: $\O{n}$ time
+	\end{itemize}
+
+	\item Book-keeping:
+	\begin{itemize}
+		\item \lstinline[style=C++]{ptr} to beginning
+		\item \lstinline[style=C++]{current_size} or \lstinline[style=C++]{ptr}
+		\item \lstinline[style=C++]{max_size} or \lstinline[style=C++]{ptr} to end off allocated space
+	\end{itemize}
+
+	\item Memory:
+	\begin{itemize}
+		\item Wastes memory if size is too large
+		\item Requires reallocation if too small
+	\end{itemize}
+\end{itemize}
+Linked Lists:
+\begin{itemize}
+	\item Access:
+	\begin{itemize}
+		\item Random: $\O{n}$ time
+		\item Sequential: $\O{1}$ time
+	\end{itemize}
+
+	\item Insert:
+	\begin{itemize}
+		\item Insert: $\O{n}$ time
+		\item Append: $\O{1}$ time
+		\begin{itemize}
+			\item Append to \lstinline[style=C++]{tail_ptr}
+		\end{itemize}
+	\end{itemize}
+
+	\item Book-keeping:
+	\begin{itemize}
+		\item \lstinline[style=C++]{head_ptr} to first node
+		\item \lstinline[style=C++]{size} (optional)
+		\item \lstinline[style=C++]{tail_ptr} to last node
+		\item In each node, \lstinline[style=C++]{ptr} to next node
+		\item Wasteful for small data times (overhead on pointers)
+	\end{itemize}
+
+	\item Memory:
+	\begin{itemize}
+		\item Allocates memory as needed
+		\item Requires memory for pointers
+	\end{itemize}
+\end{itemize}
+
+\subsection{Linked List Implementation}
+\begin{lstlisting}[style=C++]
+class LinkedList {
+ public:
+    LinkedList();
+    ~LinkedList();
+ private:
+    struct Node {
+        double item;
+        Node *next;
+        Node() {next = nullptr;}
+    };
+
+    Node *head_ptr;
+};
+\end{lstlisting}
+
+\subsubsection{Methods}
+\begin{lstlisting}[style=C++]
+int size() const;
+
+bool append_item(double item);
+bool append_node(Node *n);
+
+bool delete_item(double item);
+bool delete_node(Node *n);
+\end{lstlisting}
+
+\subsubsection{Maintaining Consistency}
+Arrays:
+\begin{itemize}
+	\item Stored size matches number of elements at all times
+	\item Be sure that \lstinline[style=C++]{start_ptr + size < end_ptr}
+\end{itemize}
+Linked Lists
+\begin{itemize}
+	\item Stored size matches number of elements
+	\item The last node points to \lstinline[style=C++]{nullptr}
+	\item If the list is a circular list, last node points to head
+	\item If a doubly-linked list, next/prev pointers are consistent
+\end{itemize}

@@ -1,0 +1,55 @@
+\documentclass[english, 11pt]{article}
+\usepackage{../../notes}
+\usepackage{lipsum}
+
+%Global Course Variables
+\newcommand{\myCourseCode}{EECS 281}
+\newcommand{\myCourseName}{Data Structures and Algorithms}
+\newcommand{\myProf}{David Paoletti}
+\newcommand{\myTerm}{Winter 2015}
+\newcommand{\myLogo}{../um_seal.png}
+
+%Headers
+\lhead{\myCourseName}
+\rhead{\fancyplain{}{\rightmark}} 
+
+%Footers
+\cfoot{\thepage}
+
+\begin{document}
+\titleHeader{\myCourseCode}{\myCourseName}{\myProf}{\myTerm}{\myLogo}
+
+%Document information
+\noindent\rule{1\columnwidth}{.5pt}
+Contributors: Steven Schmatz, Max Smith
+\begin{center}
+	Latest revision: \today
+\end{center}
+\toc
+\abstr{EECS 281 is an introductory course in data structures and algorithms at the undergraduate level. The objective of the course is to present a number of fundamental techniques to solve common programming problems. For each of these problems, we will determine an abstract specification for a solution and examine one or more potential representations to implement the abstract specification, focusing on those with significant advantages in time/space required to solve large problem instances. When appropriate, we will consider special cases of a general problem that admit particularly elegant solutions.}
+
+%----------------------------
+%Document Begins
+%----------------------------
+
+\section{Introduction and Workflow}
+
+\section{Complexity Analysis}
+	\input{sections/lec2/2.tex}
+
+\section{Measuring Runtime, and Pseudocode}
+	\input{sections/lec3/3.tex}
+
+\section{Recursion and the Master Theorem}
+	\input{sections/lec4/4.tex}
+
+\section{Arrays and Container Classes}
+	\input{sections/lec5/5.tex}
+
+\section{Linked Lists and Iterators}
+	\input{sections/lec6/6.tex}
+
+\section{The Standard Template Library}
+	\input{sections/lec7/7.tex}
+
+\end{document}

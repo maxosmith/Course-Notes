@@ -1,0 +1,149 @@
+The C++ Standard Template Library, included in C++11, is a high-quality library of implementations of the best algorithms and data structures at your fingertips (with plenty of documentation). The implementations are entirely in .h files, so there is no linking necessary.
+
+Some things contained in the STL:
+\begin{itemize}
+	\item Containers and iterators
+	\item Memory allocators
+	\item Utilities and function objects
+	\item Algorithms
+\end{itemize}
+
+\subsection{Benefits}
+\begin{itemize}
+	\item \textbf{DIY implementation is difficult}: introsort, red-black trees, hash-tables, mergesort... you don't have to know how they work to use them.
+	\item \textbf{Uniformity}: a lot of the algorithms and data structures are templated, so their interfaces are relatively similar.
+	\item \textbf{Saves a lot of debugging time}: greater than half of development time is spent testing and debugging, so if you don't have to do something yourself then you can save a lot of time.
+\end{itemize}
+
+\subsection{Drawbacks}
+\begin{itemize}
+	\item Sometimes, more specific implementations may be faster. Often, if you know that you're not going to encounter a test case, then you can make trade-offs that can make your code faster in some way.
+	\item You need to understand the library well to fully utilize it. The library has specific implementations of data structures and algorithms, and you have to know the complexity of operations - how well they perform.
+\end{itemize}
+The STL uses a lot of C++ features in its implementation, including:
+\begin{itemize}
+	\item Type \lstinline[style=C++]{bool}
+	\item \lstinline[style=C++]{const}-correctness and \lstinline[style=C++]{const}-casts
+	\item Namespaces
+	\item Templates
+	\item Inline functions
+	\item Exception handling
+	\item Keywords \lstinline[style=C++]{explicit} and \lstinline[style=C++]{mutable}
+\end{itemize}
+And so on. You do not, however, need to know what these features do to use their power.
+
+It's nearly impossible to memorize the entire STL. It's not even necessary. Instead, it's helpful to know what's out there, and how to look things up when you need them.
+
+\subsection{Generic Programming}
+A lot of the STL minimizes use of pointers and dynamic memory allocation, so the debugging time is greatly decreased.
+
+Also, since everything is templated, a lot of the same algorithms can be used with multiple data structures!
+
+\subsection{Complexity}
+Most STL implementations have the best possible big-O complexities, given their interface. There are two notable exceptions:
+\begin{itemize}
+	\item \lstinline[style=C++]{nth_element()}
+	\item Linked lists
+\end{itemize}
+
+\subsection{Examples of Container}
+Miscellaneous:
+\begin{lstlisting}[style=C++]
+vector<>
+deque<>
+bit_vector<>  // same as vector<bool>
+set<>
+multi_set<>
+map<>
+multi_map<>
+list<>
+array<>
+\end{lstlisting}
+Linked list containers:
+\begin{lstlisting}[style=C++]
+list<>          // doubly linked, .size() in O(1)
+slist<>         // singly linked, .size() in O(n)
+forward_list<>  // singly linked, .size() does not exist
+\end{lstlisting}
+
+\subsection{Copying and Sorting}
+Do this:
+\begin{lstlisting}[style=C++]
+#include <algorithm>
+
+copy(vec.begin(), vec.end(), arr); // copy over
+copy(arr, arr + SIZE, vec.begin()); // copy back
+
+sort(arr, arr + SIZE);
+sort(v.begin(), v.end());	
+\end{lstlisting}
+Not this:
+\begin{lstlisting}[style=C++]
+auto it = vec.begin();
+int i = 0;
+while (it != vec.end()) {
+    arr[i] = *it;
+    i++;
+}
+\end{lstlisting}
+Or anything of the variety. Using builtins like \lstinline[style=C++]{sort()} and \lstinline[style=C++]{copy()} is a lot safer and in a more functional style.
+
+\subsection{Memory Allocation}
+\begin{tabular}{l|l}
+	\textbf{Data structure} & \textbf{Memory overhead}\\
+	\hline
+	vector & Compact \\
+	\hline
+	list & Not very compact \\
+	\hline
+	unordered\_map & Memory hog
+\end{tabular}
+If memory is a worry, don't use an \lstinline[style=C++]{unordered_map<>}.
+
+\subsection{Utilities and Functional Programming}
+\begin{itemize}
+	\item There are some functions that perform common operations, like \lstinline[style=C++]{swap<>} and \lstinline[style=C++]{max<>}.
+	\item C++11 introduced lambdas instead of functors, which are basically anonymous functors.
+\end{itemize}
+\begin{lstlisting}[style=C++]
+void double_all(std::vector<int> & v) {
+    std::for_each(v.begin(), v.end(), [](int in) {in *= 2;});
+}
+\end{lstlisting}
+Pretty nifty, right? There is also the function \lstinline[style=C++]{std::transform()}, which copies the lambda's return value to each element.
+
+\subsection{Sorting Custom Classes}
+Let's say, however, that you want to sort a custom class. Instead of overloading the \lstinline[style=C++]{operator<()}, use a \textbf{functional object} as your comparison and then use standard library tools.
+\begin{lstlisting}[style=C++]
+struct SortByName {
+    bool operator()(const Employee & left,
+                    const Employee & right) const {
+        return left.getName() < right.getName();                
+    }
+};
+\end{lstlisting}
+You can then use it like so:
+\begin{lstlisting}[style=C++]
+vector<Employee> people(100);
+// fill them
+SortByName nameSort();
+sort(people.begin(), people.end(), nameSort);	
+\end{lstlisting}
+
+\subsection{Generating Random Permutations}
+This is a little tidbit which is great for testing your program:
+\begin{lstlisting}[style=C++]
+srand(time(nullptr));
+vector<int> perm(N);
+
+// fill it up
+for (unsigned int i = 0; i < N; i++) {
+    perm[i] = i;
+}
+
+random_shuffle(perm.begin(), perm.end());
+\end{lstlisting}
+You can also sort arrays by using:
+\begin{lstlisting}[style=C++]
+random_shuffle(perm, perm + N);
+\end{lstlisting}

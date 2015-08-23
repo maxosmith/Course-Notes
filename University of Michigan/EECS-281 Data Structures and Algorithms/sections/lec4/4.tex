@@ -1,0 +1,242 @@
+Consider the factorial function:
+\begin{lstlisting}[style=C++]
+int factorial(int n){
+	if (n == 0){
+		return 1;
+	return n * factorial(n - 1);
+}
+\end{lstlisting}
+The time complexity of this function is:
+$$T(n)=\begin{aligned}
+	&c_0 &\text{if } n=0\\
+	&T(n-1)+c_1 &\text{if } n>0
+\end{aligned}$$
+Solving this function we obtain the growth function:
+$$\begin{aligned}
+	T(n) &= T(n-1)+c_1\\
+	T(n-1) &= (T(n-2) + c_1)+c_1 \\
+	T(n-2) &= ((T(n-3) + c_1) + c_1) + c_1\\
+	&\vdots \\
+	T(n-k) &= T(n-k) + kc_1\\
+	T(n) &= nc_1 + c_0
+\end{aligned}$$
+This growth function is on the order $\O{n}$.
+
+\subsection{Tail Recursion}
+When a function gets called, it gets a stack frame, which stores the local variables. Also, each recursive call generates another stack frame for each recursive call!
+
+A function is \textbf{tail recursive} if there is no pending computation at the end of the recursive step.
+
+Example of a normal recursive function:
+\begin{lstlisting}[style=C++]
+int factorial(int n){
+	if (n == 0)
+		return 1;
+	else
+		return n * factorial(n - 1);
+}
+\end{lstlisting}
+Contrasted with the tail recursive version (notice there's no further computation in the return statement):
+\begin{lstlisting}[style=C++]
+int factorial(int n, int result = 1) {
+    if (n == 0)
+        return result;
+    else
+        return factorial(n - 1, result * n);
+}
+\end{lstlisting}
+
+\subsection{Counting Steps}
+\begin{lstlisting}[style=C++]
+int myFunc(          // 1 step
+            char *p, // 1 step
+            int aN,  // 1 step
+            int ar[] // 1 step) {
+
+    return   // 1 step
+        zzz; // 1 step
+}
+\end{lstlisting}
+\begin{lstlisting}[style=C++]
+char *course = "EECS281";           // 7 steps (copy chars at runtime)
+int HWKs[4] = {100, 110, 120, 140}; // 4 steps (copy at run time)
+int retCode =                       // 1 step
+    myFunc(                         // 2 steps (call and return);
+        course, 4, HWKs);           // 4 steps (each var and return var)
+\end{lstlisting}
+
+\subsection{The Program Stack}
+\subsubsection{Function Call Internal Operations}
+When a function call is \textbf{made}, all local variables are saved in a special storage called the stack. Then, argument values are passed onto the stack.
+
+When a function call is \textbf{received}, the function's arguments are popped off the stack.
+
+When a function issues a \lstinline[style=C++]{return}, the return value is pushed onto the stack.
+
+When \lstinline[style=C++]{return} is received, the return value is popped off the stack, and saved local variables are restored.
+
+\subsection{Stack Properties}
+The stack supports \textbf{nested function calls}, and each has its own set of \textit{local variables} and \textit{arguments}.
+
+There is only \textbf{one program stack} (per thread). This is different from the program heap, where dynamic memory is allocated.
+
+Program stack size is \textbf{limited} in practice, so the number of nested function calls is limited based on the size of that stack. This means that ``plain recursion'' is a bad idea over every element. Use tail recursion or iterative algorithms instead. However, for programs solvable with $\O{1}$ additional memory, they do not favor ``plain'' recursive algorithms.
+
+\subsection{Exercise: Step Counting}
+\begin{lstlisting}[style=C++]
+int factorial(int n) {           // 2 steps
+    if (n == 0)                  // 1 step
+        return 1;                // 2 steps
+    return n * factorial(n - 1); // 6 step
+}	
+\end{lstlisting}
+The last line is 6 steps because there is subtraction, function call, argument passing, internal return, external return, and multiplication.
+
+\subsection{Exercise: Tail Recursive Power Function}
+This is an okay implementation. Could be better. Runtime: $\O{n}$
+\begin{lstlisting}[style=C++]
+int power_recursive(int x, unsigned int y) {
+    if (y == 0)
+        return 1;
+    return x * power_recursive(x, y - 1);
+}
+\end{lstlisting}
+This is much better, because it doesn't create additional stack frames per recursive call. Runtime: $\O{n}$
+\begin{lstlisting}[style=C++]
+int power_tail(int x, unsigned int y, int result = 1) {
+    if (y == 0)
+        return result;
+    return power_tail(x, y - 1, result * x);
+}
+\end{lstlisting}
+This is the best implementation here, because it has $\O{\log{n}}$ time.
+\begin{lstlisting}[style=C++]
+int power_iterative(int x, unsigned int y) {
+    int result = 1;
+
+    while (y > 0) {
+        if (y % 2)
+            result *= x;
+        x *= x;
+        y /= 2;
+    }
+
+    return result;
+}
+\end{lstlisting}
+This is a recursive version of this better logarithmic power function helps us write the runtime:
+\begin{lstlisting}[style=C++]
+int power(int x, unsigned int y, int result = 1) {
+    if (y == 0)
+        return result;
+    else if (y % 2)
+        return power(x * x, y / 2, result * x);
+    else
+        return power(x * x, y / 2, result);
+}	
+\end{lstlisting}
+The runtime is:
+$$T(n)=\begin{aligned}
+	&c_0 &\text{if } n=0\\
+	&T(n/2)+c_1 &\text{if } n>0
+\end{aligned}$$
+So:
+$$\begin{aligned}
+	T(n) &= T(n/2)+c_1\\
+	T(n/2) &= (T(n/4) + c_1)+c_1 \\
+	&\vdots \\
+	T(1) &= T(\frac{n}{2^k}) + kc_1=c_0+kc_1\\
+	n &= 2^k\\
+	k &= \log{n}
+\end{aligned}$$
+Resulting in the growth function: $T(n)=c_0 + \log{n} = \O{\log{n}}$
+
+\subsection{Common Recurrence Relations}
+\begin{itemize}
+	\item \textbf{Binary search}: $T(n)=T(n/2)+c$
+	\item \textbf{Sequential search}: $T(n)=T(n-1)+c$
+	\item \textbf{Tree traversal}: $T(n)=2T(n/2)+c$
+	\item \textbf{Insertion sort}: $T(n)=T(n-1)+c_1 n + c_2$
+\end{itemize}
+
+\subsection{Solving Recurrences with the Master Theorem}
+One way to do it is through the telescoping method, which can be difficult at times. This is where the \textbf{Master Theorem} helps.
+
+Let $T(n)$ be a monotonically increasing function that satisfies:
+$$T(n)=aT(\frac{n}{b})+f(n)\\T(1)=1$$
+Where $a\geq 1, b\geq 2$. If $f(n)\in\Theta{n^2}$, then:
+$$T(n)=\begin{cases}
+	\Theta{(n^{n\log_b a})} &\text{if } a>b^c\\
+	\Theta{(n^c \log_2 n)} &\text{if } a=b^2\\
+	\Theta{(n^c)} &\text{if } a<b^2
+\end{cases}$$
+Note that this doesn't work in the following circumstances:
+\begin{itemize}
+	\item $T(n)$ is not monotonic, such as $T(n)=\sin (n)$
+	\item $f(n)$ is not polynomial, such as $f(n)=2^n$
+	\item $b$ is not a constant, such as when it's a function
+	\item Not dividing $n$ by anything in each step
+	\item $f(n)$ has to be a polynomial
+\end{itemize}
+There is another case which allows polylogarithmic functions for $f(n)$.
+
+\subsection{Job Interview Question}
+Write an efficient algorithm that searches for a value in an $n\times m$ array. THis is sorted along rows and columns. That is,
+\begin{lstlisting}[style=C++]
+table[i][j] <= table[i][j+1]
+table[i][j] <= table[i+1][j]
+\end{lstlisting}
+Obvious way: linear or binary search in every row. Better way: start in the middle.
+
+\subsection{Solution 1: Quad Partition}
+Split the region into four quadrants – one can be eliminated. If the number you see is too small, it can't be in the up left quadrant. If it is too big, it can't be in the bottom right quadrant.
+$$T(n)=3T(n/2)+c$$
+By the master theorem,
+$$T(n)=\Theta (2^{\log_2 (3)})$$
+
+\subsection{Solution 2: Binary Partition}
+Split the region into four quadrants.
+\begin{itemize}
+	\item Scan a middle row/column/diagonal for the target element. Look for where the 13 should be.
+	\item If not found, split where it would have been
+	\item Eliminate 2 or 4 sub-regions
+\end{itemize}
+$$T(n)=2T(n/2)+cn\text{ or }T(n)=2T(n/2)$$
+By the master theorem:
+$$T(n)=\Theta (n\log n)\text{ or }T(n)=\Theta (n)$$
+
+\subsection{Solution 3: Stepwise Linear Search}
+Start from the top right corner, and only move down or right depending on whether the number at the index is less than or greater than the target.
+\begin{lstlisting}[style=C++]
+bool stepwise(int mat[][N_Max], int N, int target, int &row, int &col) {
+    if (target < mat[0][0] || target > mat[N-1][N-1]) {
+        return false;
+    }
+    row = 0;
+    col = N - 1;
+
+    while (row <= N && col >= 0) {
+        if (mat[row][col] < target) {
+            row++;
+        } else if (mat[row][col] > target) {
+            col--;
+        } else {
+            return true;
+        }
+    }
+
+    return false;
+}
+\end{lstlisting}
+
+\subsection{Linear Recurrences}
+Linear recurrences are sequences of the form:
+$$F_n = c_1 F_{n-1} + c_2 F_{n-2}$$
+These appear frequently in many contexts:
+\begin{itemize}
+	\item Stock-trading strategies
+	\item Nice-looking architectural proportions
+	\item Nature
+	\item Interview questions
+\end{itemize}
+These can be calculated recursively (which ends up being terrible), linearly, and with some nifty tricks.
