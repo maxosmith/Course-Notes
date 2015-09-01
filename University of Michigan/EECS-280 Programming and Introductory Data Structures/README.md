@@ -1,5 +1,5 @@
-# EECS 281
-## Data Structures and Algorithms
-## Honglak Lee
+# EECS 280
+## Programming and Introductory Data Structures
+## DeOrio, Juett, Mihalcea, \& Olson
 
-Lecture notes, retro-actively being created (very incomplete!)
+Lecture notes
