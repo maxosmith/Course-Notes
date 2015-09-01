@@ -1,0 +1,115 @@
+\subsection{Static type}
+\begin{itemize}
+	\item \textbf{Static type}: when a compiler can tell which derived type is needed
+\begin{lstlisting}[style=C++]
+Trianglet(3,4,5);
+t.print();
+
+Triangle *t_ptr= &t;
+t_ptr->print();
+
+Isoscelesi(1,12);
+i.print();
+
+Isosceles*i_ptr= &i;
+i_ptr->print();
+\end{lstlisting}
+\end{itemize}
+
+\subsection{Dynamic type}
+\begin{itemize}
+	\item \textbf{Dynamic type}: type is not known until run time 
+\begin{lstlisting}[style=C++]
+//EFFECTS: asks user to select Triangle,
+// Isosceles or Equilateral
+// returns a pointer to correct object
+Triangle * ask_user();
+
+int main() {
+	Triangle *t = ask_user(); //enters "Isosceles"
+	t->print();
+}
+\end{lstlisting}
+\end{itemize}
+
+\subsection{Polymorphism}
+\begin{itemize}
+	\item From the previous example:
+\begin{lstlisting}[style=C++]
+//...
+Triangle *t = ask_user(); //"Isosceles"
+t->print();
+\end{lstlisting}
+	\item \lstinline[style=C++]{t} can change types at runtime, in other words it is \textbf{polymorphic}
+	\item Polymorphism is the ability to associate many behaviors with one function name dynamically (at runtime)
+\end{itemize}
+
+\subsection{Virtual Functions}
+\begin{itemize}
+	\item A \lstinline[style=C++]{virtual} function checks dynamtic type to find correct overridden function version to run.
+\begin{lstlisting}[style=C++]
+class Triangle {
+	virtual void print() const{/*...*/}
+	//...
+};
+\end{lstlisting}
+	\item The \lstinline[style=C++]{virtual} function type is inherited, so any sub-classes of \lstinline[style=C++]{Triangle} that override \lstinline[style=C++]{print()} will automatically become \lstinline[style=C++]{virtual}
+\end{itemize}
+
+\subsection{Abstract base class}
+\begin{itemize}
+	\item An \textbf{abstract base class} creates an \textit{interface only} class as a base class, from which an implementation can be derived
+	\item You \textbf{cannot create an instance} of an abstract base class.
+	\item In C++ a class is abstract if there's missing/no implementation (via having at least one of its functions as \textbf{pure virtual} function)
+\begin{lstlisting}[style=C++]
+class Shape {
+public:
+	virtual double area() const = 0;
+	virtual void print() const = 0;
+};
+\end{lstlisting}
+	\item ``Assigning'' a 0 to a function designates as pure virtual
+	\item A \textbf{factory function} creates objects for a client who doesn't need to know their actual types (dynamic)
+\end{itemize}
+
+\subsection{Upcast}
+\begin{itemize}
+	\item An \textbf{upcast} is substituting a subtype for a supertype
+	\item Type conversion is automatic, an \textit{implicit cast}
+\begin{lstlisting}[style=C++]
+Shape * ask_user() {
+	cout << "Rectangle, Triangle, Isosceles or Equilateral? ";
+	string s;
+	cin >> s;
+	if (s == "Triangle") return &g_triangle;	// Upcasted to shape
+	if (s == "Isosceles") return &g_isosceles;	// Upcasted to shape
+	//...
+}
+\end{lstlisting}
+	\item Since \lstinline[style=C++]{Isosceles} \textit{is a} \lstinline[style=C++]{Shape}, this can happen automatically.
+\end{itemize}
+
+\subsection{Downcast}
+\begin{itemize}
+	\item Can't convert supertype to subtype
+	\item e.g., \lstinline[style=C++]{Shape}$\to$\lstinline[style=C++]{Isoscelese}
+	\item Type conversion is not automatic
+	\item This is called a \textit{downcast}
+\begin{lstlisting}[style=C++]
+Isosceles *t= ask_user();//enter "Isosceles"
+// Error: invalid conversion
+\end{lstlisting}
+	\item Since a parent type might not be a child type, this cast cannot happen automatically
+	\item \lstinline[style=C++]{dynamic_cast<T*>(ptr)} downcasts \lstinline[style=C++]{ptr} to type \lstinline[style=C++]{T*}
+\end{itemize}
+
+\subsection{dynamic\_cast vs. static\_cast}
+\begin{center}
+\begin{tabular}{l|l}
+	dynamic\_cast & static\_cast \\
+	\hline
+	Checks at runtime if it is OK to cast & Does not check at runtime \\
+	Cast from a polymorphic base to derived & Programmer tells compiler ``trust me'' \\
+	Supertype to subtype, downcast & Non-polymorphic types \& polymorphic \\
+\end{tabular}
+\end{center}

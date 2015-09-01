@@ -1,0 +1,187 @@
+\subsection{Structs}
+\begin{itemize}
+	\item A \lstinline[style=C++]{struct} describes a ``compound object'' that comprises one or more elements, each of independent type
+	\item Defines a new type, containing only data
+	\item e.g., a triangle:
+\begin{lstlisting}[style=C++]
+struct Triangle {
+	double a, b, c; // Edge lengths
+}
+
+int main() {
+	Triangle t; // New triangle with undefined edges
+
+	// Initialize each member
+	t.a = 3;
+	t.b = 4;
+	t.c = 5;
+
+	// Or initialize member variables all at once, in order:
+	Triangle t2 = {3, 4, 5};
+
+	// Copy
+	Triangle t3 = t2;
+}
+\end{lstlisting}
+	\item \lstinline[style=C++]{struct} are passed by value, unlike arrays
+	\item This can be a problem with large structs, so pass by reference or pointer
+\end{itemize}
+
+\subsection{struct vs. array}
+\begin{center}
+\begin{tabular}[breaklines=true]{p{5cm}|p{5cm}}
+	struct & array \\
+	\hline
+	{\begin{lstlisting}[style=C++]
+struct Triangle{/*...*/};
+	 	\end{lstlisting}} &
+	{\begin{lstlisting}[style=C++]
+double edges[3];
+	 	\end{lstlisting}} \\
+	Stores group of data & Stores group of data \\
+	Heterogeneous types & Homogenous types \\
+	Access by name & Acces by index \\
+	Default pass-by-value & Default pass-by-reference \\
+	Creates a custom type & Does not create a new type \\
+\end{tabular}
+\end{center}
+
+\subsection{struct vs. class}
+\begin{center}
+\begin{tabular}{l|l}
+	struct & class \\
+	Heterogeneous aggregate data type & Heterogeneous aggregate data type \\
+	C style & C++ style \\
+	Contains only data & Contains data and functions \\
+	Undefined by default & Constructors can be used to initialize \\
+	All data is accessible & Control of data access \\
+\end{tabular}
+\end{center}
+
+\subsection{Classes}
+\begin{itemize}
+\begin{lstlisting}[style=C++]
+class Triangle {
+	public:
+	double a,b,c;//edge lengths
+
+	double area(){ //compute area
+		double s = (a+b+c)/2;
+		double newArea= sqrt(s*(s-a)*(s-b)*(s-c));
+		return newArea;
+	}
+};
+\end{lstlisting}
+	\item A \lstinline[style=C++]{class} contains both data and functions
+	\item These are called \textbf{member data} and \textbf{member functions}
+	\item Because member functions are within the same scope as member data, they have access to the member data directly
+	\item \lstinline[style=C++]{public} means members are accessible from outside the \lstinline[style=C++]{class}
+	\item From outside scope, access \lstinline[style=C++]{class} members just like a \lstinline[style=C++]{struct}
+\begin{lstlisting}[style=C++]
+int main() {
+	Triangle t;
+	t.a=3; t.b=4; t.c=5;
+	cout << "area = " << t.area() << endl;
+
+	// Copy
+	Triangle t2 = t1;
+}
+\end{lstlisting}
+	\item Calling a member function is just like evaluating a function
+\end{itemize}
+
+\subsection{Initialization problem}
+\begin{itemize}
+	\item Classes, similar to structs, has undefined values upon initialization.
+	\item This is a common source of bugs.
+	\item A \textbf{constructor} is a member function that has the same name as the class
+	\item They run automatically when a new object is defined
+	\item It's typically used to initialize member variables
+	\item A constructor has the same name as the class, and no return value:
+\begin{lstlisting}[style=C++]
+class Triangle {
+public:
+	double a, b, c;
+	double area() {/*...*/}
+
+	// Constructor
+	Triangle() {a=0; b=0; c=0;}
+
+	// Constructors with inputs for initialization 
+	Triangle(double a_in, double b_in, double c_in){
+		a = a_in; b = b_in; c = c_in;
+	}
+}
+
+int main() {
+	Triangle t; // Constructor executes automatically
+	t.area();
+}
+\end{lstlisting}
+	\item The compiler will select the correct constructor
+	\item Two different functions with the same name, but different prototypes is called \textbf{function overloading}.
+	\item There are several ways to call the initializer:
+\begin{lstlisting}[style=C++]
+int main() {
+	Triangle t = Triangle(3, 4, 5);
+	Triangle t2(3, 4, 5);
+}
+\end{lstlisting}
+\end{itemize}
+
+\subsection{Private member variables}
+\begin{itemize}
+	\item Declaring variables and functions as \lstinline[style=C++]{private} allows them to be only visible within the scope of that respective class.
+\begin{lstlisting}[style=C++]
+class Triangle {
+private:
+	double a, b, c;
+public:
+	//...
+}
+\end{lstlisting}
+	\item In this example, calling \lstinline[style=C++]{t.a} is no longer possible.
+	\item By default, every member of a class is \lstinline[style=C++]{private}
+\end{itemize}
+
+\subsection{get and set functions}
+\begin{itemize}
+	\item A \lstinline[style=C++]{get} function is a \lstinline[style=C++]{public} function that returns a copy of a \lstinline[style=C++]{private} member variable:
+\begin{lstlisting}[style=C++]
+class Triangle {
+	//...
+public: 
+	// EFFECTS: returns edge a, b, c
+	double get_a() {return a; }
+	double get_b() {return b; }
+	double get_c() {return c; }
+}
+\end{lstlisting}
+	\item A \lstinline[style=C++]{set} function is a \lstinline[style=C++]{public} function that modifies a \lstinline[style=C++]{private} member variable:
+\begin{lstlisting}[style=C++]
+class Triangle {
+	//...
+public: 
+	// REQUIRES: a,b,care non-negative and form a triangle
+	// MODIFIES: a, b, c
+	// EFFECTS: sets length of edge a, b, c
+	void set_a(double a_in);
+	void set_b(double b_in);
+	void set_c(double c_in);
+}
+\end{lstlisting}
+	\item \lstinline[style=C++]{set} functions allow you to run extra code when a member variable changes
+\end{itemize}
+
+\subsection{struct vs. class}
+\begin{center}
+\begin{tabular}{l|l}
+	struct & class \\
+	\hline
+	Heterogeneous aggregate data type & Heterogeneous aggregate data type \\
+	C style & C++ style \\
+	Contains only data & Contains data and functions \\
+	Undefined by default & Constructs can be used to initialize \\
+	All data is accessible & Control of data access \\
+\end{tabular}
+\end{center}

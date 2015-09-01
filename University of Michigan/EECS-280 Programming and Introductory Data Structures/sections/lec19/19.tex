@@ -1,0 +1,190 @@
+\subsection{Introduction}
+\begin{itemize}
+	\item Abstract Data Types like \lstinline[style=C++]{IntSet} and \lstinline[style=C++]{IntList} are often called \textbf{containers} or container classes, since their purpose is to contain other objects
+	\item Today, we will use the C++ \lstinline[style=C++]{template} mechanism to reuse the same container code for any type
+	\item To see how templates might be useful, consider the following fragments defining a list-of-intand a list-of-char:
+\begin{lstlisting}[style=C++]
+// Int 
+class List {
+public:
+	void insertFront(int v);
+	int removeFront();
+	//...
+private:
+	struct Node { 
+		Node *next;
+		int datum;
+	};
+	Node *first;
+};
+
+// Char 
+class List {
+public:
+	void insertFront(char v);
+	char removeFront();
+	//...
+private:
+	struct Node { 
+		Node *next;
+		int datum;
+	};
+	char *first;
+};
+\end{lstlisting}
+	\item It's like someone took the list-of-int definition and replaced each instance of \lstinline[style=C++]{int} with an instance of \lstinline[style=C++]{char}.
+\end{itemize}
+
+\subsection{Templates}
+\begin{itemize}
+	\item The intuition behind templates is that they are code with the ``type name'' left as a (compile-time) constant.
+	\item The parameter is a type, not a variable.
+	\item To start, you first need to declare that something will be a template:
+\begin{lstlisting}[style=C++]
+template <typename T>
+class List {
+	// ...
+};
+\end{lstlisting}
+	\item \lstinline[style=C++]{T} stands for ``the name of the type contained by this \lstinline[style=C++]{List}''
+	\item Alternate notation:
+\begin{lstlisting}[style=C++]
+template <class T>
+class List {
+	// ...
+};
+\end{lstlisting}
+	\item e.g.,
+\begin{lstlisting}[style=C++]
+template <typename T>
+class List {
+public:
+	// methods
+
+	// constructors/destructor
+
+private:
+	struct Node {
+		Node *next;
+		T datum;
+	};
+	//...
+};
+\end{lstlisting}
+\end{itemize}
+
+\subsection{Templated Methods}
+\begin{itemize}
+	\item All that is left is to define each of the method bodies.
+	\item Each body must also be declared as a templated method and we do that in much the same way as we do for the class definition
+	\item Each function begins with the template declaration: \lstinline[style=C++]{template <typename T>}
+	\item And each method name must in the \lstinline[style=C++]{List<T>} scope:
+\begin{lstlisting}[style=C++]
+template <typename T>
+void List<T>::insertFront(Ti) {
+	Node *np= new Node;
+	np->datum = i;
+	np->next = first;
+	first = np;
+}
+\end{lstlisting}
+\end{itemize}
+
+\subsection{Using Templated Containers}
+\begin{itemize}
+	\item To use the templated container, you specify the type \lstinline[style=C++]{T} when creating the container object.
+\begin{lstlisting}[style=C++]
+// Create a list of integers on the stack
+List<int> li;
+li.insertFront(42);
+
+// Create a list of integers on the heap
+List<int> *lip = new List<int>;
+lip->insertFront(42);
+\end{lstlisting}
+	\item All templated codes goes in the header file: both the declaration and definition
+\end{itemize}
+
+\subsection{Containers of large values}
+\begin{itemize}
+	\item Copying elements by value is fine for types with small representations, for example, built-in types like \lstinline[style=C++]{int}
+	\item This is nottrue for larger types –any nontrivial structor class would be expensive to pass by value, because you'll spend all of your time copying
+	\item e.g.,
+\begin{lstlisting}[style=C++]
+class Gorilla {
+	// OVERVIEW: a big, expensive class
+	// lots of member data ...
+};\end{lstlisting}
+	\item Two options:
+	\begin{itemize}
+		\item Pass-by-pointer (results in container of pointers)
+		\item Pass-by-reference (only fixes parameter copy issues)
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{Container of pointers}
+\begin{itemize}
+	\item The good news: \lstinline[style=C++]{Gorilla} is passed by pointer, no copies!
+	\item The bad news: containers-of-pointers are subject to two broad kinds of potential bugs:
+	\begin{enumerate}
+		\item Using an object after it has been deleted
+\begin{lstlisting}[style=C++]
+List<Gorilla*> zoo;
+Gorilla *colo= new Gorilla;
+zoo.insertFront(colo);
+// ...
+delete colo; // bad!
+// ...
+Gorilla *g = zoo.removeFront();//g already deleted!
+\end{lstlisting}
+		\item Leaving an object orphaned by neverdeleting it
+	\end{enumerate}
+\end{itemize}
+
+\subsection{Pattern of use for container-of-ptr}
+\begin{enumerate}
+	\item \textbf{Existence}: Allocate an object before inserting it into any container.
+\begin{lstlisting}[style=C++]
+// OK
+List<Gorilla*> zoo;
+Gorilla *colo= new Gorilla;
+zoo.insertFront(colo);
+
+// better
+List<Gorilla*> zoo;
+zoo.insertFront(new Gorilla);
+\end{lstlisting}
+	\item \textbf{Ownership}: Once it is inserted, do not modify it until it is removed.
+\begin{lstlisting}[style=C++]
+List<Gorilla*> zoo;
+Gorilla *colo= new Gorilla;
+zoo.insertFront(colo);
+colo->set_name("Bill"); // bad! - could mess up a container's representation invariant
+
+// Good:
+Gorilla *g = zoo.removeFront(); //remove
+g->set_name("Bill"); //change
+zoo.insertFront(g); //replace
+\end{lstlisting}
+	\item \textbf{Conservation}: Once it is removed, it must either be deallocatedor inserted into some container. Don’t forget to delete at the end!
+\begin{lstlisting}[style=C++]
+// bad example
+List<Gorilla*> zoo;
+zoo.insertFront(new Gorilla);
+zoo.removeFront(); //bad! memory leak!
+
+// good example
+List<Gorilla*> zoo;
+zoo.insertFront(new Gorilla);
+deletezoo.removeFront(); // fixed
+\end{lstlisting}
+\end{enumerate}
+
+\subsection{Deleting a shared object}
+\begin{itemize}
+	\item How to delete objects that occur on multiple containers?
+	\item One solution:
+	\begin{itemize}
+		\item Remove object from allcontainers before freeing up the object.
+	\end{itemize}
+\end{itemize}

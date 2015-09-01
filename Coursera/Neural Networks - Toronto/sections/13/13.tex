@@ -1,0 +1,79 @@
+\subsection{The ups and downs of backpropagation}
+\begin{itemize}
+	\subsubsection{A brief history of backpropagation}
+	\item The backpropagation algorithm for learning multiple layers of features was invented several times in the 70's and 80's:
+	\begin{itemize}
+		\item Bryson \& Ho (1969) linear
+		\item Werbos (1974)
+		\item Rumelhart et. al. in 1981
+		\item Parker (1985)
+		\item LeCun (1985)
+		\item Rumelhart et.al. (1985)
+	\end{itemize}
+
+	\item Backpropagation clearly had great promise for learning multiple layers of non-linear feature detectors
+	\item But by the late 1990's most serious researchers in machine learning had given up on it
+	\begin{itemize}
+		\item It was still widely used in psychological models and in practical pplications such as credit card fraud detection
+	\end{itemize}
+
+	\subsubsection{Why backpropagation failed}
+	\item The popular explanation of why backpropagation failed in the 90's:
+	\begin{itemize}
+		\item It could not make good use of multiple hidden layers
+		\item It did not work well in recurrent networks or deep auto-encoders
+		\item Support vector machines worked better, required less expertise, produced repeatable results, and had a much better theory
+	\end{itemize}
+
+	\item The real reason it failed:
+	\begin{itemize}
+		\item Computers were thousands of times too slow
+		\item Labeled datasets were hundreds of times too small
+		\item Deep networks were too small and not initialized sensibly
+	\end{itemize}
+
+	\subsubsection{A spectrum of machine learning tasks}
+	\item Theres a spectrum of tasks from the things people study in typical statistics to artificial intelligence
+	\item Statistics end of the spectrum:
+	\begin{itemize}
+		\item Low-dimensional data (e.g., less than 100 dimensions)
+		\item Lots of noise in the data
+		\item Not much structure in the data. The structure can be captured by a fairly simple model
+		\item The main problem is separating true structure from noise
+		\begin{itemize}
+			\item Not ideal for non-Bayesian neural nets. Try SVM or GP.
+		\end{itemize}
+	\end{itemize}
+
+	\item Artificial intellience end of the spectrum:
+	\begin{itemize}
+		\item High-dimensional data (e.g., more than 100 dimensions)
+		\item The noise is not the main problem
+		\item There is a huge amount of structure in the data, but its too complicated to be represented by a simple model
+		\item The main problem is figuring out a way to represent the complicated structure so that it can be learned
+		\begin{itemize}
+			\item Let backpropagation figure it out
+		\end{itemize}
+	\end{itemize}
+
+	\subsubsection{Why Support Vector Machines were never a good bet for Artificial Intelligence tasks that need good representations}
+	\item \textbf{View 1}: SVM's are just a clever reincarnation of Perceptrons
+	\begin{itemize}
+		\item They expand the input to a very large layer of non-linear non-adaptive features 
+		\item They only have one layer of adaptive weights 
+		\item They ahve a very efficient way of fitting the weights that control overfitting (max margin hyperplane)
+	\end{itemize}
+	\item \textbf{View 2}: SVM's are just a clever reincarnation of Perceptrons (different notion of features being used)
+	\begin{itemize}
+		\item They use each input vector in the training set to define a non-adaptive ``feature''
+		\begin{itemize}
+			\item How similar a test input is to a training case
+		\end{itemize}
+		\item They have a clever way of simultaneously doing feature selection and finding weights on the remaining features.
+	\end{itemize}
+\end{itemize}
+
+\subsection{Belief Nets}
+\begin{itemize}
+	\item 
+\end{itemize}

@@ -1,0 +1,45 @@
+\subsection{Interfaces}
+\begin{itemize}
+	\item Question: How can you provide a class definition that carries no implementation details to the client programmer, yet still has interface information?
+	\item Answer: Create an ``interface-only'' class as an abstract base class, from which an implementation can be derived.
+	\item Interfaces have \textbf{no implementation} which makes it different from an abstract class, which may have partial implementation.
+	\item This is done using pure virtual functions
+	\item e.g., (Notice how all of the functions are pure virtual)
+\begin{lstlisting}[style=C++]
+class IntSet{
+	// OVERVIEW: interface for a mutable set of ints
+	// with bounded size
+
+public:
+	virtualvoid insert(intv) = 0;
+	virtualvoid remove(intv) = 0;
+	virtualboolquery(intv) const= 0;
+	virtualintsize() const= 0;
+};
+\end{lstlisting}
+	\item You \textbf{cannot} instantiate \lstinline[style=C++]{IntSet}, because there is no implementation
+	\item You can create a pointer however
+	\item e.g.,
+\begin{lstlisting}[style=C++]
+intmain() {
+	IntSetUnsortedis;
+	IntSet*is_ptr= &is; //pointer to implementation
+	is_ptr->insert(7);
+	is_ptr->insert(4);
+	is_ptr->insert(7);
+	is_ptr->insert(1);
+	is_ptr->remove(4);
+}
+\end{lstlisting}
+\end{itemize}
+
+\subsection{Representation Invariant Details}
+\begin{itemize}
+	\item A \textit{representation invariant} must be true immediately before and immediately after any member function execution
+	\item With two \textbf{exceptions} of course:
+	\begin{itemize}
+		\item \textbf{Constructors}: the constructor establishes the representation invariant, so the representation invariant only has to hold at the end
+		\item \textbf{Destructors}: the representation invariant only has to hold at the beginning
+	\end{itemize}
+	\item You may find it helpful to create a \lstinline[style=C++]{check_invariant()} function to run tests on whether your functions maintain their representation.
+\end{itemize}

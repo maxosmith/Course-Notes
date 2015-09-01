@@ -1,0 +1,136 @@
+\subsection{Abstraction}
+\begin{itemize}
+	\item \textbf{Abstraction} is a many-to-one mapping that reduces complexity and eliminates unnecessary details by providing only those details that matter.
+	\item e.g., Multiplication: table look-up, summing, etc. (we only care that it multiplies)
+	\item Type types: procedural, data
+\end{itemize}
+
+\subsection{Procedural Abstraction}
+\begin{itemize}
+	\item Decomposing programs into functions
+	\item For any function, there is a person who implements the function (the author) and a person who uses the function (the client).
+	\item The author needs to think carefully about whatthe function is supposed to do, as well as howthe function is going to do it.
+	\item In contrast, the client only needs to consider the what, not the how. Since how is much more complicated, this is a Big Win for the client!
+	\item Provides two important properties:
+	\begin{itemize}
+		\item \textbf{Local}: the implementation of an abstraction can be understood without examining any other abstraction implementation.
+		\item \textbf{Substitutable}: you can replace one (correct) implementation of an abstraction with another (correct) one, and no callers of that abstraction will need to be modified.
+	\end{itemize}
+	\item Layout abstractions before writing code, you don't want to change it!
+	\item If a change can be limited to replacing the implementation of an abstraction with a substitutable implementation, then you are guaranteed that no other part of the project needs to change.
+\end{itemize}
+
+\subsection{Fucntion Definitions vs. Declarations}
+\begin{itemize}
+	\item In larger programs, it is useful to separate the declarationof a function from its definition. A declaration provides the \textbf{type signature} of a function, also called the function header.
+	\item Function headers can be placed in their own file and accessed using the preprocessor directive \lstinline[style=bash]{#include}.
+	\item The \textbf{header file} contains all of the function declarations (io.h):
+\begin{lstlisting}[style=C++]
+double GetParam(string prompt, double min, double max);
+//...
+\end{lstlisting}
+	
+	\item And the associated implementations/definitions (io.cpp):
+\begin{lstlisting}[style=C++]
+#include "io.h"
+double GetParam(string prompt, double min, double max){
+	/* ... */
+}
+\end{lstlisting}
+
+	\item These can be accessed in another file (p1.cpp) through an include of the header file:
+\begin{lstlisting}[style=C++]
+#include "io.h"
+int main() {
+	//...
+	GetParam(prompt, min, max);
+}
+\end{lstlisting}
+\end{itemize}
+
+\subsection{Function Details}
+\begin{itemize}
+	\item All C++ functions take zero or more arguments and return a result of some type.
+	\item There is a special type, called \textbf{void}, that means ``noresult is returned''. void is still a type, even though it is ``the type with no legal values''.
+	\item The type signature of a function can be considered part of theabstraction –if you change it, customers (callers) must also change.
+	\item However, as long as a new implementation of an abstraction does the ``same thing'' as some old (correct) implementation, you can replace the old one with the new one.
+	\item Now we need to define what ``same thing'' means through \textbf{specifications}
+\end{itemize}
+
+\subsection{Specifications}
+\begin{itemize}
+	\item Answer three questions:
+	\begin{itemize}
+		\item \textbf{REQUIRES}: What pre-conditions must hold? (if any)
+		\item \textbf{MODIFIES}: Do inputs change? How? (if any)
+		\item \textbf{EFFECTS}: What does it do?
+	\end{itemize}
+
+	\item e.g.,
+\begin{lstlisting}[style=C++]
+intfactorial(intn);
+// REQUIRES: n >= 0
+// EFFECTS: returns n!
+\end{lstlisting}
+
+	\item Functions without REQUIRES clauses are considered \textbf{complete}; they are valid for all input. Otherwise they're \textbf{partial}.
+	\item Complete is better to write than partial, if possible.
+	\item A MODIFIES clause identifies any function argument or piece of global state that \textbf{might} change if this function is called.
+	\item e.g.,
+\begin{lstlisting}[style=C++]
+void swap(int&x, int&y);
+// MODIFIES: x, y
+// EFFECTS: exchanges the values of x and y
+\end{lstlisting}
+	\item The ampersand (\&) means that you get a \textbf{reference} to the caller's argument, not a cop yof it. This lets you to change the value of that argument.
+\end{itemize}
+
+\subsection{Call Stacks: How function calls work}
+\begin{itemize}
+	\item When you call a function, the program follows these steps:
+	\begin{enumerate}
+		\item Evaluate the actual arguments to the function (order is not guaranteed).
+		\item Create an ``activation record'' (sometimes called a ``stack frame'') to hold the function's formal arguments and local variables.
+		\item Copy the actuals' values to the formals' storage space.
+		\item Evaluate the function in its local scope.
+		\item Replace the function call with the result.
+		\item Destroy the activation record.
+	\end{enumerate}
+
+	\item Activation records are typically stored as a \textbf{stack}.
+	\item See example from lecture slides.
+\end{itemize}
+
+\subsection{Recursion}
+\begin{itemize}
+	\item \textbf{Recursive}: ``refers to itself''
+	\item A function is recursive if it calls itself
+	\item Problem is recursive if:
+	\begin{enumerate}
+		\item Base case exists (at least one)
+		\item All other cases can be solved by first solving one (or more) smaller cases, and then combining those solutions with a simple step.
+	\end{enumerate}
+	\item e.g.,
+	$$n!=\begin{cases}
+		1 &(n==0)\\
+		n\times (n-1)! &(n>0)
+	\end{cases}$$
+\begin{lstlisting}[style=C++]
+int factorial(int n) {
+	// REQUIRES: n >= 0
+	// EFFECTS: computes n!
+	if (n == 0){
+		return 1; // Base case
+	}else {
+		return n * factorail(n-1); // Recursive step
+	}
+}
+\end{lstlisting}
+	
+	\item To write a recursive function:
+	\begin{enumerate}
+		\item Identify the ``trivial'' cases, and write the explicitly
+		\item For all other cases, first assume there is a function that can solve smaller versions of the same problem, then figure out how to get from the smaller solution to the bigger one.
+	\end{enumerate}
+	\item See example from lecture slides.
+\end{itemize}

@@ -1,0 +1,74 @@
+\subsection{First-class Objects}
+\begin{itemize}
+	\item For any entity in a programming language, we say that the entity is \textbf{first-class} if you can do all four of these things:
+	\begin{enumerate}
+		\item Create them
+		\item Destroy them
+		\item Pass them as arguments
+		\item Return them as values
+	\end{enumerate}
+	\item Unlike values, types and functions are notfirst class objects in C++; but, they can sometimes come close.
+	\item The \textbf{template mechanism} allows us to pass types as arguments
+	\item The \textbf{function pointer mechanism} allows us to pass functions as arguments and return them as results
+\end{itemize}
+
+\subsection{Motivation}
+\begin{itemize}
+	\item \lstinline[style=C++]{any_even, any_odd} are both very similar functions.
+	\item We would like a function that is generic, and could perform a more general form of this operation
+	\item The generic function signature would like like this:
+\begin{lstlisting}[style=C++]
+bool any_of(const List<int> &l, bool (*pred)(int));
+\end{lstlisting}
+\end{itemize}
+
+\subsection{Using function pointers}
+\begin{itemize}
+	\item \lstinline[style=C++]{pred} is a pointer to a function that takes a single integer argument, returning a boolean result
+	\item A \textbf{predicate} is used to control an algorithm
+	\item The generic implementation is:
+\begin{lstlisting}[style=C++]
+bool any_of(const List<int> &l, bool (*pred)(int)) {
+	for(List<int>::Iterator i=l.begin(); i!=l.end(); ++i)
+		if (pred(*i)) return true;
+
+	//reached end without finding elt
+	return false;
+}
+\end{lstlisting}
+	\item We can get the odd elements, by using the appropriate predicate:
+\begin{lstlisting}[style=C++]
+bool isOdd(intn) {
+	return (n%2);
+}
+
+List<int> l;
+// fill l ...
+bool contains_odd= any_of(l, isOdd);
+\end{lstlisting}
+\end{itemize}
+
+\subsection{Functors}
+\begin{itemize}
+	\item We can redefine the paranthesis operator () and use a class as a function
+	\item However, unlike functions with function pointers, objects can have per-object state, which allows us to specialize on a per-object basis.
+	\item e.g.,
+\begin{lstlisting}[style=C++]
+class GreaterN{
+	int limit;
+public:
+	GreaterN(int limit_in) : limit(limit_in) {}
+	bool operator() (int n) {
+		return n > limit;
+	}
+};
+\end{lstlisting}
+	\item We can use this class to ``generate'' specialized functors:
+\begin{lstlisting}[style=C++]
+GreaterNg2(2);
+GreaterNg6(6);
+cout<< g2(4) << endl;
+cout<< g6(4) << endl;
+\end{lstlisting}
+	\item Another use for functors: \textbf{Comparison}: used to define order, takes two elements of the same type and ouputs a \lstinline[style=C++]{bool}
+\end{itemize}

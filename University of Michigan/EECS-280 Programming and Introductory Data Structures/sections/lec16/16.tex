@@ -1,0 +1,108 @@
+\subsection{Default Argument}
+\begin{itemize}
+	\item One way to solve this problem of duplicate definitions is to use something called a \textit{default argument}
+	\item \textbf{Default argument}: make an argument optional by specifying the value to be assigned when not specified (default)
+\begin{lstlisting}[style=C++]
+IntSet(int capacity = 0);
+\end{lstlisting}
+\end{itemize}
+
+\subsection{Destructor}
+\begin{itemize}
+	\item Problem: what happens if we have a local \lstinline[style=C++]{IntSet} inside of a function and the function returns?
+\begin{lstlisting}[style=C++]
+void foo() {
+	IntSet is(3);
+}  // foo returns
+
+int main() {
+	foo();
+}
+\end{lstlisting}
+	\item Array is stored on the heap, and only the pointer will be destroyed.
+	\item To solve this memory leak, we have to arrange to de-allocate the integer array whenever the ``enclosing'' IntSetis destroyed.
+	\item We do this with a \textbf{destructor}, the opposite of a constructor
+	\item A destructor also has the same name as the class, preceded with a tilde
+	\item e.g.,
+\begin{lstlisting}[style=C++]
+class IntSet{
+public:
+	//...
+
+	//EFFECTS: destroys this IntSet
+	~IntSet();
+
+	//...
+};
+
+IntSet::~IntSet() {
+	delete[] elts;
+}
+\end{lstlisting}
+	\item Destructors run automatically when an object is destroyed
+	\item When does the destructor run?
+	\begin{itemize}
+		\item Local: out of scope
+		\item Global: program end
+		\item Dynamic: \textbf{when it is deletec}
+	\end{itemize}
+\end{itemize}
+
+\subsection{Copy Constructor}
+\begin{itemize}
+	\item In our original \lstinline[style=C++]{IntSet} when a copy is currently performed the pointer to the array of the original set is copied, so both sets will have pointers point to one array. 
+	\item The copy constructor has two tasks
+	\begin{enumerate}
+		\item Initialize the member variables
+		\item \textbf{Copy everything} from the other \lstinline[style=C++]{IntSet}
+	\end{enumerate}
+	\item e.g.,
+\begin{lstlisting}[style=C++]
+IntSet::IntSet(constIntSet&other) {
+	//1. Initialize member variables
+	elts= new int[other.elts_capacity];
+	elts_size= other.elts_size;
+	elts_capacity= other.elts_capacity;
+
+	//2. Copy everything from the other IntSet
+	for (inti= 0; i< other.elts_size; ++i)
+		elts[i] = other.elts[i];
+}
+\end{lstlisting}
+	\item The copy constructor we've written follows pointers and copiesthe things they point to, rather than just copying the pointers
+	\item This is called a \textbf{deep copy}, as opposed to the default behavior which called a \textbf{shallow copy}
+\end{itemize}
+
+\subsection{Destructors and polymorphism}
+\begin{itemize}
+	\item When you create a object, all the constructors run, starting with the base class
+	\item Now, let's see what happens when we mix destructors with polymorphism
+	\item e.g.,
+\begin{lstlisting}[style=C++]
+class Animal {
+	virtual void talk() {}
+	virtual ~Animal {}
+};
+
+class Chicken : public Animal {
+public:
+	virtual void talk()
+		{ cout<< "cluck\n"; }
+	virtual ~Chicken {}
+};
+
+class Horse : public Animal {
+public:
+	virtual void talk()
+		{ cout<< “neigh\n"; }
+};
+\end{lstlisting}
+	\item When running the following code:
+\begin{lstlisting}[style=C++]
+Animal *a = ask_user(); //input: “Chicken”
+// do something with a
+delete a; a=0;
+\end{lstlisting}
+	\item Since dtoris virtual, correct dtors(\lstinline[style=C++]{~Chicken()}, then \lstinline[style=C++]{~Animal()} ) are selected at runtime.
+	\item Destructors run from child class towards parent class!
+\end{itemize}

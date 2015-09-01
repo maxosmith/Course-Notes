@@ -1,0 +1,60 @@
+\subsection{Abstraction}
+\begin{itemize}
+	\item \textbf{Procedural abstraction}
+	\begin{itemize}
+		\item A function is given a specification which documents whatthe function does, but not howit does it.
+		\item For example, if we find a faster way to compute factorial, we can just replace the old implementation with the new one, and no other component of the program needs to know this.
+	\end{itemize}
+	\item \textbf{Data abstraction}
+	\begin{itemize}
+		\item An ADT provides an abstractdescription of values and operations.
+		\item The definition of an ADT must combine bothsome notion ofwhatthe values of that type represent, and howthey behave.
+		\item We can leave off the details of how this actually happens.
+	\end{itemize}
+\end{itemize}
+
+\subsection{Abstract Data Types}
+\begin{itemize}
+	\item \textbf{Information hiding}: we don't need to know the details of how the object is represented, nor do we need to know how the operations on those objects are implemented.
+	\item \textbf{Encapsulation}: the objects and their operations are defined in the same place; the ADT combines both data and operation in one entity.
+	\item ADTs are substitutable: you can change the implementation and no users of the type can tell
+	\item See example in lecture slides.
+\end{itemize}
+
+\subsection{const member functions}
+\begin{itemize}
+	\item You can use \lstinline[style=C++]{const} in a function signature promises ``this member function will not modify any member variable''
+\begin{lstlisting}[style=C++]
+class Triangle {
+	//...
+	double area() const;
+	//...
+}
+\end{lstlisting}
+\end{itemize}
+
+\subsection{Representation invariant}
+\begin{itemize}
+	\item Member variables are a class’s representation
+	\item The description of how member variables should behave are representation invariants
+	\item \textbf{Representation invariants} are rules that the representation must obey immediately before and immediately after any member function execution
+	\item The \textit{what} the data type does is then the header file
+	\item The \textit{how} the data type works is in the cpp file
+\end{itemize}
+
+\subsection{Scope Resolution Operator}
+\begin{itemize}
+	\item \lstinline[style=C++]{::} is the scope resolution operator, which tells the compiler that this function is inside the scope of the class
+	\item e.g.,
+\begin{lstlisting}[style=C++]
+Triangle::Triangle(): a(0), b(0), c(0) {}
+\end{lstlisting}
+	\item In the previous example, it's used to show in-line construction
+	\item This syntax is called an \textbf{initializer list}
+	\item More efficient, because dealt with at compile time.
+	\item It can also be used with parameters. e.g.,
+\begin{lstlisting}[style=C++]
+Triangle::Triangle(double a_in, double b_in, double c_in): a(a_in), b(b_in), c(c_in) {}
+\end{lstlisting}
+	\item See the Flatland example from lecture slides.
+\end{itemize}

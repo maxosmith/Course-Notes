@@ -1,0 +1,86 @@
+\subsection{Types of testing}
+\begin{itemize}
+	\item Unit testing
+	\begin{itemize}
+		\item Test smaller, less complex, easier to understand units
+		\item One piece at a time (e.g., a function)
+	\end{itemize}
+
+	\item System testing
+	\begin{itemize}
+		\item Test entire project (code base)
+		\item Do this \textit{after} unit testing
+	\end{itemize}
+
+	\item Regression testing
+	\begin{itemize}
+		\item Automatically run all unit and system tests after a code change
+	\end{itemize}
+
+	\item Steps to test:
+	\begin{enumerate}
+		\item Understand the specification
+		\item Write tests
+		\item Check the results
+	\end{enumerate}
+\end{itemize}
+
+\subsection{Understand the Specification}
+\begin{itemize}
+	\item For an entire assignment, read through the specification very carefully, and make a note of everything it says you have to do
+	\item Required behaviors: what must and must not happen
+\end{itemize}
+
+\subsection{Write Tests}
+\begin{itemize}
+	\item For each of your required behaviors, write one or more test cases that check them.
+	\item To the extent possible, the test case should check exactlyone behavior –no more!
+	\item 4 types of tests:
+	\begin{itemize}
+		\item \textbf{Simple}: ``expected'' or ``normal'' inputs
+		\item \textbf{Boundary}: edges of what is expected
+		\item \textbf{Nonsense}: unexpected inputs
+		\item \textbf{Stress}: long inputs
+	\end{itemize}
+\end{itemize}
+
+\subsection{Check the results}
+\begin{itemize}
+	\item Do: write down correct answer beforerunning test
+	\item Don't: quickly run test cases and glance at the output
+	\item \textbf{Asserts} that the representation invariant is true:
+\begin{lstlisting}[style=C++]
+#include <cassert>
+list_tin = list_make(); // empty list
+list_tout = reverse(in); // expect empty list
+assert( list_isEmpty(out) );
+\end{lstlisting}
+\end{itemize}
+
+\subsection{Debugging Strategies}
+\begin{itemize}
+	\item Read the code
+	\item Remove portions of the code to narrow down error
+	\item Add print statements
+	\item Add \lstinline[style=C++]{assert()} statements
+	\item Add a more specific test (shorter is better)
+	\item \textit{Use a debugger!}
+\end{itemize}
+
+\subsection{Function Pointers}
+\begin{itemize}
+	\item How do you define a variable that points to a function taking two integers, and returns an integer?
+\begin{lstlisting}[style=C++]
+int (*foo)(int, int);
+\end{lstlisting}
+	\item You read this from ``inside out'':
+\begin{lstlisting}[style=C++]
+foo						// foo
+(*foo)					// is a pointer
+(*foo)(    );			// to a function
+(*foo)(int, int);		// that takes two integers
+int (*foo)(int, int);	// and returns an integer
+\end{lstlisting}
+	\item Once we've declared foo, we can assign any function to it: \lstinline[style=C++]{foo = min;}
+	\item And then it can be called as follows: \lstinline[style=C++]{foo(3, 5)}
+\end{itemize}

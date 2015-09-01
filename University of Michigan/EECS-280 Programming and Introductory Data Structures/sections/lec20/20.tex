@@ -1,0 +1,100 @@
+\begin{itemize}
+	\item An iterator allows you to traverse a container
+	\item We’ve seen something like this before with arrays
+\begin{lstlisting}[style=C++]
+int a[SIZE]; // fill a
+for (int i=0; i< SIZE; ++i)
+	cout<< a[i] << endl;
+\end{lstlisting}
+	\item How would you do this for a linked list, like our \lstinline[style=C++]{List} type?
+	\item In the end, our iterator will work a lot like using a pointer to traverse an array
+\end{itemize}
+
+\subsection{Iterator functions}
+\begin{enumerate}
+	\item \textbf{Create}: an iterator with a constructor
+	\item \textbf{Get}: the \lstinline[style=C++]{T} at the iterator’s current position
+	\item \textbf{Move}: the iterator to the next position
+	\item \textbf{Compare}: two iterators
+\end{enumerate}
+\begin{lstlisting}[style=C++]
+<template T>
+class Iterator {
+	Node* node_ptr;
+public:
+	Iterator(); 							// Create
+	T& operator* () const; 					// Get
+	Iterator& operator++ (); 				// Move
+	bool operator!= (Iterator rhs) const;	// Compare
+};
+\end{lstlisting}
+
+\subsection{Friends}
+\begin{itemize}
+	\item Our list also needs to functions \lstinline[style=C++]{begin(), end()} 
+	\item \lstinline[style=C++]{begin()}: returns an iterator object pointing to first list position
+	\item \lstinline[style=C++]{end()}: returns a default iterator object ``past the end'' position
+	\item Our \lstinline[style=C++]{Iterator} needs access to the internal workings of the \lstinline[style=C++]{List} in order to perform these functions
+	\item We can solve this by making \lstinline[style=C++]{Iterator} a \textbf{friend} of \lstinline[style=C++]{List}
+	\item Friendship is \textbf{given}, not taken
+	\item The class declares which classes are its friends
+	\item e.g.,
+\begin{lstlisting}[style=C++]
+class List {
+	// ...
+	class Iterator {
+		// ...
+		friend class List;
+	};
+};
+\end{lstlisting}
+\end{itemize}
+
+\subsection{Using iterators}
+\begin{itemize}
+	\item With these functionalities we can now use an iterator to traverse a list:
+\begin{lstlisting}[style=C++]
+List<int> l;
+l.insertFront( 3 );
+l.insertFront( 2 );
+l.insertFront( 1 );
+
+for (List<int>::Iterator i=l.begin(); i!= l.end(); ++i) {
+	cout<< *i<< " ";
+}
+
+cout<< endl;
+\end{lstlisting}
+	\item We have successfully created a function abstraction to access a container
+\end{itemize}
+
+\subsection{Iterator invalidation}
+\begin{itemize}
+	\item Once an iterator is created, if the underlying container is modified, the iterator may become invalid.
+	\item If the iterator is invalidated, its behavior is undefined, much like an invalid pointer.
+	\item The intuition behind this is that the iterator depends on the representation of the container – if that changes, the iterator is likely to miss an element or return an element that no longer exists.
+	\item e.g., (BAD)
+\begin{lstlisting}[style=C++]
+List<int> l;
+l.insertFront( 1 );
+List<int>::Iterator i=l.begin();
+++i; ++i; // oops, went off the end!
+\end{lstlisting}
+	\item It’s your responsibility to keep your Iterator within the bounds of the container
+\end{itemize}
+
+\subsection{Putting it all together}
+\begin{lstlisting}[style=C++]
+List<Gorilla*> zoo;
+zoo.insertFront(new Gorilla("Colo"));
+zoo.insertFront(new Gorilla("Koko"));
+
+for (List<Gorilla*>::Iterator i=zoo.begin(); i!= zoo.end(); ++i)
+	cout<< (**i).get_name() << endl;
+
+for (List<Gorilla*>::Iterator i=zoo.begin(); i!= zoo.end(); ++i) {
+	delete *i; *i=0;
+}
+
+cout<< endl;
+\end{lstlisting}

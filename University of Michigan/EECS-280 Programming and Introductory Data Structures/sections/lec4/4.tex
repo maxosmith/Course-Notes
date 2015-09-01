@@ -1,0 +1,28 @@
+\subsection{Tail-recursion to iteration conversion}
+\begin{itemize}
+	\item There are five steps to the conversion of a tail-recursive function to an iterative one:
+	\begin{enumerate}
+		\item Copy the function's type signature
+		\item Identify any needed ``loop variables'' by inspecting the call to the helper function (if it exists).
+		\item Write initialization code to mirror the call to the helper function
+		\item Identify termination condition(s) and return values by copying the base case behavior.
+		\item Write loop body by copying the inductive step
+	\end{enumerate}
+\end{itemize}
+
+\subsection{Dependency Graphs}
+\begin{itemize}
+	\item Special kind of graph with ``directed'' edges showing which ``new'' values depend on which ``old'' values.
+	\item An edge is drawn from a \textbf{source vertex} to a \textbf{sink vertex}.
+	\item To build a dependency graph, draw one vertex for each variable. If variable fooreads from variable barto compute its new value, draw an edge fromfootobar. (Don't draw an edge between a vertex and itself).
+	\item If a variable has no edges with it as a sink(i.e. no edges terminate there), you can write its assignment, and erase it and any edges with it as a source.
+	\item If two variables (\lstinline[style=C++]{foo, bar}) are each dependent on the other, then you can solve this by inventing shadow variables:
+\begin{lstlisting}[style=C++]
+int foo_new = bar - 1; // Shadow variable
+int bar_new = foo - 1; // Shadow variable
+// ------------------
+foo = bar_new;
+bar = foo_new;
+\end{lstlisting}
+	\item The transition between these two steps is called a \textbf{software epoch} - dependencies do not exist across epochs.
+\end{itemize}
