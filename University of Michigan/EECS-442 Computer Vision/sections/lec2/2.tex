@@ -39,14 +39,255 @@
 		\item Can be used to represent an image, where each entry is a pixel.		
 	\end{itemize}
 	\item Sum: $C_{n\times m}=A_{n\times m}+B_{n\times m}; c_{ij}=a_{ij}+b_{ij}$
+	\item Product: $C_{n\times p}=A_{n\times m}B_{m\times p}$
+	$$\begin{bmatrix}
+		3 & 0 \\
+		0 & 7 
+	\end{bmatrix}\begin{bmatrix}
+		0 & 1 \\
+		1 & 0
+	\end{bmatrix}=\begin{bmatrix}
+		0 & 3 \\
+		7 & 0
+	\end{bmatrix}$$
+	\item Transpose: $C_{m\times n}=A^{T}_{n\times m}; c_{ij}=a_{ji}$
+	\item Determinant: 
+	\begin{itemize}
+		\item Must be square
+		\item 2D: $det \begin{bmatrix}
+			a_{11} & a_{12} \\
+			a_{21} & a_{22}
+		\end{bmatrix}=a_{11}a_{22}-a_{21}a_{12}$
+		\item 3D: $det \begin{bmatrix}
+			a_{11} & a_{12} & a_{13} \\
+			a_{21} & a_{22} & a_{23} \\
+			a_{31} & a_{32} & a_{33}=
+		\end{bmatrix}=a_{11} \begin{vmatrix}
+			a_{22} & a_{23} \\
+			a_{32} & a_{33}
+		\end{vmatrix} - a_{12} \begin{vmatrix}
+			a_{21} & a_{23} \\
+			a_{31} & a_{33}
+		\end{vmatrix} + a_{13} \begin{vmatrix}
+			a_{23} & a_{22} \\
+			a_{31} & a_{32}
+		\end{vmatrix}$
+	\end{itemize}
+	\item Inverse:	$$\begin{bmatrix}
+		a_{11} & a_{12} \\
+		a_{21} & a_{22}
+	\end{bmatrix}^{-1}=\frac{1}{a_{11}a_{22} - a_{21}a_{12}}\begin{bmatrix}
+		a_{22} & -a_{12} \\
+		-a_{21} & a_{11}
+	\end{bmatrix}$$
+	\begin{itemize}
+		\item Must be square
+		\item $A^{-1}A=I$
+	\end{itemize}
+	\item Orthogonal: $Q_{n\times n}Q_{n\times n}^T = Q^{T}_{n\times n}Q_{n\times n}=I$
+	\begin{itemize}
+		\item Rows and columns are unit vectors
+	\end{itemize}
+	\item Block forms: 
+	\begin{itemize}
+		\item Represent submatrices as variables
+		\item e.g.,
+		$$P=\begin{bmatrix}
+			1 & 0 & 1\\
+			0 & 2 & 0\\
+			0 & 0 & 1
+		\end{bmatrix}=\begin{bmatrix}
+			S & t \\
+			0 & 1
+		\end{bmatrix}$$
+		$$S=\begin{bmatrix}
+			1 & 0 \\
+			0 & 2
+		\end{bmatrix}, t= \begin{bmatrix}
+			1 \\ 0
+		\end{bmatrix}$$
+	\end{itemize}
+\subsubsection{Eigenvalues and Eigenvectors}
+	\item \textbf{Eigen relation}: Matrix A acts on vector $\vec{u}$ and produces a scaled version of $\vec{u}$
+	$$A\vec{u}=\lambda\vec{u}$$
+	\item $\vec{u}$: eigenvector
+	\item $\lambda$: eigenvalue
+	\item The eigenvalues of A are the roots of the characteristics equation:
+	$$p(\lambda)=det(\lambda I-A)=0$$
+	\item \textbf{Eigendecomposition}:
+	$$A=S\Lambda S^{-1}$$
+	\begin{itemize}
+		\item $\Lambda$: diagonal matrix of eigenvalues
+		\item $S$: matrix with eigenvetors for columns
+	\end{itemize}
+\subsubsection{Singular Value decomposition}
+	\item $A=U\Sigma V^{-1}$
+	\item $U, V$: orthogonal matrix
+	\item $\Sigma$: diagonal matrix of singular values
+	\item \textbf{Singular value}: $sigma_i=\sqrt{\lambda_i}$
+	\begin{itemize}
+		\item $\lambda$: eigenvalue of $A^{T}A$
+	\end{itemize}
 \end{itemize}
 
 \subsection{Geometrical transformations}
 \begin{itemize}
-	\item 
+	\item \textbf{Translation}:
+	$$P\to P'\\
+	P=(x,y), t=(t_x, t_y)\\
+	P'=\begin{bmatrix}
+		x + t_x\\
+		y + t_y
+	\end{bmatrix}=\begin{bmatrix}
+		1 & 0 & t_x \\
+		0 & 1 & t_y
+	\end{bmatrix}\begin{bmatrix}
+		x \\ y \\ 1	
+	\end{bmatrix}$$
+	\begin{itemize}
+		\item This will shift $P$ by $t$
+	\end{itemize}
+	\item \textbf{Homogeneous Coordinates}
+	\begin{itemize}
+		\item Multipl;y the coordinate by a non-zero scalar and add an extra coordinate equal to that scalar. e.g.,
+		$$(x,y)\to (xz, yz, z), z\neq 0$$
+		\item To go back to cartesian: divide by last coordinate and eliminate it:
+		$$(x,y,z), z\neq 0\to (x/z, y/z)$$
+	\end{itemize}
+	\item Translation using homogeneous coordinates:
+	$$P'=\begin{bmatrix}
+		x+t_x\\y+t_y\\1
+	\end{bmatrix}=\begin{bmatrix}
+		1 & 0 & t_x \\
+		0 & 1 & t_y \\
+		0 & 0 & 1
+	\end{bmatrix}\begin{bmatrix}
+		x \\ y\\ 1
+	\end{bmatrix}=\begin{bmatrix}
+		i & T \\ 0 & 1
+	\end{bmatrix}P=TP$$
+	\item \textbf{Scaling}:
+	$$P'=\begin{bmatrix}
+		s_x t_x\\x_y t_y\\1
+	\end{bmatrix}=\begin{bmatrix}
+		s_x & 0 & 0 \\
+		0 & s_y & 0 \\
+		0 & 0 & 1
+	\end{bmatrix}\begin{bmatrix}
+		x \\ y\\ 1
+	\end{bmatrix}=\begin{bmatrix}
+		S & 0 \\ 0 & 1
+	\end{bmatrix}P=SP$$
+	\item Scaling \& Translating:
+	$$P'=TSP=\begin{bmatrix}
+		s_x & 0 & t_x\\
+		0 & s_y & t_y\\
+		0 & 0 & 1
+	\end{bmatrix}\begin{bmatrix}
+		x \\ y \\ 1
+	\end{bmatrix}$$
+	\item Translation and scaling is not communative: $STP\neq TSP$
+	\item \textbf{Rotation}:
+	\begin{itemize}
+		\item Rotation by angle $\theta$
+		$$\begin{bmatrix}
+			x' \\ y'
+		\end{bmatrix}=\begin{bmatrix}
+			\cos\theta & -\sin\theta \\
+			\sin\theta & \cos\theta
+		\end{bmatrix}\begin{bmatrix}
+			x\\y
+		\end{bmatrix}$$
+		$$P'=RP$$
+	\end{itemize}
+	\item Translation + Rotation + Scaling = 
+	$$P'=(TRS)P\\
+	P'=\begin{bmatrix}
+		RS & t \\ 0 & 1
+	\end{bmatrix}\begin{bmatrix}
+		x \\ y\\ 1
+	\end{bmatrix}$$
 \end{itemize}
 
-\subsection{Application: removing perspective distortion - the DLT algorithm}
+\subsection{Transformation in 2D}
+\subsubsection{Isometries}
+$$\begin{bmatrix}
+	x' \\ y' \\ 1
+\end{bmatrix}=\begin{bmatrix}
+	R & t\\ 0 & 1
+\end{bmatrix}\begin{bmatrix}
+	x \\ y \\  1
+\end{bmatrix}=H_e \begin{bmatrix}
+	x\\y\\1
+\end{bmatrix}$$
 \begin{itemize}
-	\item 
+	\item Preserve distance (areas)
+	\item 3 DOF
+	\item Regulate motion of a rigid object
+\end{itemize}
+
+\subsubsection{Similarities}
+$$\begin{bmatrix}
+	x' \\ y' \\ 1
+\end{bmatrix}=\begin{bmatrix}
+	SR & t\\ 0 & 1
+\end{bmatrix}\begin{bmatrix}
+	x \\ y \\  1
+\end{bmatrix}=H_s \begin{bmatrix}
+	x\\y\\1
+\end{bmatrix}$$
+\begin{itemize}
+	\item Preserve:
+	\begin{itemize}
+		\item ratio of lengths
+		\item angles
+	\end{itemize}
+	\item 4 DOF
+\end{itemize}
+
+\subsubsection{Affinities}
+$$\begin{bmatrix}
+	x' \\ y' \\ 1
+\end{bmatrix}=\begin{bmatrix}
+	A & t\\ 0 & 1
+\end{bmatrix}\begin{bmatrix}
+	x \\ y \\  1
+\end{bmatrix}=H_a \begin{bmatrix}
+	x\\y\\1
+\end{bmatrix}\\
+A=\begin{bmatrix}
+	a_{11} & a_{12} \\ 
+	a_{21} & a_{22}
+\end{bmatrix}=R(\theta)R(-\phi)DR(\phi), D=\begin{bmatrix}
+	s_x & 0 \\ 0 & s_y
+\end{bmatrix}$$
+\begin{itemize}
+	\item Preserve:
+	\begin{itemize}
+		\item Parallel lines
+		\item Ratio of areas
+		\item Ratio of lengths on collinear lines
+		\item others...
+	\end{itemize}
+	\item 6 DOF
+\end{itemize}
+	
+\subsubsection{Projective}
+$$\begin{bmatrix}
+	x' \\ y' \\ 1
+\end{bmatrix}=\begin{bmatrix}
+	A & t\\ v & 1
+\end{bmatrix}\begin{bmatrix}
+	x \\ y \\  1
+\end{bmatrix}=H_p \begin{bmatrix}
+	x\\y\\1
+\end{bmatrix}\\$$
+\begin{itemize}
+	\item 8 DOF
+	\item Preserve:
+	\begin{itemize}
+		\item cross ratio of 4 collinear points
+		\item collinearity
+		\item and a few others...
+	\end{itemize}
 \end{itemize}
