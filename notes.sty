@@ -27,7 +27,11 @@
 %Formatting - hline in header
 \usepackage{fancyhdr}
 %Table of contents linking
-\usepackage{hyperref}
+\usepackage[colorlinks = true,
+            linkcolor = blue,
+            urlcolor  = blue,
+            citecolor = blue,
+            anchorcolor = blue]{hyperref}
 %Customize theorems
 \usepackage{thmtools, nameref, cleveref}
 %To stop reordering figures
@@ -301,10 +305,12 @@
 \newcommand{\titleHeader}[5]{
 	\pagenumbering{roman}
 	\begin{center}
+		\Large{\href{https://github.com/MaxOSmith/Course-Notes}{Course Notes}} \\ 
+		\vspace{3 mm}
 		\textbf{\Huge{#1}} \\
 		\Large{#2} \\
 		\vspace{2mm}\includegraphics[scale=0.2]{#5} \\
-		#3 - #4 \\
+		#3 - #4
 	\end{center}
 }
 
