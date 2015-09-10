@@ -1,0 +1,52 @@
+\subsection{Basic definitions and properties}
+\begin{itemize}
+\subsubsection{Vectors}
+	\item \textbf{Vectors (2D or 3D)}:
+	\begin{itemize}
+		\item $v=(x_1, x_2)$
+		\item Magnitude: $||v||=\sqrt{x_1^{2}+x_2^{2}}$
+		\item \textbf{Unit vector}: iff $||v||=\frac{v}{||v||}=1$
+		\item Orientation: $\theta = \tan^{-1}\left(\frac{x_2}{x_1}\right)$
+	\end{itemize}
+	\item Vector addition: $\vec{v}+\vec{w}=(x_1, x_2)+(y_1, y_2)=(x_1+y_1, x_2+y+2)$
+	\item Vector subtraction: $\vec{v}+\vec{w}=(x_1, x_2)-(y_1, y_2)=(x_1-y_1, x_2-y+2)$
+	\item Scalar product: $a\vec{v}=a(x_1, x_2)=(ax_1, ax_2)$
+	\item Inner (dot) product: $\vec{v}+\vec{w}=(x_1, x_2)\cdot(y_1, y_2)=x_1y_1+x_2y_2=||\vec{v}||\cdot||\vec{w}||\cos(\alpha)$
+	\begin{itemize}
+		\item Where $\alpha$ is the angle between the vectors
+	\end{itemize}
+	\item Orthonormal basis:
+	\begin{itemize}
+		\item $\vec{i}=(1,0), \vec{j}=(0,1)$
+		\item You can use them to represent vectors: $\vec{v}=(x_1, x_2)=x_1\vec{i}+x_2\vec{j}$
+	\end{itemize}
+	\item Vector (cross) product:
+	\begin{itemize}
+		\item $\vec{u}=\vec{v}\times\vec{w}$
+		\item Magnitude: $||\vec{u}||=||\vec{v}\times\vec{w}||=||\vec{v}||||\vec{w}||\sin(\alpha)$
+		\item $(x_1, x_2, x_3)\times(y_1, y_2, y_3)=(x_2y_3-x_3y_2, x_3y_1-x_1y_3, x_1y_2-x_2y_1)$
+	\end{itemize}
+\subsubsection{Matrices}
+	\item Matrices:
+	\begin{itemize}
+		\item e.g.,
+		$$A_{n\times m}=\begin{bmatrix}
+			a_{11} & a_{12} &\ldots & a_{1m}\\
+			a_{21} & a_{22} &\ldots & a_{2m}\\
+			\vdots &\vdots &\ddots & \vdots\\
+			a_{n1} & a_{n2} &\ldots &a_{nm}\\
+		\end{bmatrix}$$
+		\item Can be used to represent an image, where each entry is a pixel.		
+	\end{itemize}
+	\item Sum: $C_{n\times m}=A_{n\times m}+B_{n\times m}; c_{ij}=a_{ij}+b_{ij}$
+\end{itemize}
+
+\subsection{Geometrical transformations}
+\begin{itemize}
+	\item 
+\end{itemize}
+
+\subsection{Application: removing perspective distortion - the DLT algorithm}
+\begin{itemize}
+	\item 
+\end{itemize}
