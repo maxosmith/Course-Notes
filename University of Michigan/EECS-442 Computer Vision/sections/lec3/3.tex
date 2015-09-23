@@ -1,0 +1,230 @@
+\subsection{Pinhole Camera}
+\img{.75}{sections/lec3/ap.png}
+\begin{itemize}
+	\item A barrier is added to block off most of the rays
+	\item This process reduces blurring resulting from multiple rays of light hitting the same spot
+	\item \textbf{Aperature}: hole in the barrier that allows light to pass through.
+\img{.75}{sections/lec3/pin.png}
+	\item $f$ (\textbf{focal length}): distance between the lens (pinhole) the image sensor (image plane)
+	\item $c$: center of the camera/pinhole/aperature
+	\item Say we have an object of interest $P$ and want to understand how it'll register on our image plane as $P'$
+	$$P=\begin{bmatrix}
+		x \\ y \\ z
+	\end{bmatrix}\to P'=\begin{bmatrix}
+		x' \\ y'
+	\end{bmatrix}$$
+\img{.75}{sections/lec3/obj.png}
+	\item We can derive the tranformation using similar triangles:
+	$$x'=f\frac{x}{z}, y'=f\frac{y}{z}$$
+\end{itemize}
+
+\subsection{Cameras \& Lenses}
+\begin{itemize}
+	\item If the aperature is too large, your image will blur
+	\item If it's too small you won't have enough light going through to have an image (too dark)
+	\item This can be fixed by using lenses 
+\img{.75}{sections/lec3/lens.png}
+	\item A \textbf{lens} focuses light onto the film
+\img{.75}{sections/lec3/par.png}
+	\item Rays passing through the center of the lens are not deviated
+	\item All parallel rays converge to one point on a plan located at the \textbf{focal length} $f$
+\img{.75}{sections/lec3/c.png}
+	\item There is a specific distance at which objects are ``in focus''
+	\item Related to the concept of depth of field (``range object is in focus'')
+	\item The area pointed at in the image refers to the ``circle of confusion'' an area where you can't resolve individual rays
+\end{itemize}
+
+\subsection{Snell's Law}
+\begin{itemize}
+	\item Light bends at an interface as a result of travelling different speeds in different mediums.
+\img{.75}{sections/lec3/snell.png}
+	$$n_1 \sin\alpha_1=n_2\sin \alpha_2$$
+	\item $\alpha_1$: incident angle
+	\item $\alpha_2$: refraction angle
+	\item $n_i$: index of refraction
+	\item For small angles:
+	\img{1}{sections/lec3/thin.png}
+	\begin{itemize}
+		\item $n_1\alpha_1\approx n_2\alpha_2$
+		\item $z' = f+z_0$
+		\item $f = \frac{R}{2(n-1)}$
+		$$x' = z'\frac{x}{z}, y'=z'\frac{y}{z}$$
+	\end{itemize}
+\end{itemize}
+
+\subsection{Issues with lenses}
+\begin{itemize}
+	\item \textbf{Chromatic aberration}: lenses have different refractive indices for different wavelengths which cause color fringing
+	\img{.8}{sections/lec3/fring.png}
+	\item \textbf{Spherical aberration}: rays farther from the optical axis focus closer 
+	\img{1}{sections/lec3/sph.png}
+	\item \textbf{Radial distortion}: deviations are most noticeable for rays that pass through the edge of the lens
+	\img{1}{sections/lec3/rad.png}
+\end{itemize}
+
+\subsection{Converting to pixels}
+\img{.8}{sections/lec3/pin.png}
+\img{.8}{sections/lec3/coor.png}
+\begin{enumerate}
+	\item Offset
+	\begin{itemize}
+		\item The center of the image plane is at coordinates $C=(c_x, c_y)$
+		\item This modifies our projection mapping to: $(f\frac{x}{z}+c_x, f\frac{y}{z}+c_y)$
+	\end{itemize}
+	\item From metric to pixels
+	\begin{itemize}
+		\item If we let $k, l$ be conversion metrics with units pixel/m, too allow for pixel length and width to be different
+		\item We can now make these modifications to the conversion to be in pixels:
+		$$(x,y,z)\to(fk\frac{x}{z}+c_x, fl\frac{y}{z}+c_y)\\
+		(x,y,z)\to(\alpha \frac{x}{z}+c_x, \beta\frac{y}{z}+c_y)$$
+		\item We use $\alpha, \beta$ for ease of notation 
+	\end{itemize}
+\end{enumerate}
+
+\subsection{Linear Transformation to pixels}
+\begin{itemize}
+	\item Our previous formula isn't linear because of the division by $z$
+	\item If we use homogeneous coordinates we can make it linear:
+	\begin{itemize}
+		\item Image coordinates: $(x, y, 1)$
+		\item Scene coordinates: $(x, y, z, 1)$
+	\end{itemize}
+	\item We can now define a matrix $M$ to represent our transformation:
+	$$x'=Mx\\
+	x'=\begin{bmatrix}
+		fx \\ fy \\z
+	\end{bmatrix}=\begin{bmatrix}
+		f & 0 & 0 & 0 \\
+		0 & f & 0 & 0 \\
+		0 & 0 & 1 & 0
+	\end{bmatrix}\begin{bmatrix}
+		x \\ y \\ z \\ 1
+	\end{bmatrix}$$
+	\item We can now use this idea for our pixel mapping:
+	$$x'=\begin{bmatrix}
+		\alpha x+c_x z \\ \beta y + c_y z \\ z
+	\end{bmatrix} = \begin{bmatrix}
+		\alpha & 0 & c_x & 0\\
+		0 & \beta & c_y & 0 \\
+		0 & 0 & 1 & 0
+	\end{bmatrix}\begin{bmatrix}
+		x \\ y \\ z \\ 1
+	\end{bmatrix}$$
+\end{itemize}
+
+\subsection{Camera Matrix}
+\begin{itemize}
+	\item The subsection of our previous matrix:
+	$$\begin{bmatrix}
+		\alpha & 0 & c_x \\
+		0 & \beta & c_y \\
+		0 & 0 & 1 
+	\end{bmatrix}=K$$
+	\item $K$ is called the camera matrix
+	\item It sometimes features a skew parameter ($s$), but in pratcie $s\approx 0$
+		$$\begin{bmatrix}
+		\alpha & s & c_x \\
+		0 & \beta & c_y \\
+		0 & 0 & 1 
+	\end{bmatrix}$$
+	\img{.7}{sections/lec3/skew.png}
+\end{itemize}
+
+\subsection{3D Rotation of Points}
+\begin{itemize}
+	\item Rotation around the coordinate axes, \textbf{counter-clockwise}:
+	$$R_x(\alpha)=\begin{bmatrix}
+		1 & 0 & 0 \\
+		0 & \cos(\alpha) & -\sin(\alpha) \\
+		0 & \sin(\alpha) & \cos(\alpha)
+	\end{bmatrix}\\
+	R_y(\beta)=\begin{bmatrix}
+		\cos(\beta) & 0 & \sin(\beta) \\
+		0 & 1 & 0 \\
+		-\sin(\beta) & 0 & \cos(\beta)
+	\end{bmatrix}\\
+	R_z(\gamma)=\begin{bmatrix}
+		\cos(\gamma) & -\sin(\gamma) & 0 \\
+		\sin(\gamma) & \cos(\gamma) & 0 \\
+		0 & 0 & 1
+	\end{bmatrix}$$
+\end{itemize}
+
+\subsection{Camera Matrix Homogeneous Coordinates}
+\begin{itemize}
+	\item In 4D homogeneous coordinates the mapping from world to image follows:
+	$$X=\begin{bmatrix}
+		R & T \\
+		0 & T
+	\end{bmatrix}_{4\times 4} X_{world}$$
+	$$X'=K_{3\times 3}[R\text{ }T]_{3\times 4} X_{world, 4\times 1}$$
+	\item Here $K$ represents the internal camera parameters: $K=\begin{bmatrix}
+		\alpha & s & c_x \\
+		0 & \beta & c_y \\
+		0 & 0 & 1
+	\end{bmatrix}$
+	\item Our external camera parameters are represented by $R, T$
+	\item If we represent $M=\begin{bmatrix}
+		\vec{m}_1 & \vec{m}_2 & \vec{m}_3
+	\end{bmatrix}^{T}$, then we may also write our transformation as:
+	$$(x,y,z)_w\to (\frac{\vec{m}_1 X_m}{\vec{m}_3 X_w}, \frac{\vec{m}_2 X_w}{\vec{m}_3 X_w} )$$
+\end{itemize}
+
+\begin{theorem}[Theorem (Faaugeras, 1993)]
+	$$M=K[R\text{ }T]=[KR\text{ }KT]=[A\text{ }b]$$
+\begin{itemize}
+	\item Perspective projection req:
+	\begin{itemize}
+		\item $det(A)\neq 0$
+	\end{itemize}
+	\item Zero-skew conditions:
+	\begin{itemize}
+		\item $det(A)\neq 0$
+		\item $(\vec{a}_1\times \vec{a}_3)\cdot(\vec{a}_2\times \vec{a}_3)=0$
+	\end{itemize}
+	\item Perspective proj \& zero-skew conditons:
+	\begin{itemize}
+		\item $det(A)\neq 0$
+		\item $(\vec{a}_1\times \vec{a}_3)\cdot(\vec{a}_2\times \vec{a}_3)=0$
+		\item $(\vec{a}_1\times \vec{a}_3)\cdot(\vec{a}_1\times \vec{a}_3)=(\vec{a}_2\times \vec{a}_3)\cdot(\vec{a}_2\times \vec{a}_3)$
+	\end{itemize}
+\end{itemize}
+\end{theorem}
+
+\subsection{Properties of Projection}
+\begin{itemize}
+	\item Points project to points
+	\item Liens project to lines
+	\item Distant objects look smaller
+	\img{1}{sections/lec3/small.png}
+	\item Angles are not preserved
+	\item Parallel lines will meet at a \textbf{vanishing point}
+	\img{1}{sections/lec3/vanish.png}
+	\item Objects on the periphery are expanded
+	\item Degenerate cases:
+	\begin{itemize}
+		\item Line through focal point projects to a point
+		\item Plane though focal point projects to line
+		\item Plane perpendicular to image plane projects to part of the image (with horizon)
+	\end{itemize}
+\subsubsection{Vanishing points}
+	\item Sets of parallel lines on the same plan lead to collinear vanishing points (The line is called the \textbf{horizon} for that plane)
+	\item Each set of parallel lines meets at a different point (The vanishing point for this direction)
+\end{itemize}
+
+\subsection{Other camera models}
+\begin{itemize}
+\subsubsection{Weak perspective projection}
+	\item When the relative scene depth is small compared to its distance from the camera
+	\item Namely, if the relative distance (scene depth) between two points of a 3D object along the optical axis is much smaller than the average distance to the camera
+	\img{1}{sections/lec3/weak.png}
+	$$x'=-\frac{f'}{z_0}x, y'=-\frac{f'}{z_0}y$$
+	\item In this perspective the fraction is the \textbf{magnification} ($m$)
+	\item Accurate when object is small and distant
+	\item Most useful for recognition
+\subsubsection{Orthographic (affine) projection}
+	\item Distance form center of projection to image plane is infinite
+	\img{.7}{sections/lec3/orth.png}
+	$$x'=-x, y'=-y$$
+	\item All rays are parallel
+\end{itemize}

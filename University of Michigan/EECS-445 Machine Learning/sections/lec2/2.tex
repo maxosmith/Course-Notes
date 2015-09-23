@@ -1,0 +1,60 @@
+\subsection{Notation}
+\begin{itemize}
+	\item $x\in\mathbb{R}^D$: data 
+	\item $\phi (x)\in\mathbb{R}^M$: features for $\vec{x}$
+	\item $t\in\mathbb{R}$: continuous-valued labels
+	\item $\vec{x}^{(n)}\equiv \vec{x}_n$: n-th training example
+	\item $\vec{t}^{(n)}\equiv \vec{t}_n$: n-th targe value
+\end{itemize}
+
+\subsection{1D Inputs}
+\begin{itemize}
+	\item In the 1D case ($x\in\mathbb{R}^1$)
+	\item Given a set of observations $x^{(1)},\ldots ,x^{(N)}$ and corresponding targe values $t^{(1)},\ldots,t^{(N)}$
+	\item We want to learn a function $y(\vec{x}, W)\approx t$ to predict future values
+	$$y(\vec{x}, \vec{w})=\sum_{j=0}^{M-1}\vec{w}_j \phi_j (\vec{x}) = \vec{w}^T \phi(x)$$
+	\item e.g., (green = solution, red = 3-rd polynomial approximation)
+	\begin{center}
+		\includegraphics{sections/lec2/3.png}
+	\end{center}
+	\item For simplicity, we add a \textit{bias function}: $\phi_0 (\vec{x})=1$
+	$$\vec{\phi}=1, x, x^2, x^3, \ldots$$
+\end{itemize}
+
+\subsection{Basis Function}
+\begin{itemize}
+	\item Function to construct features from raw data.
+	\item e.g.,
+	\begin{itemize}
+		\item Polynomial: $\phi_j(x)=x^j$
+		\item Gaussian: $\phi_j(x)=exp(-\frac{(x-\mu_j)^2}{2s^2})$
+		\item Sigmoid: $\phi_j(x)=\sigma (\frac{x-\mu_j}{s})$
+	\end{itemize}
+\end{itemize}
+
+\subsection{Objective Function}
+\begin{itemize}
+	\item We will use of sum-of-square errors:
+	$$E(w)=\frac{1}{2}\sum_{n=1}^N (y(x^{(n)}, w)-t^{(n)})^2$$
+\end{itemize}
+
+\subsection{Batch Gradient Descent}
+\begin{itemize}
+	\item Given data $(x,y)$ initial $w$, repeat until convergence:
+	$$\vec{w}=\vec{w}-\eta \nabla_{\vec{w}} E(\vec{w})$$
+	$$\nabla_{\vec{w}}E(w)=\sum_{n=1}^N \left( \sum_{k=0}^{M-1} w_k \phi_k (\vec{x}^{(n)}) - t^{(n)} \right)\phi (\vec{x}^{(n)})=\sum_{n=1}^N \left(\vec{w}^T \phi (\vec{x}^{(n)}) - \vec{t}^{(n)}\right) \phi(x^{(n)})$$
+\end{itemize}
+
+\subsection{Overfitting}
+\begin{itemize}
+	\item An implicit way to tell is when the coeffecients become unreasonably large
+	\item Solutions:
+	\begin{itemize}
+		\item Reduce order
+		\item Add more data point
+		\item Reselect features, some may be harming you
+	\end{itemize}
+	\item If you have a small number of data points, then you should use low order polynomial (small number of features)
+	\item As you obtain more data points, you can gradually increase the order of the polynomial (more features)
+	\item Controlling model complexity: \textbf{regularization}
+\end{itemize}

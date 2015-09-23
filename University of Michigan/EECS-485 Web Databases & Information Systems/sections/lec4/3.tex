@@ -1,0 +1,128 @@
+\subsection{Mark up Language}
+\begin{itemize}
+	\item Add tags as ``mark up'' to text
+	\item Document still ``primarily'' text
+	\item Mark up improves both structure and presentation
+	\subsubsection{Hypertext}
+	\item Text with embedded links to other documents
+	\item Anchor tag <a href = ``link''>atext</a>
+	\subsubsection{Escape Strings}
+	\item Some characters have special meaning in an application context
+	\begin{itemize}
+		\item / or ? in URL
+	\end{itemize}
+	\item Need an \textbf{escape string}
+	\begin{itemize}
+		\item e.g., \&lt; \&euro; \&amp;
+	\end{itemize}
+\end{itemize}
+
+\subsection{XML}
+\begin{itemize}
+	\item No standard set of stags
+	\item Define tags and use them
+	\item Need to balanced like parentheses
+	\item Tags form a heirarchy of objects
+	\begin{itemize}
+		\item Document Object Model (DOM) tree
+	\end{itemize}
+\end{itemize}
+
+\subsection{XHTML}
+\begin{itemize}
+	\item HTML permits unbalanced tags
+	\item HTML cannot be derived from XML
+	\item XHTML is a dialect of HTML that meets XML rules (proper containment)
+\end{itemize}
+
+\subsection{HTML5}
+\begin{itemize}
+	\item Merges all that has happened over years related to HTML
+	\begin{itemize}
+		\item XHTML
+		\item Browser-specific estensions of HTML
+		\item OTher use cases of broad interest
+	\end{itemize}
+\end{itemize}
+
+\subsection{Layout - CSS}
+\begin{itemize}
+	\item Modern HTML seperates content form the way content looks (through CSS)
+	\item Included via:
+	%<link rel="stylesheet" type="text/css" href="style.css"\>
+	\subsubsection{Scaling and Positioning}
+	\item Biggest problem in layout
+	\item If display screen width changes, do you:
+	\begin{itemize}
+		\item Keep your page fixed width any way
+		\item Adjust page width, and use more lines of text - increasing page length
+		\item Adjust path width and font size so everything scales evenly
+	\end{itemize}
+\end{itemize}
+
+\subsection{Dynamic Content}
+\begin{itemize}
+	\item So far, HTTP servers are fileservers
+	\begin{itemize}
+		\item And browsers are HTML renderers
+	\end{itemize}
+	\item Think of the things that are impossible with simple static pages
+	\item In the old days, almost all requests were just disk loads
+\end{itemize}
+
+\subsection{N-tier model}
+\begin{itemize}
+	\item We've seperated persistent storage from user interactions
+	\item Web apps often break down pieces of code functionality into machines
+	\img{.8}{sections/lec4/model.png}
+	\subsubsection{Model-View-Controller}
+	\item System to sort out who does what
+	\img{.8}{sections/lec4/mvc.png}
+	\item HTML is the model
+	\item CSS is the view
+	\item Browser is the controller
+	\item Model exists in the database/filesystem
+	\item View is the computed HTML++
+	\item Controller is processing of user input
+	\img{.8}{sections/lec4/mvc.png}
+\end{itemize}
+
+\subsection{Object-Relational Mapping}
+\begin{itemize}
+	\item Addresses the ``impedance mismatch'' between relational and object worlds
+	\item Map object classes to database tables
+\end{itemize}
+
+\subsection{Dynamic Client}
+\begin{itemize}
+	\item Lots of different options for client-side content, but most people nowadays conerging on AJAX (Asynchronous JavaScript and XML)
+	\begin{itemize}
+		\item JavaScript for running in the browser
+		\item XML for data exchange with server, via HTTP
+		\item After intiial page load, similar to client/server program, not traditional web page loads
+	\end{itemize}
+	\item JS code runs when triggered by %<script>
+	\item Has read/write access to the page's DOM
+	\item e.g.,
+	\img{.8}{sections/lec4/jsdom.png}
+	\item Client-side code will display code instead of end result. Server-side code would only show result.
+\end{itemize}
+
+\subsection{Browser Security}
+\begin{itemize}
+	\item JS is potential security nightmare, so in-browser programs are sandboxed
+	\begin{itemize}
+		\item \textbf{Same-origin policy}: scripts from the same origin can access each others' data + methods
+		\item scripts form different origins cannot see each other
+	\end{itemize}
+	\subsubsection{Attacks}
+	\item Cross-site scripting
+	\item SQL Injection
+\end{itemize}
+
+\subsection{Browser Internals}
+\img{.8}{sections/lec4/INT.PNG}
+\begin{itemize}
+	\item Chome added more break-down of functionality allowign you to kill tabs-by-process
+\end{itemize}
+\img{.8}{sections/lec4/int2.png}

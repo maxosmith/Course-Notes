@@ -1,0 +1,128 @@
+\subsection{Probability}
+\begin{itemize}
+	\item \textbf{Experiment}: procedure that yields an outcome
+	\item \textbf{Sample space}: set of all possible outcomes in the experiment, denoted as $\Omega$ (or $S$)
+	\item \textbf{Event}: subset of the sample space $\Omega$ (i.e., an event is a set consisting of individual outcomes)
+	\item \textbf{Probability measure}: function from events to probability levels
+	\item \textbf{Probability space}: $(\Omega, \mathcal{F}, P)$
+	\subsubsection{Axioms of Probability}
+	\item $P(A)\geq 0, \forall A\in\mathcal{F}$
+	\item $P(\Omega)=1$
+	\item If $A_1, A_2, \ldots$ are disjoint events, then:
+		$$P(\Cup_i A_i)=\sum_{i}P(A_i)$$
+	\subsubsection{Set probabilities}
+	\item $A\subset B \to P(A)\leq P(B)$
+	\item $P(A\cap B)\leq min(P(A), P(B))$
+	\item $P(A\cup B)\leq P(A) + P(B)$
+	\item $P(\Omega\\A) = 1-P(A)$
+	\item If $A_1,\ldots,A_k$ are a set of disjoint events such that $\Cup_{i=1}^k A_i=\Omega$, then: 
+		$$\sum_{i=1}^k P(A_k)=1$$
+	\subsubsection{Conditional Probability}
+	\item For events $A, B\in\mathcal{F}$ with $P(B)>0$, we may write the conditional probability of A given B:
+		$$TODO$$
+\end{itemize}
+
+\subsection{Bayes' Rule}
+\begin{itemize}
+	\item Using chain rule we may see \textbf{Bayes' rule}:
+		$$P(B|A)=\frac{P(A|B)P(B)}{P(A)}$$
+	\item Often written:
+		$$P(B_i | A)=\frac{P(A|B_i) P(B_i)}{\sum_i P(A|B_i) P(B_i)}$$
+	\item Where $B_i$ are a partition of $\Omega$ (note the bottom is just the law of total probability)
+	\item 
+\end{itemize}
+
+\subsection{Likelihood Functions}
+\begin{itemize}
+	\item Bayes' allows us to compute the posterior of $w$ given data $D$:
+		$$p(w|D)=\frac{p(D|w)p(w)}{p(D)}$$
+		$$p(D)=\sum_w p(D|w)p(w)$$
+	\item The likelihood unction $p(D|w)$ is evaluated for observbed data $D$ as a function of $w$.
+	\item Namely,
+		$$posterior\propto likelihood\times prior$$
+		$$p(\vec{w}|D)\propto p(D|\vec{w})p(\vec{w})$$
+	\item We do this because we typically have a model ($p(\vec{w})$), and then we can improve our likelihood of prediction by observing data ($p(D|\vec{w}$)
+\end{itemize}
+
+\subsection{Maximum Likelihood}
+\begin{itemize}
+	\item Maximum likelihood:
+	\begin{itemize}
+		\item choose parameter setting $w$ that maximizes likelihood function $p(D|w)$
+		\item Choose the value of $w$ that maximizes the probability of observed data
+		\item The negative log of the likelihood is called the negative log-likelihood (e.g., a loss function to minimize)
+		\item Maximizing likelihood is equivalent to minimizing the loss
+	\end{itemize}
+	\item MAP (maximum a posteriori) estimation
+	\begin{itemize}
+		\item Equivalent to mazimizing $p(w|D)\propto p(D|w)p(w)$
+	\end{itemize}
+\end{itemize}
+
+\subsection{The Gaussian Distribution}
+$$\mathcal{N}(x|\mu, \sigma^2)=\frac{1}{(2\pi\sigma^2)^(1/2)}e^{-\frac{1}{2\sigma^2}(x-\mu)^2}$$
+TODO INSERT FUNCTION AND GRAPH
+\begin{itemize}
+	\item Expected value: $E(x)=\mu=\int p(x)x dx$
+	\item Variance: $Var(x)=E(x^2) - E(x)^2=\sigma^2$
+\end{itemize}
+
+\subsection{Maximum Likelihood $w$}
+\begin{itemize}
+	\item Assume a stochastic model:
+		$$t=y(x, w)+\epsilon\text{ where }\epsilon~\mathcal{N}(0, \beta^{-1})$$
+		\item $\beta^{-1}=\sigma^2$
+		\item This gives a likelihood function:
+		$$p(t|x,w,\beta)=\mathcal{N}(t|y(x,w),\beta^{-1})$$
+		\item With inputs $X=\{ x^{(1)}, \ldots, x^{(N}\}$ and targe values $t = \{ t^{(1)}, \ldots, t^{(N)}\}$, the data likelihood is:
+		$$p(t|X, w, \beta)=\Pi_{n=1}^N \mathcal{N}(t^{(n)}|w^T\phi(x^{(n)}), \beta^{-1})$$
+		\item Log likelihood is:
+		$$TODO-16$$
+		\item where:
+		$$TODO-16$$
+\end{itemize}
+
+\subsection{Log Likelihood}
+\begin{itemize}
+	\item The log likelihood is:
+		$$\ln p (\vec{t}|\vec{w}, \beta)=\frac{N}{2}\ln\beta-\frac{N}{2}\ln (2\pi) - \beta E_D(\vec{w})$$
+	\item Derivation:
+		$$\begin{aligned}
+			\log (P(t^{(1)}, t^{(2)}, \ldots, t^{(n)}|x^{(1)}, x^{(2)}, \ldots, x^{(n)}, w)) &= \log P(\vec{t}|\vec{x}, \vec{w}) \\
+			&= \log \left[ \Pi_{i=1}^N P(t^{(i)}|x^{(i)}, w)\right] \\
+			&= \log \left[ \Pi_{i=1}^N \frac{1}{\sqrt{2\pi}\sigma} \exp\left( -\frac{|t^{(i)}-w^T\phi(x^{(i)})|^2}{2\sigma^2}\right) \right] \\
+			&= \log \left[ \Pi_{i=1}^N \frac{\sqrt{\beta}}{\sqrt{2\pi}} \exp\left( -\frac{1}{2}\beta|t^{(i)}-w^T\phi(x^{(i)})|^2\right) \right] \\
+			&= \sum_{i=1}^N \log\left( \frac{\sqrt{\beta}}{\sqrt{2\pi}}\right)+\log\left( \exp\left( -\frac{1}{2}\beta|t^{(i)} - w^T\phi(x^{(i)})|^2 \right)\right) \\
+			&= \sum_{i=1}^N \log\left( \frac{\sqrt{\beta}}{\sqrt{2\pi}}\right)+-\frac{1}{2}\beta|t^{(i)} - w^T\phi(x^{(i)})|^2 
+		\end{aligned}$$
+	\item Maximizing the likelihood is summarized as:
+		$$0=(\phi^T t)^T-w^T (\phi^T \phi)$$
+\end{itemize}
+
+\subsection{Locally weighted linear regression}
+\img{.8}{sections/lec4/lwlr.png}
+\begin{itemize}
+	\item Main idea: when predicting $f(x)$, give high weights for ``neighbors'' of x
+	\item In locally weighted regression, points are weighted by prioximity to the current $x$ in question using a kernel. A regression is computed using the weighted points
+	\item Use simple features, like when you're not sure what a good feature function would be
+	\item Weighted based on proximity of neighbors
+	\item Do linear regression at each position based on neighbors
+	\item Approximation of local neighborhood
+	\item Final curve is made by dragging $x$ across and rerunning regression each time 
+\end{itemize}
+
+\begin{defn}[Locally-weighted linear regression]
+	\begin{enumerate}
+		\item Fit $\vec{w}$ to minimize $\sum_i r^{(i)} \left( t^{(i)} - \vec{w}^T \phi (x^{(i)})\right)^2$
+		\item Predict: $\vec{w}^T\phi(x^{(i)})$
+	\end{enumerate}
+	\begin{itemize}
+		\item Remarks:
+		\begin{itemize}
+			\item Standard choice: $r^{(i)}=\exp\left( -\frac{||x^{(i)} - x||^2}{2\tau^2} \right)$, where $\tau=$``kernel width''
+			\item $r^{(i)}$ depends on $x$ (query point), and you solve linear regression for each query point $x$
+			\item The problem can be formualted as a modified version of least squares 
+			\item CHoice of $\tau$ can cause overfitting/underfitting
+		\end{itemize}
+	\end{itemize}
+\end{defn}

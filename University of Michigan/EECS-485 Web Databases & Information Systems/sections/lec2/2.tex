@@ -1,0 +1,84 @@
+\subsection{Networking Basics}
+\begin{itemize}
+	\item \textbf{Circuit switched}: a dedicated channel is established for the duration of a transmission.
+	\begin{itemize}
+		\item Good for real-time things like voice and teleconferences
+		\item Don't have to packet data
+		\item Better latency
+		\item No waittime
+	\end{itemize}
+	\item \textbf{Packet switched}: netwrok in which relatively small units of data called \textbf{packets} are routed through a network for transmission.
+	\begin{itemize}
+		\item Makes better use of network resources
+		\item Can survive destruction of a node in the network
+		\item Packets can get lost
+	\end{itemize}
+\end{itemize}
+
+\subsection{Network Protocol Stack Model}
+\begin{center}
+\begin{tabular}{c | c c}
+	Application & User interaction & HTTP, FTP, SMTP\\
+	Presentation & Data representation & XML, Cryptography \\
+	Session & DIalogue management & ??? \\\
+	Transport & Reliable end-to-end link & TCP \\
+	Network & Routing via multiple nodes & IP \\
+	Data Link & Physical addressing & Ethernet \\
+	Physical & Metal or RF representation & 802.11, Bluetooth
+\end{tabular}
+\end{center}
+\begin{itemize}
+	\item IP is best-effor; therefore, packets may get dropped or delayed
+	\item TCP is reliable because it guarantees data will get there in order
+	\item Open System Interconnection (OSI) Reference Model
+	\item 
+\end{itemize}
+
+\subsection{HTTP Structure}
+\begin{itemize}
+	\item Request/response protocol:
+	\begin{enumerate}
+		\item Client opens TCP connection to server and writes a request
+		\item Server response appropriately
+		\item COnnection is closed
+	\end{enumerate}
+	\item Completely stateless
+	\begin{itemize}
+		\item Each request is treated as brand new
+	\end{itemize}
+	\item Client requests have several possible forms:
+	\begin{itemize}
+		\item GET, POST, PUT, DELETE, HEAD, TRACE, CONNECT, OPTIONS
+		\item Each has an associated parameter
+	\end{itemize}
+	\item Even a single page can consist of dozen of HTTP requests
+\end{itemize}
+
+\subsection{HTTP Client Algorithm}
+\begin{enumerate}
+	\item Wati for user to type into browser
+	\item Break the URL into host and path
+	\item Contact host at port 80, send GET <path> HTTP/1.1
+	\item Download result code and bytes
+	\item Send content bytes to HTML renderer for drawing onscreen
+\end{enumerate}
+
+\subsection{HTTP Server Algorithm}
+\begin{enumerate}
+	\item HTTP server process (or thread) waits for connection from client
+	\item Receives a GET /index.html request
+	\item Looks in content directory, computs name /content/index.html
+	\item Loads file from disk
+	\item Write resposne to clinet: 200 OK, followed by bytes for /content/index.html
+\end{enumerate}
+
+\subsection{URL Encoding}
+\begin{center}
+	http://server:port/path\#fragment?search
+\end{center}
+\begin{itemize}
+	\item Server name translated by DNS look-up: www.umich.edu$\to$135.22.87.1
+	\item Path is a file name relative to server root
+	\item Fragment is identified at the client, ignored by server
+	\item Search string is a general-purpose (set of) parameter(s) that the server can use as it pleases.
+\end{itemize}

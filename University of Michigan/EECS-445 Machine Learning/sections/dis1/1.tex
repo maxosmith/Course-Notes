@@ -1,0 +1,41 @@
+\begin{defn}[Gradient (vector)]
+	$$f(x):\mathbb{R}^{n\times n}\to \mathbb{R}$$
+	$$\nabla_{x}f(x)=\begin{bmatrix}
+		\frac{\partial f(x)}{\partial x_1}\\
+		\vdots \\
+		\frac{\partial f(x)}{\partial x_n}
+	\end{bmatrix} $$
+\end{defn}
+
+\begin{defn}[Gradient (matrix)]
+	$$f(x):\mathbb{R}^{n\times n}\to \mathbb{R}$$
+	$$\nabla_{A}f(A)=\begin{bmatrix}
+		\frac{\partial f(A)}{\partial A_{11}} & \ldots & \frac{\partial f(A)}{\partial A_{1n}}\\
+		\vdots &\ddots & \vdots \\
+		\frac{\partial f(A)}{\partial A_{m1}} & \ldots & \frac{\partial f(A)}{\partial A_{mn}}\\
+	\end{bmatrix} $$
+\end{defn}
+
+\begin{defn}[Hessian]
+	$$f:\mathbb{R}^n \to\mathbb{R}$$
+	$$\nabla_x^{2}f(x)=\begin{bmatrix}
+		\frac{\partial^2 f(x)}{\partial x_r \partial x_c}
+	\end{bmatrix}$$
+\end{defn}
+
+\subsection{Matrix Calculus Examples}
+\begin{itemize}
+	\item e.g.,
+	$$\vec{a}^{T}C\vec{b}; a\in\mathbb{R}^m, C\in\mathbb{R}^{m\times n}, b\in\mathbb{R}^n$$
+	$$\sum_{i=1}^m a_i (Cb)^i$$
+	$$\sum_{i=1}^m a_i \sum_{j=1}^n C_{ij} b_j$$
+	$$\sum_{i=1}^{m}\sum_{j=1}^n C_{ij}a_i b_j$$
+	\item e.g.,
+	$$\frac{\partial f(x)^T A g(x)}{\partial x}; f:\mathbb{R}^k\to\mathbb{R}^m, g:\mathbb{R}^k\to\mathbb{R}^n, A: m\times n$$
+	$$\begin{aligned}
+		\frac{\partial f(x)^T A g(x)}{\partial x_k} &= \frac{\partial}{\partial x_k}\left( \sum_{i=1}^{m}\sum_{j=1}^n A_{ij} f(x)_i g(x)_j\right)\\
+		&= \sum_{i=1}^m \sum_{j=1}^n A_{ij} \frac{\partial}{\partial x_k} f(x)_i g(x)_j\\
+		&= \sum_{i=1}^m \sum_{j=1}^n A_{ij} \left( g(x)_j \frac{\partial f(x)_i}{\partial x_k} + f(x)_i \frac{\partial g(x)_j}{\partial x_k} \right)\\
+		&= \sum_{i=1}^m\sum_{j=1}^{n}\left( A_{ij}g(x)_j \frac{\partial f(x)_i}{\partial x_k} \right) + \sum_{i=1}^m\sum_{j=1}^n\left( A_{ij} f(x)_i \frac{\partial g(x)_j}{\partial x_k} \right)
+ 	\end{aligned}$$
+\end{itemize}

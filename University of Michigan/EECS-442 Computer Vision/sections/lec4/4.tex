@@ -1,0 +1,156 @@
+\subsection{Goal of Calibration}
+\begin{itemize}
+	\item Notation change: $P=P_w, p=P'$
+	\item Goal: estimate intrinsic and extrinsic parameters from 1 or multiple images
+	$$P'=MP_w = K[R\text{ }T]P_w$$
+	$$M=\begin{bmatrix}
+		\alpha\vec{r}_1^T -\alpha\cot\theta\vec{r}_2^T+u_0\vec{r}_3^T &\alpha t_x-\alpha\cot\theta t_y + u_0 t_z \\
+		\frac{\beta}{\sin\theta}\vec{r}_2^T+v_0\vec{r}_3^T & \frac{\beta}{\sin\theta}t_y + v_0 t_z \\
+		\vec{r}_3^T & t_z
+ 	\end{bmatrix}_{3\times 4}$$
+\end{itemize}
+
+\subsection{Calibration Problem}
+\img{.8}{sections/lec4/cal.png}
+\begin{itemize}
+	\item $P1,\ldots P_n$ with known position from rig in $(O_w, i_w, j_w, k_w)$
+	\item $p_1,\ldots p_n$ with known positions in the image from camera
+\img{.8}{sections/lec4/img.png}
+	\item This figure shows the mapping from a point $P$ on the rig to $p$ on the image.
+	\item We need to solve for 11 unkowns in $M$ with 11 equations, resulting in the need for 6 correspondences.
+	$$P_i\to MP_i\to p_i=\begin{bmatrix}
+		u_i \\ v_i
+	\end{bmatrix} = \begin{bmatrix}
+		\frac{\vec{m}_1 P_i}{\vec{m}_3 P_i} \\ 
+		\frac{\vec{m}_2 P_i}{\vec{m}_3 P_i}
+	\end{bmatrix}\text{, where }M=\begin{bmatrix}
+		\vec{m_1} \\ \vec{m_2} \\ \vec{m_3}
+	\end{bmatrix}$$
+	\item Simplifying the final equation for $p_i$, we receive:
+	$$u_i (\vec{m}_3 P_i)-\vec{m}_1 P_i = 0$$
+	$$v_i (\vec{m}_3 P_i)-\vec{m}_1 P_i = 0$$
+	\item In the case of the calibration problem we may have $n$ mappings so $i\in [1, n]$
+\end{itemize}
+
+\subsection{Calibration matrices}
+\begin{itemize}
+	\item The resulting list of point mappings:
+	$$u_1 (\vec{m}_3 P_1)-\vec{m}_1 P_1 = 0$$
+	$$v_1 (\vec{m}_3 P_1)-\vec{m}_1 P_1 = 0$$
+	$$\vdots$$
+	$$u_n (\vec{m}_3 P_n)-\vec{m}_1 P_n = 0$$
+	$$v_n (\vec{m}_3 P_n)-\vec{m}_1 P_n = 0$$
+	\item Can be rewritten after considering an inverse block matrix multiplication:
+	$$\mathcal{P}\vec{m}=\vec{0}$$
+	$$\mathcal{P}:=\begin{bmatrix}
+		P_1^T & 0^T & -u_1 P_1^T \\
+		0^T & P_1^T & -v_1 P_1^T \\
+		\vdots & \vdots & \vdots \\
+		P_n^T & 0^T & -u_n P_n^T \\
+		0^T & P_n^T & -v_n P_n^T
+	\end{bmatrix}_{2n\times 12}, \vec{m}=\begin{pmatrix}
+		\vec{m}^T_1 \\ \vec{m}^T_2 \\ \vec{m}^T_3
+	\end{pmatrix}_{12\times 1}$$
+\end{itemize}
+
+\subsection{Homogeneous $M\times N$ Linear Systems}
+\begin{itemize}
+	\item $M= number of equations = 2n$
+	\item $N = number of unknown = 11$
+	\img{1}{sections/lec4/block.png}
+	\item Rectangular system ($M>N$)
+	\begin{itemize}
+		\item $\vec{0}$ is always a solution
+		\item To find non-zero solution:
+		\begin{itemize}
+			\item Minimize $|\mathcal{P}\vec{m}|^2$
+			\item Under the constraint $|\vec{m}|^2=1$
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+\subsection{Calibration Problem}
+$$\mathcal{P}\vec{m}=\vec{0}$$
+\begin{itemize}
+	\item How do we solve this homogeneous linear system?
+	\item Use \textbf{Direct Linear Transformation (DLT)} algorithm via SVD decomposition.
+	\item Perform SVD decomposition of $\mathcal{P}$
+	$$\mathcal{P}\to U_{2n\times 12} D_{12\times 12} V_{12\times 12}^T$$
+	\item The last column of $V$ gives $\vec{m}$
+	$$M P_i\to p_i$$ 
+	\item This representation of SVD is one of the possible decompositions that is typically used for efficiency
+	\item If we rewrite our matrix $M=[A\text{ }\vec{v}]$
+	$$\rho \begin{pmatrix}
+		\vec{a}_1^T \\ \vec{a}_2^T \\ \vec{a}_3^T
+	\end{pmatrix} = \begin{pmatrix}
+		\alpha\vec{r}_1^T-\alpha\cot\theta\vec{r}_2^T+u_0\vec{r}_3^T\\
+		\frac{\beta}{\sin\theta}\vec{r}^T_2 + v_o\vec{r}_3^T\\
+		\vec{r}_3^T
+	\end{pmatrix}$$
+	\item Then using the fact that rows of a rotation matrix have unit length and are perpendicular this yields (intrinsic):
+	$$\begin{aligned}
+	\rho&=\epsilon/|\vec{a}_3|\\
+	\vec{r}_3&=\rho\vec{a}_3\\
+	u_0&=\rho^2(\vec{a}_2\cdot\vec{a}_3)\\
+	v_0&=\rho^2(\vec{a}_2\cdot\vec{a}_3)\\
+	\cos\theta &= \frac{(\vec{a}_1\times \vec{a}_3)\cdot(\vec{a}_2\times\vec{a}_3)}{|\vec{a}_1\times \vec{a}_3|\cdot|\vec{a}_2\times\vec{a}_3|}\\
+	\text{Can be used to solve for $f$:} \\
+	\alpha &=\rho^2 |\vec{a}_\times\vec{a}_3|\sin\theta \\
+	\beta &=\rho^2 |\vec{a}_2\times\vec{a}_3|\sin\theta
+	epsilon&=\mp 1\end{aligned}$$
+	\item You may also derive the following formulas for extrinsic parameters:
+	$$\begin{aligned}
+		\vec{r}_1 &= \frac{(\vec{a}_2\times\vec{a}_3)}{|\vec{a}_2\times\vec{a}_3|}\\
+		\vec{r}_2 &= \vec{r}_3\times\vec{r}_1 \\
+		\vec{r}_3 &= \frac{\pm 1}{|\vec{a}_3|}
+		T &= \rho K^{-1}\vec{b}
+	\end{aligned}$$
+\end{itemize}
+
+\subsection{Degenerate cases}
+\begin{itemize}
+	\item $P_i$'s cannot lie on the same plane
+	\item Points cannot lie on the intersection curve of two quadric surfaces
+\end{itemize}
+
+\subsection{Radial Distortion}
+\begin{itemize}
+	\subsubsection{Radial Distortion}
+	\item TODO: Image
+	\item Image magnification (in/de)creases with distance from the optical center
+	$$\begin{bmatrix}
+		\frac{1}{\lambda} & 0 & 0 \\
+		0 & \frac{1}{\lambda} & 0 \\
+		0 & 0 & 1
+	\end{bmatrix}MP_i\to \begin{pmatrix}
+		u_i \\ v_i
+	\end{pmatrix}=p_i$$
+	$$\lambda=1\pm\sum_{p=1}^3 \kappa_p d^{2p},\text{ where } \kappa\text{ is the Distortion coefficient}$$
+	\item To model the radial behavior:
+	\item TODO: radial disto image
+	$$d^2=au^2+bv^2+cuv$$
+	\item If we combine our two matrices to have a more concise notation:
+	$$\begin{bmatrix}
+		\frac{1}{\lambda} & 0 & 0 \\
+		0 & \frac{1}{\lambda} & 0 \\
+		0 & 0 & 1
+	\end{bmatrix}M=Q=\begin{bmatrix}
+		\vec{q}_1\\
+		\vec{q}_2\\
+		\vec{q}_3
+	\end{bmatrix}$$
+	\item This allows us to write our image coordinates into equations:
+	$$p_i=\begin{bmatrix}
+		u_i\\v_i
+	\end{bmatrix}=\begin{bmatrix}
+		\frac{\vec{q}_1 P_i}{\vec{q}_3 P_i}\\
+		\frac{\vec{q}_2 P_i}{\vec{q}_3 P_i}
+	\end{bmatrix}\to u_i\vec{q}_3 P_i = \vec{q}_1 P_i, v_i\vec{q}_3 P_i = \vec{q}_2 P_i\to \frac{1}{\lambda}\begin{bmatrix}
+		\frac{\vec{m}_1 P_i}{\vec{m}_3 P_i} \\
+		\frac{\vec{m}_2 P_i}{\vec{m}_3 P_i} \\
+	\end{bmatrix}$$
+	\item Simplifying it into this form allows us to ask the question: can we estimate $\vec{m}_1$ and $\vec{m}_2$ and ignore the radial distortion?
+	\item Remember our distortion took the form of: TODO INSERT PICTURE
+	\item The slope of our corner should be: 
+	$\text{slope}=\frac{u_i}{v_i}=\frac{\frac{\vec{m}_1 P_i}{\vec{m}_3 P_i}}{\frac{\vec{m}_2 P_i}{\vec{m}_3 P_i}}$
+\end{itemize}

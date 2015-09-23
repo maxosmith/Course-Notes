@@ -1,0 +1,103 @@
+\subsection{After calibration}
+\img{.8}{sections/lec5/p.png}
+\begin{itemize}
+	\item Internal parameters $K$ are known
+	\item $R, T$ are known - but these can only relate $C$ to the calibraiton rig.
+	\item You can't estimate $P_i$ from the single image measurement of $p_i$ because it may be anywhere along the line in space.
+	\item We also don't have any information in the image to tell us the scale of anything in the world.
+\end{itemize}
+
+\subsection{Recovering structure from a single view}
+\begin{itemize}
+	\item You can make assumptions to get relative sizes of objects in images
+	\item Pick a reference plane in the scene
+	\item Pick a reference direction (not parallel to the reference plane) in the scene
+	\img{.8}{sections/lec5/ref.png}
+	\subsubsection{Geometry}
+	\img{.8}{sections/lec5/van.png}
+	\item Under perspective projection, parallel lines in three-space project to convering lines in the image plane. The common point of intersection, perhaps at infinity, is called the \textbf{vanishing point}
+	\begin{itemize}
+		\item projection of a point at infinity (goes infinity far)
+		\img{.8}{sections/lec5/vp.png}
+		\item Any two parallel lines have the same vanishing point
+		\item The ray from $C$ through $v$ point is parallel to the lines
+		\item AN image may have more than one vanishing point
+	\end{itemize}
+	\item Two or more vanishing points from lines known to lie in a single 3D plane establish a \textbf{vanishing line}, which completely determines the orientation of the plane
+	\img{.7}{sections/lec5/house.png}
+\end{itemize}
+
+\subsection{The Cross Ratio}
+\img{.8}{sections/lec5/y.png}
+\begin{itemize}
+	\item $Y$ is desired height to measure
+	\item Compute Y from image measurements
+	\begin{itemize}
+		\item You'll need more than vanishing points to compute this
+	\end{itemize}
+	\item \textbf{Projective Invariant}: something that does not change under projective transformations (including perspective projection)
+	\img{.8}{sections/lec5/l.png}
+	\item The \textbf{cross ratio} of 4 collinear points is projective invariant
+	$$\frac{||P_3 - P_1||\cdot ||P_4 - P_2||}{||P_3 - P_2||\cdot ||P_4 - P_1||}$$
+	\item You can permute the point ordering and it will remain true.
+	\item Often called the fundamental invariant of projective geometry
+	\img{.8}{sections/lec5/inf.png}
+	\item When you consider the points at $\infty$, and the point where the camera would meet the ground plane $v_z$ you have enough points to use the cross ratio on our camera model.
+	\item You need the same points in the world and camera system (can't mix and match)
+	\item You must make some assumption to determine the relative sizes, typically assume $L$
+\end{itemize}
+
+\subsection{Horizon line}
+\img{.7}{sections/lec5/hor.png}
+\begin{itemize}
+	\item Sets of parallel lines on the same plane lead to collinear vanishing points the line is called the \textbf{horizon}
+	\img{.8}{sections/lec5/ex.png}
+	\item When trying to recover the structure within the camera reference system, we can check if two linesare parallel or not
+	\begin{itemize}
+		\item If they do, recognize the horizon line
+		\item Measure if hte 2 lines meet the horizon
+		\item If they do, they are parallel in 3D
+		\item Actual scale of scene is not recovered, only relative distances
+	\end{itemize}
+\end{itemize}
+
+\subsection{Lines in a 2D plane}
+$$ax+by+c=0; l=\begin{bmatrix}
+	a\\b\\c
+\end{bmatrix}$$
+\subsubsection{Intersecting lines}
+\img{1}{sections/lec5/intersect.png}
+\begin{itemize}
+	\item The intersection of lines can be calculated with: 
+	$$x=l\times l'$$
+\end{itemize}
+
+\subsection{Stereo-view geometry}
+\img{1}{sections/lec5/tri.png}
+\begin{itemize}
+	\item Two camera perspectives allow us to find position of objects through \textbf{triangulation}
+	\begin{itemize}
+		\item This requires a few knowns, $K_1, K_2, R, T$
+	\end{itemize}
+	\item Small inaccuracies with knowns can lead to situations where the lines may not intersect 
+	\item Instead, we'll find where they came close enough
+		$$d^2(x_1, M_1X)+d^2(x_2, M_2X)$$
+		$$d:=\text{distance between two lines}$$
+\end{itemize}
+
+\subsection{Epipolar Geometry}
+\img{.7}{sections/lec5/ep.png}
+\begin{itemize}
+	\item \textbf{Epipolar plane} (grey): intersections of baseline with image planes
+	\item \textbf{Baseline} (orange): projectison of other camera center
+	\item \textbf{Epipolar lines} (blue): vanishing points of camera motion direction
+	\item This framepoint, allows us to consider if two pointsare related by epipolar geometry
+	\item Use epipolar lines to find sharing points will greatly save computation cost as a 2D search becomes 1D
+	\subsubsection{Parallel image planes}
+	\item Baseline intersects the image plane at infinity
+	\item Epipoles are at infinity
+	\item Epipolar lines are parallel to x-axis
+	\subsubsection{Forward translation}
+	\img{1}{sections/lec5/f.png}
+	\item When a camera moves forward the lines turn into a spiral
+\end{itemize}
