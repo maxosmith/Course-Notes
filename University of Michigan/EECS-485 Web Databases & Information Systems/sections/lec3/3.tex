@@ -1,0 +1,277 @@
+\subsection{Traceroute}
+\begin{itemize}
+	\item \lstinline[style=bash]{traceroute} uses debug messages to expose packet's route to destination
+	\img{.8}{sections/lec3/tr.png}
+	\item No reason to have the packet links to make sense (they're not based on geography, only connectivity)
+	\item e.g.,
+	\begin{itemize}
+		\item Ann Arbor, MI
+		\item San Mateo, CA
+		\item New York, NY
+		\item <ends>
+	\end{itemize}
+\end{itemize}
+
+\subsection{IP's Small Corners}
+\begin{itemize}
+	\item How does a host get an IP address
+	\begin{itemize}
+		\item Used to be static
+		\item Nowadays, often dynamic - DHCP (Dynamic Host Configuration Protocol)
+	\end{itemize}
+	\item How does a host get its gateway address (to chat from local to internet)?
+	\begin{itemize}
+		\item Dynamically from Router 
+		\item Originally static each get their own wire
+	\end{itemize}
+	\subsection{ARP}
+	\img{.8}{sections/lec3/arp.png}
+	\item How does an IP address get mapped to a target ethernet address?
+	\begin{itemize}
+		\item Address Resolution Protocol (ARP)
+	\end{itemize}
+	\item This leaves the possibility of ARP spoofing (or poisoning) where you pretend to be another address
+	\item \textbf{ARP spoofing}
+	\begin{itemize}
+		\item Associate attacker's MAC address with IP of another host(s)
+		\item Man-in-the-middle attacks
+		\item Reconfigures table switch
+		\item Switch only sends to destination
+		\item Hub sends to everyone
+		\item CPU ignores not intended for your CPU (spoofing overrides this)
+	\end{itemize}
+\end{itemize}
+
+\subsection{Domain Name Service}
+\begin{itemize}
+	\item How does a browser known which IP address to contact?
+	\item BY a directory look-up, using \textbf{Domain Name Service (DNS)}
+	\item Cache recently used domain names to reduce need for DNS look up
+	\item e.g.,
+	\begin{lstlisting}[style=bash]
+$ host umich.edu
+umich.edu has address 141.211.243.44
+	\end{lstlisting}
+	\item Host checks for name mapping in DNS (umich$\to$IP)
+\end{itemize}
+
+\subsection{TCP}
+\begin{itemize}
+	\item Transport Control Protocol
+	\item Reliable, ordered bytestreams
+	\item Connection-oriented, unlike IP
+	\item ``Virtual circuit'' networking built on packet infrastructure
+	\item Looks like a circuit, but no reservations (on IP)
+	\item Processes tied to ``host:port'' pairs
+	\begin{itemize}
+		\item Packets/processes talk to ports
+		\item Ports are OS-level concept
+		\item Server ports are ``well0-known'' and associated with services; other ports are ``ephemeral''
+	\end{itemize}
+	\item Common TCP ports:
+	\begin{itemize}
+		\item HTTP - 80
+		\item SSH - 22
+		\item HTTPS - 442
+		\item SMTP - 25
+		\item IMAP - 143
+	\end{itemize}
+	\item Message stream is bidirectional
+\end{itemize}
+
+\subsection{Implementing Connections}
+\begin{itemize}
+	\item Basic principle of reliable TCP connection is retransmission
+	\begin{itemize}
+		\item Each packet has 32-bit sequence number
+		\item Every SeqNo is ACKed (acknowledged) by receiver
+		\item When timeout expires, sender emits again
+	\end{itemize}
+	\subsection{Stop and Wait}
+	\img{.8}{sections/lec3/sw.png}
+	\item Send a packet, wait for ACK
+	\item Receiver ACKS everything
+	\item Are there downsides to Stop-and-wait?
+	\begin{itemize}
+		\item Never get a resposne back
+	\end{itemize}
+\end{itemize}
+
+\subsection{Sliding Window}
+\begin{itemize}
+	\item \textbf{Sliding window} technique for managing send/receive capacity
+	\img{.8}{sections/lec3/sliding.png}
+	\begin{itemize}
+		\item Receiver indicates ``receive window'' it is willing to buffer
+		\item Sender cannot have more packets in transit (unACKed) than what can fit in the window
+		\item Ideally, window is bandwidth * RT delay
+		\begin{itemize}
+			\item Keeps as much data in transit as possible
+		\end{itemize}
+	\end{itemize}
+	\item This algorithm has several roles:
+	\begin{itemize}
+		\item Reliable delivery, via ACKs, timeouts, and retransmissions
+		\item In-order delivery, via buffering and ACKing
+		\item Flow control, via advertised window for receiver
+	\end{itemize}
+	\item Problems with sliding window?
+	\begin{itemize}
+		\item What if sender trnasmits data too fast?
+		\item Or receiver reads data too slow?
+	\end{itemize}
+	\subsection{Sliding Window - Sender}
+	\img{.9}{sections/lec3/send.png}
+	\item Sender buffers unACKed data
+	\item Only removes data from send buffer after it's been ACKed
+	\item Send window determined by receiver's advertisements
+	\subsection{Sliding Window - Receiver}
+	\img{.9}{sections/lec3/rec.png}
+	\item Receiver buffers data that is 
+	\begin{itemize}
+		\item Out-of-order
+		\item Not yet read off by application
+	\end{itemize}
+	\item ACKs data as it arrives
+	\item Removes data from buffer as app reads
+	\item Also shrinks/expands advertised window in response to application behavior
+	\subsection{Example}
+	\img{.8}{sections/lec3/w.png}
+	\subsection{Errors}
+	\img{.8}{sections/lec3/err.png}
+	\item \textbf{ACK lost}: ACK was lost from receiver to sender, so the sender doesn't know that the receiver got the packet. Sends it again anyways!
+	\item \textbf{Packet lost}: Receiver never got packet, so sender never gets ACK; therefore, it tries again!
+	\item \textbf{Early timeout}: If the timeout is too short, the sender will send the same packet again before the ACK had time to come back. This just results in a waste of resourdces
+\end{itemize}
+
+\subsection{3-way Handshake}
+\img{.8}{sections/lec3/3way.png}
+
+\subsection{Connection Teardown}
+\begin{itemize}
+	\item Orderly release by sender + receiver
+	\item ``Hanging up the phone''
+	\item Releases states and buffers on both sides
+	\img{.8}{sections/lec3/close.png}
+\end{itemize}
+
+\subsection{Slowing Down}
+\begin{itemize}
+	\item Two reasons for sender to slow down:
+	\begin{itemize}
+		\item Reeiver can't handle input (and will have to drop packets)
+		\item Network can't transmit sas fast as incoming packets arrive
+	\end{itemize}
+	\item Sliding window algorithm takes care of the receiver
+	\item Sender never transmits more than advertised window size 
+\end{itemize}
+
+\subsection{Congestion}
+\begin{itemize}
+	\item Buffers in middle of network can become overloaded
+	\item Not part of window negotiation (not accounted for)
+	\img{1}{sections/lec3/cong.png}
+	\item When has a packet been lost?
+	\begin{itemize}
+		\item Too long a timer, you're waiting pointlessly
+		\item Too short, adds needless load
+	\end{itemize}
+	\item Many retransmits can induce \textbf{congestion collapse}
+	\begin{itemize}
+		\item Retransmits just add to congestion
+		\item Capacity of network falls dramatically
+		\item Increase in load that results in a decrease in useful work done
+	\end{itemize}
+	\subsubsection{Where It Happens: Links}
+	\item Simple resource allocation: FIFO queue and drop-tail
+	\begin{itemize}
+		\item Access to the bandwidth: FIFO queue
+		\begin{itemize}
+			\item Packets transmitted in the order they arrive
+			\img{.7}{sections/lec3/fifo.png}
+		\end{itemize}
+		\item Access to the buffer space: drop-tail queueing
+		\begin{itemize}
+			\item If the queue is full, drop the incoming packet
+			\img{.7}{sections/lec3/drop.png}
+		\end{itemize}
+	\end{itemize}
+	\subsubsection{End Host}
+	\item Packet delay: packet experiences high delay
+	\item Packet loss: packet gets dropped along the way
+	\item How does TCP sender learn this?
+	\begin{itemize}
+		\item Delay: round-trip time estimate
+		\item Loss: timeou, acknowledgements
+	\end{itemize}
+\end{itemize}
+
+\subsection{TCP Congestion Window}
+\begin{itemize}
+	\item Each TCP sender maintains a congestion window
+	\begin{itemize}
+		\item Maximum number of bytes to have in transit
+		\item Number of bytes still awaiting acknowledgments
+	\end{itemize}
+	\item Adapting the congestion window
+	\begin{itemize}
+		\item Decrease upon losing a packet (backing off)
+		\item Increase upon success (optimistically explorining)
+		\item Always struggling to find the right transfer rate
+	\end{itemize}
+\end{itemize}
+
+\subsection{Additive Increase Multiplicative Decrease (AIMD)}
+\begin{itemize}
+	\item AIMD algorithm:
+	\begin{enumerate}
+		\item After packet timeout, cwnd = cwnd/2
+		\item If none, cwnd += 1 every RTT
+		\item Sender always xmits min(win, cwnd)
+	\end{enumerate}
+	\item Why use AIMD? Network load is really hard to get rid of: oversubscribed link must be undersubscribed to dissipate queue
+	\begin{itemize}
+		\item Over: packets dropped and retransmitted
+		\item Under: somewhat lower throughput
+	\end{itemize}
+	\subsubsection{AIMD Sawtooth}
+	\img{.7}{sections/lec3/saw.png}
+	\item The previous diagram has a slow-start, so we can implement exponential window size to begin with to increase starting speed
+	\img{.7}{sections/lec3/exp.png}
+\end{itemize}
+
+\subsection{HTTP 1.0}
+\begin{itemize}
+	\item Every HTML-embedded item requires a GET (index.html, ad.gif, logo.gif, etc.)
+	\item Naive HTTP on TCP yields awful performance:
+	\begin{itemize}
+		\item Many TCP connections created roundtrip
+		\item Lots of slow-start delays
+	\end{itemize}
+\end{itemize}
+
+\subsection{HTTP 1.1}
+\begin{itemize}
+	\item Persistent Connections
+	\begin{itemize}
+		\item Server does not close the connection after sending the resposne
+		\item Client can re-use it
+		\begin{itemize}
+			\item Especially improves small objects
+			\item Makes parallel downloads difficult
+		\end{itemize}
+	\end{itemize}
+	\item Pipelining
+	\begin{itemize}
+		\item Many HTTP requests can be ``live'' at once, on the same persistent connection
+		\item Send lots of HTTP request at once, then get lots of answers
+		\item Server replies in the order received
+	\end{itemize}
+	\item Caching
+	\begin{itemize}
+		\item GET + IF-MODIFIED-SINCE <timestamp>
+		\item When combined with browser cache, eliminates a lot of unneeded data transfer
+		\item Same number of roundtrips
+		\item Lots of different caches possible
+	\end{itemize}
+\end{itemize}

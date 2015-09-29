@@ -1,0 +1,142 @@
+\subsection{Classification problem}
+\begin{itemize}
+	\item The task of classification:
+	\begin{itemize}
+		\item Given an input vector $\vec{x}$, assign it to one of $K$ distinct classes $C_k$ where $k=1,\ldots, K$
+	\end{itemize}
+	\item Representing the assignment:
+	\begin{itemize}
+		\item For $K=2$
+		\begin{itemize}
+			\item $t=1$ means that $\vec{x}$ is in $C_1$
+			\item $t=0$ means that $\vec{x}$ is in $C_2$
+		\end{itemize}
+		\item For $K>2$
+		\begin{itemize}
+			\item Use $1-of-K$ (one-hot) encoding
+			\item e.g., $\vec{t}=(0, 1, 0, 0, 0)^T$ means that $\vec{x}$ is in $C_2$
+		\end{itemize}
+	\end{itemize}
+	\item Training: train a classifier $h(x)$ from training data:
+		$$\{(x^{(i)}), t^{(i)}\}_{i\in[1, N]}$$
+	\item Testing evualation:
+	\begin{itemize}
+		\item Data:
+			$$\{ (x^{(i)}_{test}, t^{(j)}_{test})\}_{i\in[1, N], j\in[1, m]}$$
+		\item The learning algorithm produces predictions: 
+			$$h(x^{(1)}_{test}), \ldots, h(x^{(m)}_{test})$$
+		\item 0-1 loss:
+			$$\text{Classification error:} A=\frac{1}{m}\sum_{j=1}^m h(x^{(j)}_{test})\neq t^{(j)}_{test}$$
+	\end{itemize}
+\end{itemize}
+
+\subsection{Strategies to classification}
+\begin{itemize}
+	\item Nearest neighbor classification
+	\begin{itemize}
+		\item Given query data $\vec{x}$, find the closest training points and do majority vote
+	\end{itemize}
+	\item Discriminant functions
+	\begin{itemize}
+		\item Learn a function $y(\vec{x})$ that maps $\vec{x}$ onto some $C_j$
+	\end{itemize}
+	\item Learn the distributions of $p(C_k|\vec{x})$
+	\begin{itemize}
+		\item \textbf{Discriminative models}: directly model $p(C_k|\vec{x})$ and learn parameters from the training set
+		\item \textbf{Generative models}: Learn class densities $p(x|C_k)$ and priors $p(C_k)$
+	\end{itemize}
+\end{itemize}
+
+\subsection{Probabilistic discriminative models}
+\begin{itemize}
+	\item Model decision boundary as a function of input $\vec{x}$
+	\item Learn $P(C_k|\vec{x})$ over data (e.g., maximum likelihood)
+	\item Directly predict class labels from inputs
+\end{itemize}
+
+\subsection{Logistic Regression}
+\begin{itemize}
+	\item Models that class posterior using a sigmoid applied to a linear function of the feature vector:
+		$$p(C_1|\phi)=y(\phi ) = \sigma (\vec{w}^T \phi (\vec{x}))$$
+	\item We can solve the parameter $\vec{w}$ by maximizing the likelihood of the training data
+	\subsubsection{Sigmoid and Logit functions}
+	\item The \textbf{logistic sigmoid} function is:
+		$$\sigma (a)=\frac{1}{1+\exp (-a)}$$
+		\img{1}{sections/lec4/sig.png}
+	\item Its inverse is the \textbf{logit} function (aka log odd ratio):
+		$$a=\ln \left( \frac{\sigma}{1-\sigma}\right)$$
+	\subsection{Likelihood function}
+	\item Depending on the label $y$, the likelihood of $x$ is defined as:
+		$$P(t=1|\vec{x}, \vec{w}) = \sigma(\vec{w}^T\phi(x))$$
+		$$P(t=0|\vec{x}, \vec{w}) = 1-\sigma(\vec{w}^T\phi(x))$$
+	\item Therefore:
+		$$P(t|x, w)=\sigma(w^T\phi(x))^t (1-\sigma(w^T - \sigma (w^T\phi(x)))^{1-t}$$
+	\item The complete likelihood function for the data set:
+		$$p(t|w, x)=\Pi_{n=1}^N (y^{(n)})^{(t)}(1-y^{(n)})^{1-t^{(n)}}$$
+		$$\text{where }y^{(n)}=p(C_1 | \phi(\vec{x}^{(n)})=\sigma (w^T \phi(x^{(n)})$$
+	\subsection{Derivation - Gradient}
+	$$\log P(t|w)=\sum_{n=1}^N t^{(n)}\log y^{(n)} + (1-t^{(n)})\log(1-y^{(n)})$$
+	$$\sigma^{(n)}=\sigma(w^T\phi(x^{(n)}))=y^{(n)}$$
+	$$\nabla_w\log P(t|w)$$
+	$$\sum_{n=1}^N \nabla_w \left( t^{(n)}\log\sigma(w^T\phi(x^{(n)}))+(1-t^{(n)})\log(1-\sigma(w^T\phi(x^{(n)})))\right)$$
+	$$\sum_{n=1}^N \left( t^{(n)}\frac{\sigma^{(n)}(1-\sigma^{(n)})}{\sigma^{(n)}}-(1-t^{(n)}\frac{\sigma^{(n)}(1-\sigma^{(n)})}{1-\sigma^{(n)}}\right) \nabla_w (w^T\phi(x^{(n)}))$$
+	$$\frac{\partial}{\partial s}\sigma(s)=\frac{\partial}{\partial s}\left( \frac{1}{1+\exp(-s)}\right)=\sigma(s)(1-\sigma(s))$$
+	$$\sum_{n=1}^N \left( t^{(n)}(1-\sigma^{(n)})\nabla_w (w^T\phi(x^{(n)})) - (1-t^{(n)})\sigma^{(n)}\nabla_w (w^T\phi(x^{(n)})) \right)$$
+	$$\sum_{n=1}^n (t^{(n)} - \sigma^{(n)})\phi(x^{(n)})$$
+	\subsection{Least-squares closed-form}
+		$$w_{ML}=(\phi^T \phi)^{-1}\phi^T t$$
+	\item WIth an $N\times N$ diagonal weight matrix $R$:
+		$$w_{WLS}=(\phi^T R\phi)^{-1}\phi^T R t$$
+\end{itemize}
+
+\subsection{Newton's Method}
+\begin{itemize}
+	\item Goal: Minimizing a general function $l(w)$ (one dimensional case)
+	\begin{itemize}
+		\item Approach: solve for $f(w)=\frac{\partial l(w)}{\partial w}=0$
+		\item How to solve this problem?
+	\end{itemize}
+	\item Newton's method (aka Newton-Raphson method):
+	\begin{itemize}
+		\item Repeat until convergence:
+		$$w:= w- \frac{f(w)}{f'(w)}$$
+	\end{itemize}
+	\img{.8}{sections/lec4/nm.png}
+	\item We iteratively solve by looking at the where the tangent line intercepts the x-axis and move on until the tangent line has a slope of zero.
+	\item $f'$ represents the curvative, so if the curvature is large, it forces a small step size so we don't overshoot.
+	\subsection{Multivariate case}
+	$$w:=w-H^{-1}\nabla_w l$$
+	\item Where H is the Hessian matrix:
+		$$H_{ij}(w)=\frac{\partial^2 l(w)}{\partial w_i \partial w_j}$$
+\end{itemize}
+
+\subsection{K-Nearest Neighbor Classification}
+\begin{itemize}
+	\item Training Method:
+	\begin{itemize}
+		\item Save the training examples (no sophisticated learning)
+	\end{itemize}
+	\item At prediction (testing) time:
+	\begin{itemize}
+		\item Given a test (query) example $x$, find the $k$ training examples that are closest to the $x$
+			$$kNN(x)=\{ (x^{(1)}, t^{(1)}), \ldots, (x'^{(k)}, t'^{(k)})\}$$
+		\item Predict the most frequent class amount $t_i$'s from (``majority vote''):
+			$$y=\max_t \sum_{(x', t')\in kNN(x)} l(t'=t)$$
+	\end{itemize}
+	\img{.8}{sections/lec4/knn.png}
+	\item $K$ acts as a smother (bias-variance trade-off)
+	\item Classification performance gnerally improves as $N$ (training set size) increases 
+	\item For $N\to\infty$ the error rate of hte 1-nearest-neighbor classifier is enver mroe than twice the optimal error 
+	\subsection{Factors (hyperparameters affectin kNN)}
+	\item Distance metric $D(x, x')$
+	\begin{itemize}
+		\item How to define distance between two examples between $x$ and $x$'?
+	\end{itemize}
+	\item The value of $K$
+	\begin{itemize}
+		\item $K$ determiens how much we ``smooth out'' the prediction
+	\end{itemize}
+	\subsection{kNN: Classification vs Regression}
+	\item For classification: we take ``majority vote'' from the targe labels
+	\item For regression: we take ``average'' from the target labels
+\end{itemize}

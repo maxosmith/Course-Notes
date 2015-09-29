@@ -1,0 +1,163 @@
+\subsection{Encryption as a Function}
+\begin{itemize}
+	\item Plaintest string $s$
+	\item Encryption key $K_{enc}$
+	\item Decryption key $K_{dec}$
+	\item Encrypt $s$ with $K_{enc}$ to obtain ciphertext $K_{enc}(s)$
+	\item Decrypt $K_{enc}(s)$ with decryption key $K_{dec}$ to reobtain $s$
+	\item $K_{dec}(K_{enc}(s))=s$
+	\item Encryption applies a reversible fn to some piece of data, yielding something unreadable
+	\item Decryption recovers the original data from the unreadable encryption-output
+	\item The encryption/decryption algorithm assumed known; the key is secret
+\end{itemize}
+
+\subsection{Substitution Ciphers}
+\begin{itemize}
+	\item Arbitrary 1:1 mapping of alphabet chars, using a \textbf{substitution table}
+	\item All of these are vulnerable to frequency analysis:
+	\begin{itemize}
+		\item letter
+		\item word
+		\item common phrases
+	\end{itemize}
+	\item We could make the substitution table larger (translating $n$-gram, not chars):
+	\begin{center}\begin{tabular}{l|l}
+		Plaintext & Ciphertext \\
+		AAA & QWE \\
+		AAB & RTY \\
+		AAC & ASD
+	\end{tabular}\end{center}
+	\item How big is substitution table?
+	\begin{itemize}
+		\item $A^n$ entries, where A is size of alphabet and $n$ is size of grams
+	\end{itemize}
+	\item Still vulnerable, but requies more text
+\end{itemize}
+
+\subsection{Substitution Rules}
+\begin{itemize}
+	\item Don't store table explicitly; derive table rows using substitution rule
+	\begin{itemize}
+		\item e..g, $s \text{XOR} k$, where $k$ is the key
+		\item Remember: security level depends on size of key
+		\item Key of len $b\geq 2^b$ possible keys
+	\end{itemize}
+	\item XOR ``flips a bit'' for input bits that correspond to key's ``1''
+	\item Encrypted string should ideally show no pattern for frequency analysis attack
+	\item What's the right key size?
+	\begin{itemize}
+		\item Who is trying to break the scheme?
+		\item Is that good enough?
+	\end{itemize}
+\end{itemize}
+
+\subsection{Data Encryption Standard (DES)}
+\begin{itemize}
+	\item DES is a block cipher with 56-bit key
+	\item Data transmitted in 64-bit blocks, each may be coded independently
+	\item Triple-DES, breaks up text in 3-56 bit chunks and apply DES to each with different keys
+	\img{.7}{sections/lec6/des.png}
+\end{itemize}
+
+\subsection{Review of Crypto}
+\begin{itemize}
+	\item The key is traditional crypto is used to encode the substitution rule
+	\begin{itemize}
+		\item Needed to encrypt and decrypt
+	\end{itemize}
+	\item Key distribution is the weak link
+	\begin{itemize}
+		\item Hard to revoke
+		\item Disastrous if ``codebook'' is compromised
+		\item Hard to distribute 
+		\item Impossible for the Web
+	\end{itemize}
+\end{itemize}
+
+\subsection{Public-Key Cryptography}
+\begin{itemize}
+	\item Secure communication without key exchange
+	\item Each party has a pair of related keys: \textbf{public} and \textbf{private}
+	\begin{itemize}
+		\item A public key is published freely
+		\item A private key is shared with no one
+	\end{itemize}
+	\item A message enrypted witho ne can be decrypted with the other
+	\item YOu can't derive one from the other (this is critical!)
+	\subsubsection{Two Modes}
+	\item I encrypt using the public key, and decrypt using the private key
+	\img{.8}{sections/lec6/two.png}
+	\item Anyone can encrypt; only $S$ can decrypt
+	\item Used for data confidentiality
+	\item If encrypted using private, anyone with public can decrypt
+	\item Used for authenticity
+	\item So if someone was able to encrypt, then they must have had private, ensuring no man-in-the-middle
+\end{itemize}
+
+\subsection{Trapdoor Functions}
+\begin{itemize}
+	\item Public key cryptography relies on so-called trapdoor functions
+	\begin{itemize}
+		\item A fn that is easy to compute, but hard to invert without special info
+		\item ``easy'' and ``hard'' meant comutationally
+	\end{itemize}
+	\item Some poor choices: add, multiply
+	\item In practice quite difficult to find good trapdoor rfunctions
+	\item Most popular one is related to prime factorizaiton; others possible
+	\subsubsection{Prime Factorization}
+	\item $n=pq$, where $p$ and $q$ are primes
+	\begin{itemize}
+		\item Given $p$ and $q$, easy to compute $n$
+		\item Given $n$, very hard to find $p$ and $q$
+	\end{itemize}
+	\subsubsection{Fermat's Little Theorem}
+	\item For any prime $p$, and any integer $a$: $a^p = a(\mod p)$
+	\subsubsection{Chinese Remainder Theorem}
+	\item Consider $x = a_i (\mod p_i), \text{ for }i=1,\ldots, k$
+	\item CRT: There's a solution for $x$ if $p_i$ are pairwise relatively prime (i.e., have no common factors greater than 1)
+	\item If all $a_i$ are 1, then $x=1(\mod p_i)$
+\end{itemize}
+
+\subsection{Cryptography}
+\begin{itemize}
+	\item We choose two large primes: $p, q$
+	\item $n=pq$
+	\item Next:
+	\begin{itemize}
+		\item Set $\lambda = (p-1)(q-1)$
+		\item Choose $e$ randomly, such that $e<\lambda$
+		\item Choose $d$, such that $de=1(\mod \lambda)$
+	\end{itemize}
+	\item $n$ and $e$ serve as public key
+	\begin{itemize}
+		\item $n$ is product of primes $p, q$
+	\end{itemize}
+	\item $n$ and $d$ serve as private key
+	\begin{itemize}
+		\item Choosing $d$ requires $e$ and $\lambda$
+	\end{itemize}
+	\item $\text{encrypt}_{n,e}(m)=m^e (\mod n)=c$
+	\item $\text{decrypt}_{n,d}(c)=c^D(\mod n)= m$
+	\item Slower than DES because exponential instead of XOR or SHIFTs
+	\item Will decryption always work?
+	\begin{itemize}
+		\item $c^d = m^{de}=m^{k\lambda + 1}$
+		\item $m^{k\lambda + 1}=m(m^{(p-1)(q-1)})k$
+		\item Recall from Fermat that:
+		\begin{itemize}
+			\item $m^{p-1}=1(\mod p)$
+			\item $m^{q-1}=1(\mod q)$
+		\end{itemize}
+		\item Which implies:
+		\begin{itemize}
+			\item $m^{(p-1)(q-1)}=1(\mod p)$
+			\item $m^{(p-1)(q-1)}=1(\mod q)$
+		\end{itemize}
+		\item Use the CRT to combine above 2 equations:
+			$$m^{(p-1)(q-1)}=1(\mod n),\text{ where } n=pq$$
+		\item $c^d=m(1)^k(\mod n)$
+		\item $c^d=m(\mod n)$
+		\item Thus, decrypted ciphertext $c=\text{msg}(m)$
+	\end{itemize}
+	\item Send private shared keys via expensive method, then use cheap method once key is shared. HTTPS does this.
+\end{itemize}

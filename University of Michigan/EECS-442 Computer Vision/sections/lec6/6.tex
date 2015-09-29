@@ -1,0 +1,124 @@
+\subsection{Epipolar Constraint}
+\img{.8}{sections/lec6/cons.png}
+\begin{itemize}
+	\item Potential matches for $p$ have to lie on the corresponding epipolar line $l'$.
+	\item Similarly, potential matches for $p'$ have to lie on the corresponding epipolar line $l$
+	$$\text{Left: }P\to MP = \begin{bmatrix}
+		u \\ v\\ 1
+	\end{bmatrix}, M=K[I\text{ }0]$$
+	$$\text{Right: }P\to M'P=\begin{bmatrix}
+		u' \\ v' \\ 1
+	\end{bmatrix}, M'=K[R\text{ }T]$$
+	\section{$K$ Known}
+	\item We make the assumption of a canonical camera where $K=\mathbb{I}_{3\times 3}$ (identity matrix), reducing the camera matrices to:
+	$$M=[I\text{ }0], M'=[R\text{ }T]$$
+	\item $p'$ in first camera reference system is $=Rp'$
+	\item $T\times (Rp')$ is perpendicular to epipolar plane
+		$$p^T\cdot [T\times(Rp')]=0$$
+	\item We can write the cross product as matrix multiplication to expose some interesting properties in this relationship:
+		$$\vec{a}\times\vec{b}=\begin{bmatrix}
+			0 & -a_z & a_y \\
+			a_z & 0 & -a_x \\
+			-a_y & a_x & 0
+		\end{bmatrix}\begin{bmatrix}
+			b_x \\ b_y \\ b_z
+		\end{bmatrix}=[\vec{a}_x]\vec{b}$$
+		$$\to p^T\cdot[T_x]Rp'=0$$
+		$$\text{Essential Matrix: }E=[T_x]R$$
+		$$P_1^t\cdot E p_2 = 0$$
+	\subsection{Essential matrix relationships}
+	\img{.8}{sections/lec6/ep.png}
+	\item $Ep_2$ is the epipolar line associated with $p_2$ ($l_1=Ep_2$)
+	\item $E^T p_1$ is the epipolar line associated with $p_1$ ($l_2 = E^T p_1$)
+	\item $E e_2=0$ and $E^T e_1 =0$
+	\item $E\in\mathbb{R}^{3\times 3}$; 5 DOF
+	\item $E$ is singular (rank two)
+	\section{$K$ Unknown}
+		$$M=K[I\text{ }0], M'=K[R\text{ }T]$$
+	\item We can similarly modify these equations to extract a realionship between $p$ and $p'$
+		$$p^T\cdot[T_x]Rp'=0\to(K^{-1}p)^T[T_x]RK'^{-1}p'=0\to p^TK^{-T}[T_x]RK'^{-1}p'=0$$
+		$$\text{Fundamental Matrix: }F=K^{-T}[T_x]RK'^{-1}$$
+		$$p^TFp'=0$$
+	\subsection{Fundamental matrix relationships}
+	\img{.8}{sections/lec6/epp.png}
+	\item $Fp_2$ is the epipolar line associated with $p_2$ ($l_1=Fp_2$)
+	\item $F^Tp_1$ is the epipolar line associated with $x_1$ ($l_2=F^Tp_1$)
+	\item $Fe_2=0$ and $F^Te_1=0$
+	\item $F\in\mathbb{R}^{3\times 3}$; 7 DOF
+	\item $F$ is singular (rank two)
+\end{itemize}
+
+\subsection{Estimating F - The Eight-Point Algorithm}
+\img{.8}{sections/lec6/eight.png}
+\begin{itemize}
+	\item Our points in the image plane:
+	$$P\to p=\begin{bmatrix}
+		u \\ v \\ 1
+	\end{bmatrix}, P\to p'=\begin{bmatrix}
+		u' \\ v' \\ 1
+	\end{bmatrix}$$
+	\item We can use this representation to expand our fundamental matrix:
+	$$p'^T Fp=0\to \begin{pmatrix}
+		u & v & 1
+	\end{pmatrix}\begin{bmatrix}
+		F_{11} & F_{12} & F_{13} \\
+		F_{21} & F_{22} & F_{23} \\
+		F_{31} & F_{32} & F_{33} 
+	\end{bmatrix}\begin{pmatrix}
+		u' \\ v'\\ 1
+	\end{pmatrix} = 0$$
+	$$\begin{pmatrix}
+		uu' & uv' & u & vu' & vv' & v & u' & v' 1
+	\end{pmatrix}\begin{pmatrix}
+		F_{11} \\ F_{12} \\ F_{13} \\ F_{21} \\F_{22} \\ F_{23} \\ F_{31} \\ F_{32} \\ F_{33}
+	\end{pmatrix}$$
+	\item Let's now take 8 corresponding points:
+	\img{.8}{sections/lec6/8.png}
+	$$\begin{pmatrix}
+		u_1u'_1 & u_1 v_1' & u_1 & v_1 u_1' & v_1 v_1' & v_1 & u_1' & v_1' & 1 \\
+		u_2u'_2 & u_2 v_2' & u_2 & v_2 u_2' & v_2 v_2' & v_2 & u_2' & v_2' & 1 \\
+		\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots \\
+		u_8u'_8 & u_8 v_8' & u_8 & v_8 u_8' & v_8 v_8' & v_8 & u_8' & v_8' & 1 
+	\end{pmatrix}_{8\times 9}\begin{bmatrix}
+		F_{11} \\ F_{12} \\ F_{13} \\ F_{13} \vdots F_{33}
+	\end{bmatrix}_{9\times 1}$$
+	\item We notate this homogeneous system $Wf=0$
+	\item Rank $8\to$A non-zero solution exists (unique)
+	\item If $N>8\to$ Lsq. solution by SVD$\to\hat{F}$
+	\item $||f||=1$
+		$$\hat{F}\text{ satisfies: }p'^T \hat{F}p=0$$
+	\item However, the estimated $\hat{F}$ may have full rank, and our fundamental matrix is Rank2, so we need to estimate $F$:
+		$$||F-\hat{F}||=0,\text{ subject to }det(F)=0$$
+\end{itemize}
+
+\subsection{Improving the 8-Point Algorithm}
+\begin{itemize}
+	\item There's a large amount of error in the traditional version of this algorithm due to:
+	\begin{itemize}
+		\item Highly unbalance (not well conditioned - optimization sense)
+		\item Values of $W$ must have similar magnitude
+		\item This creates problems during the SVD decomposition
+	\end{itemize}
+	\subsubsection{Normalization}
+	\item Idea: Transform image coordinate such that matrix $W$ becomes better conditioned
+	\item Apply following transformation $T$ (translation and scaling:
+	\img{.8}{sections/lec6/norm.png}
+	\begin{itemize}
+	 	\item Origin = centroid of image points
+	 	\item Mean square distance of the data points from origin is 2 pixels
+	 \end{itemize} 
+	 $$q_i = T_i p_i, q_i'=T_i' p_i'\text{ (normalization)}$$
+	 \item Translation and scaling in image plane
+	 \subsubsection{The Normalized Eight-Point Algorithm}
+	 \begin{enumerate}
+	 	\item Compute $T_i$ and $T_i'$
+	 	\item Normalize coordinates:
+	 		$$q_i = T_i p_i; q_i'=T_i' p_i'$$
+ 		\item Use the eight-point algorithm to compute $F_q'$ from the points $q_i$ and $q_i'$
+ 		\item Enforce the rank-2 constrain $\to F_q$
+ 		\item De-normalize $F_q$: $F=T'^TF_qT$
+	 \end{enumerate}
+\end{itemize}
+
+\subsection{Example: Parallel image planes}
+\img{.8}{sections/lec6/norm.png}

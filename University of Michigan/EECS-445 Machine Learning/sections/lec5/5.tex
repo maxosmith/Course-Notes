@@ -1,0 +1,119 @@
+\subsection{Softmax Regression}
+\begin{itemize}
+	\item For multiclass case, we can use softmax regression
+	\item Softmax regression can be viewed as a generalization of logistic regression
+	\item Recall that, logistic regression (binary classification) models class conditional probability as:
+		$$p(t=1|x;w)=\frac{\exp(w^T \phi(x))}{1+\exp(w^T\phi(x))}$$
+		$$p(t=0|x;w)=\frac{1}{1+\exp(w^T\phi(x))}$$
+	\begin{itemize}
+		\item Note that tehse probabilities sum to 1
+	\end{itemize}
+	\item For multiclass classification (with $K$ classes), we use the following model:
+		$$p(t=k:x;w)=\frac{\exp(w_k^T \phi(x))}{1+\sum_{j=1}^{K-1}\exp(w^T_j \phi(x))}$$
+		$$p(t=K:x;w)=\frac{1}{1+\sum_{j=1}^{K-1}\exp(w^T_j \phi(x))}$$
+	\begin{itemize}
+		\item Note that these probabilities sum to 1
+		\item This is euqivalent when seting $w_k=0$
+	\end{itemize}
+	\subsubsection{Log-likelihood and learning}
+	\item Defining $w_k=0$, we can write as:
+		$$p(t=k:x;w)=\frac{\exp(w^T_j \phi(x))}{\sum_{j=1}^{K-1}\exp(w^T_j \phi(x))}$$
+		$$p(t|x;w)=\prod_{k=1}^K \left[ \frac{\exp(w^T_j \phi(x))}{\sum_{j=1}^{K-1}\exp(w^T_j \phi(x))}\right]^{I(t=k)}$$
+	\item Log-likelihood:
+		$$\log p(D|w)=\sum_{i}\log p(t^{(i)}|x^{(i)}, w)$$
+		$$=\sum_{i}\log\prod_{k=1}^M \left[ \frac{}{} \right]^{I(t^{(i)}=k)}$$
+\end{itemize}
+
+\subsection{Probabilistic generative models}
+\begin{itemize}
+	\item Goal: Learn the distributions $p(C_k | \vec{x})$
+	\begin{itemize}
+		\item Discriminative models: Directly model $p(C_k|\vec{x})$ and learn parameters from the training set
+		\begin{itemize}
+			\item Logistic regression
+			\item Softmax regression
+		\end{itemize}
+		\item Generative models: Learn class densities $p(\vec{x}|C_k)$ and priors $p(C_k)$
+		\begin{itemize}
+			\item Gaussian discriminant analysis
+			\item Naive bayes
+		\end{itemize}
+	\end{itemize}
+	\subsubsection{Bayes' Theorem}
+	\item Bayes' theorem reduces the classificaqtion problem $p(C_k|x) $ to estimating the distribution of the data
+	\item Densisty estimation problems are easy to learn from labeled training data: $p(C_k), p(x|C_k)$
+	\item Maximum likelihood parameter estimation
+	\item For two classes, Bayes' theorem says:
+		$$p(C_1|x)=frac{p(x|C_1)p(C_1)}{p(x|C_1)p(C_1)+p(x|C_2)p(C_2)}$$
+	\item Use \textbf{log odds}:
+		$$a=\ln\frac{p(C_1|x)}{p(C_2|x)}=\ln\frac{p(x|C_1)p(C_1)}{p(x|C_2)p(C_2)}$$
+	\item Then we can define the posterior via the sigmoid:
+		$$p(C_1|x)=\sigma(a)$$
+\end{itemize}
+
+\subsection{Comparing teh approaches: Discriminative vs. Generative}
+\begin{itemize}
+	\item The \textbf{generative} approach is typically model-based, and makes it possible to generate synthetic data from $p(x|C_k)$
+	\begin{itemize}
+		\item By comparing the synthetic data and read data, we get a sense of how good the generative model is
+	\end{itemize}
+	\item The \textbf{discriminative} approach will typically have fewer parameters to estimate and have less assumptions about data distribution.
+	\begin{itemize}
+		\item Linear (e.g., logistic regression) versus quadratic (e.g., Gaussian discriminant analysis) if the dimension of the input
+		\item Less generative assumptions about the data (however, construction the features may need prior knowledge)
+	\end{itemize}
+\end{itemize}
+
+\subsection{Gaussian Discriminant Analysis}
+\begin{itemize}
+	\item Prior distribution: $p(C_k)$ (constant)
+	\item Likelihood: $p(x|C_k)$ (gaussian distribution)
+	$$p(x|C_k)=\frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma |^{1/2}}\exp\left\{-\frac{1}{2}(x-\mu_k )^T\Sigma^{-1}(x-\mu_k) \right\}$$
+	\begin{itemize}
+		\item Here $\Sigma$ represents the covariance matrix.
+		\item $D=1\to\Sigma=\sigma^2$
+		\item Spherical case $(\Sigma\propto\mathcal{I})$
+		\item Diagonal covariance
+		\item Full covariance (non-diagonals can be non-zero expressing relationships)
+	\end{itemize}
+	\item Classification: use Bayes' rule
+	\item Basic GDA assums same covariance for all classes
+	\begin{itemize}
+		\item The below shows class-sepcific density and decision boundary
+		\item Note lienar decision boundary
+		TODO: PICTURE
+	\end{itemize}
+	\subsubsection{Class-Conditional Densities}
+	\item Suppose we model $p(x|C_k)$ as Gaussians with the same covariance matrix.
+		$$p(x|C_k)=\frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma |^{1/2}}\exp\left\{-\frac{1}{2}(x-\mu_k )^T\Sigma^{-1}(x-\mu_k) \right\}$$
+	\item This gives us:
+		$$w=\Sigma^{-1}(\mu_1 - \mu_2)$$
+		$$w_0=-\frac{1}{2}\mu_1^T\Sigma^{-1}\mu_1 +\frac{1}{2}\mu_2^T\Sigma^{-1}\mu_2 + \ln\frac{p(C_1)}{p(C_2)}$$
+	\item Derivation:
+		$$\begin{aligned}
+			P(x, C_1) &= P(x|C_1) P(C_1) \\
+				&= \frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma|^{1/2}}\exp\left( -\frac{1}{2}(x-\mu_1)^T\Sigma^{-1}(x-\mu_1)\right)P(C_1) \\
+			P(x, C_2) &= P(x|C_2) P(C_2) \\
+				&= \frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma|^{1/2}}\exp\left( -\frac{1}{2}(x-\mu_2)^T\Sigma^{-1}(x-\mu_2)\right)P(C_2) \\
+			\text{log-odds: }a &= \ln(\frac{P(x, C_1)}{P(x, C_2)})=\ln(\frac{P(C_1)p(x|C_1)}{P(C_2)P(X|C_2)}) \\
+			a &= \ln(\frac{P(x, C_1)}{P(x, C_2)}) \\
+			&= \frac{\frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma|^{1/2}}\exp\left( -\frac{1}{2}(x-\mu_1)^T\Sigma^{-1}(x-\mu_1)\right)P(C_1)P(C_1)}{\frac{1}{(2\pi)^{D/2}}\frac{1}{|\Sigma|^{1/2}}\exp\left( -\frac{1}{2}(x-\mu_2)^T\Sigma^{-1}(x-\mu_2)\right)P(C_2)P(C_2)} \\
+			&= (-\frac{1}{2}(x-\mu_1)\Sigma^{-1}(x-\mu_1) + \ln(P(C_1))) - (-\frac{1}{2}(x-\mu_2)\Sigma^{-1}(x-\mu_2) + \ln(P(C_2))) \\
+			&= (\mu_1 - \mu_2)^T\Sigma^{-1}x-\frac{1}{2}\mu_1\Sigma^{-1}\mu_1+\frac{1}{2}\mu_2\Sigma^{-1}\mu_2 + \log\frac{P(C_1)}{P(C_2)}\\
+			&= (\Sigma^{-1}(\mu_1 - \mu_2))^T x + w_0
+		\end{aligned}$$
+		\subsubsection{Linear Decision Boundaries}
+		\item At decision boundary, we have $p(C_1|x)=p(C_2|x)$
+		\item With the same covariance matrices, the boundary is linear
+		\item It gives you a linear relgation due to cancellation of 2nd-order terms
+		\subsubsection{Learning parameters via maximum likelihood}
+		\item Given the training data $\{(x^{(1)}, t^{(1)}), \ldots, (x^{(N)}, t^{(N)}) \}$ and a generative model (``shared covariance'')
+			$$p(t)=\phi^t (1-\phi)^{1-t}$$
+			$$p(x|t=0)=\frac{1}{\sqrt{2\pi}|\Sigma|^{1/2}}\exp(-\frac{1}{2}(x-\mu_0)^T\Sigma^{-1}(x-\mu_0))$$
+			$$p(x|t=1)=\frac{1}{\sqrt{2\pi}|\Sigma|^{1/2}}\exp(-\frac{1}{2}(x-\mu_1)^T\Sigma^{-1}(x-\mu_1))$$
+		\item MLE:
+			$$\phi=\frac{1}{N}\sum_{i=1}^N 1\{ t^{(1)}=1\}$$
+			$$\mu_0=\frac{\sum_{i=1}^N 1\{ t^{(i)}=0\}x^{(i)}}{\sum_{i=1}^N 1\{ t^{(i)} = 0\}}$$
+			$$\mu_1=\frac{\sum_{i=1}^N 1\{ t^{(i)}=1\}x^{(i)}}{\sum_{i=1}^N 1\{ t^{(i)} = 1\}}$$
+\end{itemize}
+

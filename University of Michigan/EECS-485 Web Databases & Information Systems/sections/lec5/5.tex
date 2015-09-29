@@ -1,0 +1,22 @@
+\subsection{Cookie Contents}
+\begin{itemize}
+	\item \textbf{Path}: spedifies scope of cookie
+	\item \textbf{Expiration}: tells client when to delete
+	\item \textbf{Secure}: is how ocokie may be transmitted
+	\item Contents up to server are encrypted
+	\item Supported by HTTP
+	\item Overwriatble by source domain and path-prefix
+	\begin{itemize}
+		\item This stops a site from overwritting a different site's cookie
+	\end{itemize}
+	\item Browser per-domain, total limits
+	\begin{itemize}
+		\item Each website only gets so many cookies and so much data
+		\item Badly designed websites with large cookies may not get totally stored
+	\end{itemize}
+	\subsection{Uses and Abuses}
+	\img{.7}{sections/lec5/cook.png}
+	\item Browser makes more HTTP requests then you think (1 probably has additional 10 hidden)
+	\item The cookies for page B will remember all browsing history through various pages (e.g., A) so they can accumulate your history and your behavior
+	\item Cookies make sessions quiet, ubiquitous
+\end{itemize}
